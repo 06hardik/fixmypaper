@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research Paper Error Checker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📄 Research Paper Error Checker</h1>
+            <p class="subtitle">Upload your research paper PDF to detect and highlight formatting errors</p>
+        </header>
+
+        <main>
+            <!-- Upload Section -->
+            <section id="upload-section" class="section">
+                <div class="upload-area" id="upload-area">
+                    <div class="upload-icon">📤</div>
+                    <h2>Drop your PDF here or click to browse</h2>
+                    <p>Maximum file size: 50MB</p>
+                    <input type="file" id="file-input" accept=".pdf" hidden>
+                    <button class="btn btn-primary" id="browse-btn">Browse Files</button>
+                </div>
+            </section>
+
+            <!-- Processing Section -->
+            <section id="processing-section" class="section hidden">
+                <div class="processing-animation">
+                    <div class="spinner"></div>
+                    <h2>Processing your PDF...</h2>
+                    <p>Detecting formatting errors and annotating the document</p>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section id="results-section" class="section hidden">
+                <div class="results-header">
+                    <h2>Analysis Complete!</h2>
+                    <button class="btn btn-success" id="download-btn">
+                        <span>📥</span> Download Annotated PDF
+                    </button>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="total-errors">0</div>
+                        <div class="stat-label">Total Errors Found</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="pages-with-errors">0</div>
+                        <div class="stat-label">Pages with Errors</div>
+                    </div>
+                </div>
+
+                <!-- Document Statistics Infographics -->
+                <div class="document-stats">
+                    <h3>📊 Document Statistics</h3>
+                    <div class="stats-grid-info">
+                        <div class="info-card">
+                            <div class="info-icon">📝</div>
+                            <div class="info-number" id="total-words">0</div>
+                            <div class="info-label">Total Words</div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-icon">📄</div>
+                            <div class="info-number" id="total-pages">0</div>
+                            <div class="info-label">Pages</div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-icon">🖼️</div>
+                            <div class="info-number" id="total-images">0</div>
+                            <div class="info-label">Images</div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-icon">📊</div>
+                            <div class="info-number" id="total-tables">0</div>
+                            <div class="info-label">Tables</div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-icon">📈</div>
+                            <div class="info-number" id="total-figures">0</div>
+                            <div class="info-label">Figures</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Error Summary -->
+                <div class="error-summary">
+                    <h3>Error Summary by Type</h3>
+                    <div id="error-types-container"></div>
+                </div>
+
+                <!-- Detailed Errors -->
+                <div class="error-details">
+                    <h3>Detailed Error Report</h3>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-filter="all">All Errors</button>
+                        <button class="filter-btn" data-filter="citation_punctuation">Citation Issues</button>
+                        <button class="filter-btn" data-filter="dash_usage">Dash Usage</button>
+                        <button class="filter-btn" data-filter="punctuation_spacing">Spacing Issues</button>
+                        <button class="filter-btn" data-filter="unit_spacing">Unit Spacing</button>
+                        <button class="filter-btn" data-filter="equation_punctuation">Equation Punctuation</button>
+                        <button class="filter-btn" data-filter="missing_doi">Missing DOI</button>
+                    </div>
+                    <div id="error-list"></div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-secondary" id="new-upload-btn">Upload Another PDF</button>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Checks for common formatting errors in research papers</p>
+            <div class="error-types-legend">
+                <span class="legend-item"><span class="legend-color" style="background-color: rgba(255, 204, 204, 0.5);"></span> Citation Issues</span>
+                <span class="legend-item"><span class="legend-color" style="background-color: rgba(255, 255, 153, 0.5);"></span> Dash Usage</span>
+                <span class="legend-item"><span class="legend-color" style="background-color: rgba(255, 230, 179, 0.5);"></span> Spacing Issues</span>
+                <span class="legend-item"><span class="legend-color" style="background-color: rgba(204, 230, 255, 0.5);"></span> Unit Spacing</span>
+                <span class="legend-item"><span class="legend-color" style="background-color: rgba(255, 204, 255, 0.5);"></span> Equation Punctuation</span>
+                <span class="legend-item"><span class="legend-color" style="background-color: rgba(230, 255, 230, 0.5);"></span> Missing DOI</span>
+            </div>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

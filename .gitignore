@@ -1,0 +1,39 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Uploads (temporary files)
+uploads/*.pdf
+processed/*.pdf
+
+# Keep folders but not contents
+!uploads/.gitkeep
+!processed/.gitkeep
+
+# Logs
+*.log
+
+# Testing
+test_sample.pdf
+test_sample_annotated.pdf
+*.pyc
+
+# Environment variables
+.env
