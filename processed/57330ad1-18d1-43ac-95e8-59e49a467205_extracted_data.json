@@ -1,0 +1,4433 @@
+{
+  "full_text": "An Intelligent System for Academic Manuscript\nFormatting and Compliance\nA project report submitted in partial fulfillment of the requirements\nfor the award of the degree of\nB. Tech.in Computer Science and Engineering\nBy\nAarushi Jain (2022UCS1591)\nAayushi Jain (2022UCS1606)\nAarushi Kushwaha (2022UCS1615)\nUnder the supervision of\nDr.Vijay Kumar Bohat\nComputer Science and Engineering\nNetaji Subhas University of Technology, Delhi\nNETAJI SUBHAS UNIVERSITY OF TECHNOLOGY\nDELHI-110078\nMARCH 2026\nCERTIFICATE\nThis is to certify that the project titled An Intelligent System for Academic Manuscript\nFormatting and Compliance is a bonafide record of the work done by\nAarushi Jain (2022UCS1591)\nAayushi Jain (2022UCS1606)\nAarushi Kushwaha (2022UCS1615)\nunder my supervision and guidance in partial fulfillment of the requirements for the award of\nthe degree of Bachelor of Technology in Computer Science and Engineering of the Netaji\nSubhas University of Technology, DELHI-110078, during the year 2025 - 2026.\nTheir work is genuine and has not been submitted for the award of any other degree to the\nbest of my knowledge.\nDATE:\nDr.Vijay Kumar Bohat\nAssistant Professor\nDivision of Computer Science\nNetaji Subhas University of Technology\n1\nDECLARATION\nThis is to certify that the work which is being hereby presented by us in this project titled\n“An Intelligent System for Academic Manuscript Formatting and Compliance” in partial\nfulfilment of the award of the Bachelor of Technology submitted at the Department of Computer\nScienceandEngineering,NetajiSubhasUniversityofTechnology,NewDelhi,isagenuine\naccountofourworkcarriedoutduringtheperiodfromDecember2025toFebruary2026\nundertheguidanceofDr.VijayKumarBohat,DepartmentofComputerScience,Netaji\nSubhas University of Technology, New Delhi.\nThe matter embodied in the project report to the best of our knowledge has not been sub-\nmitted for the award of any other degree elsewhere.\nDATE:\nAarushi JainAayushi JainAarushi Kushwaha\n(2022UCS1591)(2022UCS1606)(2022UCS1615)\n2\nACKNOWLEDGEMENT\nWewouldliketoexpressoursinceregratitudetoDr.VijayKumarBohat,Departmentof\nComputer Science and Engineering, Netaji Subhas University of Technology, Delhi, for his in-\nvaluable guidance and support throughout the brainstorming, theoretical framework, and partial\nimplementation of this project.His insights, encouragement, and constructive feedback greatly\nenhanced our understanding and helped shape the direction of this work.\nWe are also thankful for the environment of learning and collaboration provided by the de-\npartment, which allowed us to explore ideas freely and translate them into practical outcomes.\n3\nTable Of Contents\nCERTIFICATE......................................2\nDECLARATION......................................3\nACKNOWLEDGEMENT.................................3\nTABLE OF CONTENTS.................................4\nINTRODUCTION.....................................5\nMOTIVATION.......................................6\nLITERATURE REVIEW.................................7\nPROBLEM STATEMENT................................9\nOBJECTIVES.......................................10\nSIMULATION PLATFORM12...............................\nPROPOSED METHOD..................................16\nCONCLUSION......................................19\nREFERENCES .......................................21\n4\nIntroduction\nFixmyPaperisaweb-basedintelligentacademicformattingverificationplatformthatisde-\nsignedtoautomaticallyanalyzeresearchpapersanddetectstructural,syntactic,citation,and\nformatting-related errors. Academic writing in technical domains follows strict formatting stan-\ndards prescribed by institutions and journals like IEEE, APA etc.These standards ensure clar-\nity, reproducibility, and professional presentation of research work.\nHowever,undergraduatestudentsoftenlackformaltraininginacademicwritingconven-\ntions.Whiletheymaypossessstrongtechnicalknowledge,theyfrequentlymakeformatting\nmistakes such as:\n•Improper ordering of figures and tables\n•Missing figure/table captions\n•Equations without numbering or explanation\n•Incorrect citation styles\n•Mismatched in-text citations and reference lists\n•Inconsistent typography and notation\nMostofthewritingtoolsthatcurrentlyexistprimarilyfocusongrammarandlanguage\nimprovement, offering little support for technical formatting compliance.Fix my Paper helps\nbridge this gap by integrating rule-based validation and machine learning techniques to generate\nstructured, actionable improvement reports within seconds.\n5\nMotivation\nThemotivationfordevelopingourprojectarisesfromthegrowingimportanceofacademic\nwritingqualityintechnicaleducation.Studentswithtechnicalbackgroundsareincreasingly\nrequired to produce research papers, project reports, and theses that adhere to strict formatting\nstandardsdefinedbyacademicinstitutionsandjournals.Whilestudentsoftenpossessstrong\ntechnical knowledge,they frequently lack adequate training in academic writing conventions,\nresulting in structural and formatting inconsistencies that negatively affect the clarity and pro-\nfessionalism of their work.\nA key motivating factor is the limited time available for faculty members to provide detailed\nformatting feedback.Professors must manage multiple responsibilities, including teaching, re-\nsearch, and administrative duties, which restricts their ability to thoroughly review formatting\naspectsofeverystudentsubmission.Asaresult,manyformattingerrorspersistacrosssub-\nmissions, slowing students’ development of academic writing skills and increasing the overall\nreview burden.\nAdditionally, existing writing support tools primarily focus on grammar correction and lan-\nguageenhancement,offeringminimalassistancefortechnicalformattingissues.Toolsthat\ndo address citation management often operate independently and do not verify contextual cor-\nrectnesswithinthedocument.Thisfragmentedsupportcreatesagapinautomatedacademic\nquality assurance for technical papers.\nThe need for an affordable and student-friendly automated solution further strengthens the\nmotivation behind this project.Many available platforms are subscription-based and may not\nbeaccessibletoallstudents.Therefore,alightweightandspecializedplatformcapableof\ndelivering fast,actionable feedback on technical formatting can significantly improve student\nproductivity, reduce faculty workload, and enhance overall research paper quality.\n6\nLiterature Review\nThedomainofacademicwritingassistancehasbeenwidelyexploredthroughvarioustools\nand research efforts aimed at improving the quality of scholarly documents.A significant por-\ntion of existing solutions focus on grammar correction and language refinement, helping users\nenhance sentence structure, vocabulary, and readability. While these tools are effective for gen-\neral writingimprovement,they provide limited support for technical formatting requirements\nspecific to research papers.\nPlagiarismdetectionsystemsrepresentanothercategoryofrelatedsolutions.Theseplat-\nforms are primarily designed to verify the originality of the content by comparing documents\nagainstlargeacademicdatabases.Althoughtheyplayanessentialroleinmaintainingaca-\ndemic integrity, they do not address formatting correctness, structural consistency, or citation-\nreferencemappingwithinadocument.Consequently,plagiarismtoolsalonecannotensure\ncomprehensive academic formatting compliance.\nCitation management software help in assisting researchers in creating and managing cita-\ntions in multiple styles. However, these tools typically operate as standalone utilities and do not\nverifywhetherin-textcitationsareproperlylinkedtothereferencelistorwhetherreferences\narecompleteandcorrectlyordered.Moreover,theylackthecapabilitytodetectcontextual\nerrorssuchasmissingcitations,incorrectbracketpunctuation,ormismatchedcitationstyles\nacross a document.\nRecentresearchinNaturalLanguageProcessinganddocumentanalysishasintroduced\ntechniques for automated document segmentation, citation extraction, and metadata classifica-\ntion.Machine learning models have been applied to identify reference structures and improve\nacademicindexingsystems.Despitetheseadvances,mostoftheresearchfocusesonlarge-\nscale academic database management rather than providing practical tools at the student-level\n7\nfor formatting verification and improvement.\nThe review of the existing literature highlights a clear gap in integrated solutions that com-\nbine structural validation, citation verification, and technical formatting analysis within a single\nplatform.There is a lack of lightweight, affordable systems specifically designed for technical\nresearch papers that can detect formatting inconsistencies related to figures, tables, equations,\nandreferenceswhileofferingactionableimprovementsuggestions.Theproposedplatform\naddressesthisgapbyintegratingrule-basedvalidationwithmachinelearningtechniquesto\nprovide comprehensive formatting assistance tailored to student research needs.\n8\nProblem Statement\nUndergraduateandpostgraduatestudentsintechnicaldisciplinesarerequiredtopreparere-\nsearchpapersandprojectreportsthatfollowstrictacademicformattingstandardsprescribed\nbyuniversities,conferences,andjournals.However,manystudentslackformaltrainingin\ntechnical writing and formatting conventions, which results in frequent structural and stylistic\nerrors in their submissions.These errors include improper figure and table referencing,miss-\ning or incorrectly placed captions, unnumbered or unexplained equations, inconsistent citation\nstyles, and mismatches between in-text citations and the reference list.\nThe absence of timely and detailed feedback further aggravates the problem.Faculty mem-\nbers often face a heavy workload and are unable to provide comprehensive formatting correc-\ntions for every submission.As a result, students repeatedly make similar mistakes, leading to\npoor document quality, increased review cycles, and delays in evaluation or publication.\nExistingwritingassistancetoolsprimarilyfocusongrammarandlanguageimprovement\nandofferlimitedsupportfortechnicalformattingverification.Toolsthathandlecitationsor\nreferencesworkinisolationanddonotvalidatetheoverallstructuralconsistencyofthedoc-\nument.Consequently,thereisalackofanintegrated,automatedsolutionthatcananalyze\nmultiplecomponentsofatechnicalpaper,includingtextstructure,figures,tables,equations,\nand references.\nTherefore,thereisaneedforacomprehensiveandautomatedsystemthatcanaccurately\ndetectformattinginconsistencies,structuralerrors,andreference-relatedissuesintechnical\nacademic documents and provide actionable feedback to help students improve the quality and\ncompliance of their research papers.\n9\nObjectives\nThe primary objective of our project is to develop an intelligent, automated system capable of\nverifying the structural and formatting correctness of technical research papers. The platform is\ndesigned to go beyond traditional grammar-checking tools by focusing specifically on academic\nformatting standards required in engineering and scientific writing.The purpose of this project\nis to ensure that research documents comply with institutional and journal-specific guidelines\nprior to submission.\nFigure 1:System Architecture of Fix my Paper\nOneofthekeyobjectivesistoautomaticallydetectformattinginconsistenciesrelatedto\nfigures, tables, and equations.This includes verifying whether figures and tables are properly\nnumbered,correctlyreferencedinthetext,placedaftertheirfirstmention,andaccompanied\nbyappropriatecaptions.Formathematicalexpressions,thesystemaimstochecksequential\nequationnumbering,properformattingofvariablesandunits,andwhetherallsymbolsare\ndefined clearly within the text.\n10\nAnother important objective is to validate citation and reference integrity. The system seeks\ntoensurethatin-textcitationscorrectlycorrespondtoentriesinthereferencelist,thatrefer-\nencesarecompleteandproperlyordered,andthatcitationstylessuchasIEEEorAPAare\nconsistently applied.By automating these checks, the platform reduces the likelihood of sub-\nmission rejections due to referencing errors.\nThe project also aims to reduce manual correction effort for both students and faculty mem-\nbers.By generating structured and actionable feedback reports within a short processing time,\nthesystemencouragesstudentstoindependentlyrefinetheirworkbeforesubmission.This\nobjectivedirectlycontributestoimprovingoverallacademicwritingqualityandpromoting\nself-learning.\nFromamethodologicalperspective,thesystemfollowsastructuredprocessingpipeline.\nThe process begins when a user uploads a research paper in PDF or DOC format.The backend\nthen extracts textual content, figures, tables, equations, and references using document parsing\nutilities.\nFollowing extraction, a rule-based engine employing regular expressions and pattern-matching\ntechniques analyzes structural formatting aspects. These rules are designed to detect errors such\nas skipped numbering sequences, incorrect caption placement, improper punctuation, inconsis-\ntent typography, and citation bracket formatting issues.\nInparallel,machinelearningmodelsareappliedtoanalyzethereferencessectionmore\nintelligently.Thesemodelsassistinidentifyingincompletereferences,mismatchesbetween\nin-text citations and bibliography entries, DOI validation issues, and inconsistencies in citation\nstyleformatting.Thecombinationofrule-basedlogicandmachinelearningenhancesboth\naccuracy and contextual understanding.\nFinally, the detected issues are aggregated into a structured analysis report.The report cat-\negorizes errors by severity and type, provides specific suggestions for correction, and may in-\nclude an overall formatting compliance score. This report is then displayed through an intuitive\nweb interface, allowing users to easily review and implement the suggested improvements.\nThrough this systematic objective-driven methodology,our project aims to deliver a com-\nprehensive, efficient, and user-friendly solution for technical academic formatting verification.\n11\nSimulation Platform and Requirements\nThesimulationplatformfortheprojectisdesignedtoreplicateareal-worldacademicdocu-\nment processing environment where research papers are uploaded, analyzed, and evaluated for\nformatting compliance.\nThe validation checks implemented in the simulation environment are listed in Table 1.\nTable 1:Stage-1 Validation Checks Used in Simulation\n#CategoryCheckable Requirement\n1Figures & TablesEvery figure and table is cited in the main text\n2Figures & TablesNo figure or table appears without textual reference\n3FiguresFigure captions are placed below the figure\n4TablesTable captions are placed above the table\n5Figures & TablesFiguresandtablesarenumberedsequentially(no\nskipping)\n6Figures & TablesFigures and tables appear after first mention in text\n7TablesUnits are specified in all column headers\n8Figures & TablesImages are clear, readable, and high resolution\n9EquationsAll equations are numbered consecutively\n10EquationsEquation numbers are in parentheses and flush right\n11EquationsEvery equation is referenced in the text\n12EquationsAllsymbolsaredefinedbeforeorimmediatelyafter\nuse\n13Math FormattingVariables are italicized\n14Math FormattingFunctions and units are in roman (non-italic) font\n12\n#CategoryCheckable Requirement\n15Math FormattingProper punctuation is used after equations\n16CitationsCitationstylematchesthetargetjournal(IEEE/A-\nPA/etc.)\n17CitationsBracket punctuation is correct (e.g., [1], not .[1])\n18CitationsOne-to-one match between in-text citations and refer-\nence list\n19ReferencesNo missing or uncited references\n20ReferencesReferences are ordered correctly\n21ReferencesReferencesarecomplete(authors,title,venue,year,\npages)\n22ReferencesDOI included wherever available\n23ReferencesJournal title casing is consistent\n24ReferencesURLs and DOIs are valid and unbroken\n25ReferencesRecentreferencesincluded(last5yearswhererele-\nvant)\n26AcronymsAcronyms are defined at first occurrence\n27UnitsNon-breakingspacebetweennumberandunit(e.g.,\n10 kg)\n28TypographyEn-dash used for numeric ranges (e.g., 10–20)\n29TypographyConsistent spacing after commas and full stops\n30ConsistencyNotation, symbols, and terminology used consistently\nThefrontendoftheplatformisbuiltusingmodernwebtechnologiessuchasReact.jsor\nNext.js, combined with CSS for responsive and clean user interface design.The purpose of the\nfrontend is to provide a smooth document upload experience, display structured error reports,\nand ensure intuitive navigation.The interface is designed to clearly categorize detected issues\nunder sections such as figures, equations, citations, references, and typography, making it easy\nfor users to understand and correct errors.\n13\nThebackendofthesystemisimplementedusingNode.jsorPythonwithFastAPI.The\nbackend handles core processing tasks, including document parsing, rule-based validation, ma-\nchine learning inference, and report generation.FastAPI is particularly suitable due to its high\nperformance,asynchronouscapabilities,andcompatibilitywithmachinelearningworkflows.\nThebackendactsasthecentralprocessingunitoftheplatform,coordinatingdataextraction,\nanalysis, and structured output generation.\nFordocumentanalysisandmachinelearningoperations,wehaveusedPythonasthepri-\nmaryprogramminglanguageduetoitsrichecosystemoflibraries.Regularexpressionsand\nrule-based engines are employed to detect formatting patterns such as figure numbering, cita-\ntion brackets, equation formatting, and punctuation consistency.In addition, Natural Language\nProcessingtechniquesandScikit-learnmodelsassistinmorecomplextaskssuchascitation-\nreference matching,reference completeness verification, and DOI validation.This hybrid ap-\nproach ensures both speed and contextual intelligence in error detection.\nThe system requires a reliable database layer, such as PostgreSQL or MongoDB, to manage\nuser session data, analysis results, and system logs temporarily.While uploaded documents are\nnot stored permanently in order to maintain privacy, temporary storage ensures smooth report\ngenerationandretrieval.Datadeletionpoliciesareimplementedtoremovedocumentsafter\nprocessing, ensuring compliance with privacy and academic integrity standards.\nFrom an infrastructure perspective,the platform is deployed on a cloud-based virtual ma-\nchine capable of handling document uploads and concurrent processing requests. Containeriza-\ntion using Docker ensures portability and consistent deployment across environments.Object\nstorage is utilized for temporary file management, while monitoring and logging services main-\ntain system reliability, uptime tracking, and performance diagnostics.\nFor machine learning model training and experimentation, a short-term GPU-enabled com-\npute instance may be required.This is particularly useful during development and optimization\nphasestoimprovemodelaccuracyinreferenceclassificationandpatternrecognition.Once\ntrained, inference can be performed efficiently on standard CPU-based servers to reduce oper-\national costs.\nSecurity and accessibility are also essential requirements of the platform.A registered do-\n14\nmain name and SSL certificate are necessary to ensure secure HTTPS communication between\nusersandtheserver.Authenticationmechanismscanbeintegratedinlaterstagestosupport\ninstitutional adoption and personalized report tracking.\nOverall, the simulation platform integrates modern web technologies, cloud infrastructure,\nand machine learning frameworks to create a scalable and efficient academic formatting veri-\nfication system.The combination of frontend usability, backend computational efficiency, and\nsecure deployment ensures that the system can operate reliably under real-world academic us-\nage conditions.\n15\nProposed Method\nTheproposedsystemisdesignedtoautomaticallyanalyzetechnicalresearchdocumentsand\nidentify structural, formatting, and reference-related issues.The methodology of the system is\ndescribed below.\n1.Document Upload and Input Handling\nThe process begins with the user uploading a research paper through a web-based inter-\nface.ThesystemacceptsdocumentsinPDForDOCformat.Onceuploaded,thefile\nissecurelystoredandpassedtotheprocessingmoduleforfurtheranalysis.Theinter-\nfaceisdesignedtobesimpleandaccessible,allowingstudentstoquicklysubmittheir\ndocuments for evaluation.\n2.Text Extraction and Preprocessing\nAfter the document is uploaded, the system extracts textual and structural content using\ndocument parsing libraries.The extracted content is cleaned and organized into logical\ncomponents such as headings, paragraphs, figures, tables, equations, and references. Pre-\nprocessing ensures that the data is structured properly so that different validation modules\ncan analyze each component efficiently.\n3.Structural and Formatting Validation\nThe system applies a rule-based validation engine to identify formatting inconsistencies.\nRegularexpressiontechniquesareusedtocheckfigureandtablenumbering,caption\nplacement,equation numbering,and citation formats.The system also verifies whether\nfigures,tables,andequationsareproperlyreferencedwithinthetextandwhethertheir\nnumbering sequence is consistent throughout the document.\n16\n4.Citation and Reference Analysis\nToensureaccuracyinacademicreferencing,thesystemperformscitationverification\nusing natural language processing techniques.It checks the relationship between in-text\ncitationsandthebibliographytodetectmissingreferences,duplicates,ormismatches.\nThesystemalsovalidateswhetherthecitationformatfollowsstandardstylessuchas\nIEEE or APA.\n5.Contextual Analysis of Technical Elements\nTheproposedmethodincludesmulti-modalanalysistoevaluatefiguresandequations\nincontext.Thesystemcheckswhethereachfigureorequationisaccompaniedbyan\nappropriate explanation in the surrounding text.This ensures that technical elements are\nnot only present but are also properly integrated into the document.\n6.Report Generation and Feedback\nAftercompletingtheanalysis,thesystemgeneratesadetailedreportthatcategorizes\nerrorsbasedontypeandseverity.Thereportincludesactionablesuggestionsforim-\nprovement, allowing users to correct issues before final submission.The entire analysis\nprocess is optimized for speed and produces results within approximately 40 seconds.\n7.System Benefits\nThe proposed system is lightweight, scalable, and cost-effective for students.It reduces\nmanual formatting effort and helps improve the overall quality of academic submissions.\nAdditionally,itminimizestheworkloadoffacultymembersbyautomatingrepetitive\nformatting checks.\n8.Comparison with Existing Solutions\nThe advantages of the proposed system over existing tools are presented in Table 2.\n17\nTable 2:Comparison between Fix my Paper and Existing Solutions\nFix my Paper (our solution)Existing Solutions\nAdvanced AI-driven analysisBasic formatting checks\nImage and equation context checkLimited technical paper support\nAffordable for studentsHigher cost barrier\nLightning-fast results in just 40 sec-Slower processing (up to 2 minutes)\nonds\nTailored for technical papersGeneric approach to all papers\nEmpowersstudentsandreducesFocusesmainlyonlanguageand\nfaculty workloadstyle\n18\nConclusion\nOur project proposes a scalable and intelligent academic formatting verification system specifi-\ncally designed for technical research papers in engineering and related disciplines.Unlike con-\nventionalwritingtoolsthatfocusmainlyongrammarandlanguagerefinement,thisplatform\nconcentratesonstructuralaccuracy,formattingcompliance,andreferenceintegrity.Byinte-\ngrating rule-based validation mechanisms with machine learning models, the system is capable\nof performing a detailed analysis of figures, tables, equations, citations, references, typography,\nand document consistency within a single unified framework.\nThe combination of deterministic rule engines and data-driven models enhances both pre-\ncisionandcontextualunderstanding.Rule-basedlogicensuresstrictadherencetopredefined\nacademicstandards,suchassequentialnumberingoffiguresandequations,correctcaption\nplacement,propercitationbracketformatting,andconsistentpunctuation.Atthesametime,\nmachinelearningmodelsprovideintelligentvalidationofreferencesectionsbyidentifying\nincomplete entries, mismatches between in-text citations and bibliography items, DOI irregu-\nlarities,andstyleinconsistencies.Thishybridarchitectureallowsthesystemtodelivercom-\nprehensive and reliable formatting verification.\nOne of the primary impacts of the platform is the improvement of student academic writing\nquality.By receiving structured, categorized feedback before submission, students can identify\nrecurring formatting mistakes and correct them independently.Over time, this promotes better\nunderstandingofacademicconventionsandstrengthenstechnicalwritingskills.Insteadof\nrelying solely on manual feedback from faculty members, students gain access to an automated\nassistant that supports continuous learning and self-correction.\nThesystemalsosignificantlyreducesrepetitivefacultyworkload.Formattingerrorssuch\nasincorrectnumbering,missingreferences,undefinedvariables,andcitationmismatchesof-\n19\ntenconsumesubstantialreviewtimedespitebeingnon-conceptualissues.Byautomatingthe\ndetection of such errors, the platform enables faculty members to focus more on evaluating the\ntechnical depth and originality of the research rather than routine formatting corrections.This\ncontributes to improved efficiency in academic evaluation processes.\nAnotherimportantcontributionofthesolutionisenhancedcompliancewithjournaland\ninstitutionalstandards.Researchpapersintendedforpublicationmustadherestrictlytopre-\nscribed formatting guidelines such as IEEE or APA styles.Even minor inconsistencies can re-\nsult in rejection or revision requests.By verifying citation styles, reference ordering, structural\nconsistency,and typographic conventions,the system increases the likelihood of submissions\nmeeting professional standards on the first attempt.\nAffordability and accessibility are also central to the platform’s design philosophy.Many\nexisting academic support tools are expensive subscription-based services that may not be ac-\ncessibletoallstudents.Thisprojectaimstoprovidefastandcost-effectiveautomatedassis-\ntance,deliveringdetailedanalysisreportswithinashortprocessingtime.Thisensuresthat\nstudents from diverse academic backgrounds can benefit from advanced formatting verification\nwithout financial barriers.\nWith pilot testing, iterative refinement, and performance optimization, the system has strong\npotential for institutional-level adoption across engineering colleges and technical universities.\nItcanbeintegratedintosubmissionworkflows,departmentalreviewprocesses,orresearch\nlabsto establisha standardizedpre-submission verification mechanism.In the long term,the\nplatform may evolve into a comprehensive academic quality assurance tool, supporting large-\nscale document validation while promoting higher standards of technical writing excellence.\n20\nReferences\n•English grammar and writing app.https://www.gingersoftware.com/grammarcheck.\n•Languagetool free ai grammar checker.https://languagetool.org, 2018.\n•The bea-2019 dataset for grammatical, lexical, and spelling errors.\nhttps://www.cl.cam.ac.uk/research/nl/bea2019/, 2019.\n•A grammatical error correction model for english essay scoring based on statistical meth-\nods.Hindawi, 2022.\n•Writefull vs grammarly:What’s the difference?, 2022.Blog:Comparison of accuracy\nand application.\n•The 11 best ai tools for academic writing, 2023.Master Academia.\n•Automated academic writing and proofreading.https://www.writefull.com, 2023.\n•Research and analysis of grammatical error correction technology. SCIRP Journal, 2024.\n•Free, powerful english grammar checker.https://www.scribens.com, 2025.\n•Grammarly grammar checker.https://www.grammarly.com/grammar-check, 2025.\n•StefanoBann‘o.Usinggrammaticalerrorcorrectiontoautomaticallyassessl2profi-\nciency.\nComputer SpeechLanguage, 2024.https://www.sciencedirect.com/.\n•Christopher Bryant, Zhenhao Yuan, Muhammad Rizqi Qorib, Huan Cao, Hwee Tou Ng,\n21\nandTedBriscoe.Grammaticalerrorcorrection:Asurveyofthestateoftheart.Compu-\ntational Linguistics, 49(3):643–701, 2023.\n•Robert ¨Ostling.Evaluation of really good grammatical error correction.In Proceedings\nof LREC 2024, pages 6582–6593, 2024.\n22\n",
+  "total_characters": 28154,
+  "page_texts": [
+    "An Intelligent System for Academic Manuscript\nFormatting and Compliance\nA project report submitted in partial fulfillment of the requirements\nfor the award of the degree of\nB. Tech. in Computer Science and Engineering\nBy\nAarushi Jain (2022UCS1591)\nAayushi Jain (2022UCS1606)\nAarushi Kushwaha (2022UCS1615)\nUnder the supervision of\nDr. Vijay Kumar Bohat\nComputer Science and Engineering\nNetaji Subhas University of Technology, Delhi\nNETAJI SUBHAS UNIVERSITY OF TECHNOLOGY\nDELHI-110078\nMARCH 2026\n",
+    "CERTIFICATE\nThis is to certify that the project titled An Intelligent System for Academic Manuscript\nFormatting and Compliance is a bonafide record of the work done by\nAarushi Jain (2022UCS1591)\nAayushi Jain (2022UCS1606)\nAarushi Kushwaha (2022UCS1615)\nunder my supervision and guidance in partial fulfillment of the requirements for the award of\nthe degree of Bachelor of Technology in Computer Science and Engineering of the Netaji\nSubhas University of Technology, DELHI-110078, during the year 2025 - 2026.\nTheir work is genuine and has not been submitted for the award of any other degree to the\nbest of my knowledge.\nDATE:\nDr. Vijay Kumar Bohat\nAssistant Professor\nDivision of Computer Science\nNetaji Subhas University of Technology\n1\n",
+    "DECLARATION\nThis is to certify that the work which is being hereby presented by us in this project titled\n“An Intelligent System for Academic Manuscript Formatting and Compliance” in partial\nfulfilment of the award of the Bachelor of Technology submitted at the Department of Computer\nScience and Engineering, Netaji Subhas University of Technology, New Delhi, is a genuine\naccount of our work carried out during the period from December 2025 to February 2026\nunder the guidance of Dr. Vijay Kumar Bohat, Department of Computer Science, Netaji\nSubhas University of Technology, New Delhi.\nThe matter embodied in the project report to the best of our knowledge has not been sub-\nmitted for the award of any other degree elsewhere.\nDATE:\nAarushi Jain\nAayushi Jain\nAarushi Kushwaha\n(2022UCS1591)\n(2022UCS1606)\n(2022UCS1615)\n2\n",
+    "ACKNOWLEDGEMENT\nWe would like to express our sincere gratitude to Dr. Vijay Kumar Bohat, Department of\nComputer Science and Engineering, Netaji Subhas University of Technology, Delhi, for his in-\nvaluable guidance and support throughout the brainstorming, theoretical framework, and partial\nimplementation of this project. His insights, encouragement, and constructive feedback greatly\nenhanced our understanding and helped shape the direction of this work.\nWe are also thankful for the environment of learning and collaboration provided by the de-\npartment, which allowed us to explore ideas freely and translate them into practical outcomes.\n3\n",
+    "Table Of Contents\nCERTIFICATE\n. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .\n2\nDECLARATION . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .\n3\nACKNOWLEDGEMENT . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .\n3\nTABLE OF CONTENTS\n. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .\n4\nINTRODUCTION . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .\n5\nMOTIVATION . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .\n6\nLITERATURE REVIEW . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .\n7\nPROBLEM STATEMENT\n. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .\n9\nOBJECTIVES . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .\n10\nSIMULATION PLATFORM . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .\n12\nPROPOSED METHOD . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .\n16\nCONCLUSION\n. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .\n19\nREFERENCES . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .\n21\n4\n",
+    "Introduction\nFix my Paper is a web-based intelligent academic formatting verification platform that is de-\nsigned to automatically analyze research papers and detect structural, syntactic, citation, and\nformatting-related errors. Academic writing in technical domains follows strict formatting stan-\ndards prescribed by institutions and journals like IEEE, APA etc. These standards ensure clar-\nity, reproducibility, and professional presentation of research work.\nHowever, undergraduate students often lack formal training in academic writing conven-\ntions. While they may possess strong technical knowledge, they frequently make formatting\nmistakes such as:\n• Improper ordering of figures and tables\n• Missing figure/table captions\n• Equations without numbering or explanation\n• Incorrect citation styles\n• Mismatched in-text citations and reference lists\n• Inconsistent typography and notation\nMost of the writing tools that currently exist primarily focus on grammar and language\nimprovement, offering little support for technical formatting compliance. Fix my Paper helps\nbridge this gap by integrating rule-based validation and machine learning techniques to generate\nstructured, actionable improvement reports within seconds.\n5\n",
+    "Motivation\nThe motivation for developing our project arises from the growing importance of academic\nwriting quality in technical education. Students with technical backgrounds are increasingly\nrequired to produce research papers, project reports, and theses that adhere to strict formatting\nstandards defined by academic institutions and journals. While students often possess strong\ntechnical knowledge, they frequently lack adequate training in academic writing conventions,\nresulting in structural and formatting inconsistencies that negatively affect the clarity and pro-\nfessionalism of their work.\nA key motivating factor is the limited time available for faculty members to provide detailed\nformatting feedback. Professors must manage multiple responsibilities, including teaching, re-\nsearch, and administrative duties, which restricts their ability to thoroughly review formatting\naspects of every student submission. As a result, many formatting errors persist across sub-\nmissions, slowing students’ development of academic writing skills and increasing the overall\nreview burden.\nAdditionally, existing writing support tools primarily focus on grammar correction and lan-\nguage enhancement, offering minimal assistance for technical formatting issues . Tools that\ndo address citation management often operate independently and do not verify contextual cor-\nrectness within the document. This fragmented support creates a gap in automated academic\nquality assurance for technical papers.\nThe need for an affordable and student-friendly automated solution further strengthens the\nmotivation behind this project. Many available platforms are subscription-based and may not\nbe accessible to all students. Therefore, a lightweight and specialized platform capable of\ndelivering fast, actionable feedback on technical formatting can significantly improve student\nproductivity, reduce faculty workload, and enhance overall research paper quality.\n6\n",
+    "Literature Review\nThe domain of academic writing assistance has been widely explored through various tools\nand research efforts aimed at improving the quality of scholarly documents. A significant por-\ntion of existing solutions focus on grammar correction and language refinement, helping users\nenhance sentence structure, vocabulary, and readability. While these tools are effective for gen-\neral writing improvement, they provide limited support for technical formatting requirements\nspecific to research papers.\nPlagiarism detection systems represent another category of related solutions. These plat-\nforms are primarily designed to verify the originality of the content by comparing documents\nagainst large academic databases. Although they play an essential role in maintaining aca-\ndemic integrity, they do not address formatting correctness, structural consistency, or citation-\nreference mapping within a document. Consequently, plagiarism tools alone cannot ensure\ncomprehensive academic formatting compliance.\nCitation management software help in assisting researchers in creating and managing cita-\ntions in multiple styles. However, these tools typically operate as standalone utilities and do not\nverify whether in-text citations are properly linked to the reference list or whether references\nare complete and correctly ordered. Moreover, they lack the capability to detect contextual\nerrors such as missing citations, incorrect bracket punctuation, or mismatched citation styles\nacross a document.\nRecent research in Natural Language Processing and document analysis has introduced\ntechniques for automated document segmentation, citation extraction, and metadata classifica-\ntion. Machine learning models have been applied to identify reference structures and improve\nacademic indexing systems. Despite these advances, most of the research focuses on large-\nscale academic database management rather than providing practical tools at the student-level\n7\n",
+    "for formatting verification and improvement.\nThe review of the existing literature highlights a clear gap in integrated solutions that com-\nbine structural validation, citation verification, and technical formatting analysis within a single\nplatform. There is a lack of lightweight, affordable systems specifically designed for technical\nresearch papers that can detect formatting inconsistencies related to figures, tables, equations,\nand references while offering actionable improvement suggestions. The proposed platform\naddresses this gap by integrating rule-based validation with machine learning techniques to\nprovide comprehensive formatting assistance tailored to student research needs.\n8\n",
+    "Problem Statement\nUndergraduate and postgraduate students in technical disciplines are required to prepare re-\nsearch papers and project reports that follow strict academic formatting standards prescribed\nby universities, conferences, and journals. However, many students lack formal training in\ntechnical writing and formatting conventions, which results in frequent structural and stylistic\nerrors in their submissions. These errors include improper figure and table referencing, miss-\ning or incorrectly placed captions, unnumbered or unexplained equations, inconsistent citation\nstyles, and mismatches between in-text citations and the reference list.\nThe absence of timely and detailed feedback further aggravates the problem. Faculty mem-\nbers often face a heavy workload and are unable to provide comprehensive formatting correc-\ntions for every submission. As a result, students repeatedly make similar mistakes, leading to\npoor document quality, increased review cycles, and delays in evaluation or publication.\nExisting writing assistance tools primarily focus on grammar and language improvement\nand offer limited support for technical formatting verification. Tools that handle citations or\nreferences work in isolation and do not validate the overall structural consistency of the doc-\nument. Consequently, there is a lack of an integrated, automated solution that can analyze\nmultiple components of a technical paper, including text structure, figures, tables, equations,\nand references.\nTherefore, there is a need for a comprehensive and automated system that can accurately\ndetect formatting inconsistencies, structural errors, and reference-related issues in technical\nacademic documents and provide actionable feedback to help students improve the quality and\ncompliance of their research papers.\n9\n",
+    "Objectives\nThe primary objective of our project is to develop an intelligent, automated system capable of\nverifying the structural and formatting correctness of technical research papers. The platform is\ndesigned to go beyond traditional grammar-checking tools by focusing specifically on academic\nformatting standards required in engineering and scientific writing. The purpose of this project\nis to ensure that research documents comply with institutional and journal-specific guidelines\nprior to submission.\nFigure 1: System Architecture of Fix my Paper\nOne of the key objectives is to automatically detect formatting inconsistencies related to\nfigures, tables, and equations. This includes verifying whether figures and tables are properly\nnumbered, correctly referenced in the text, placed after their first mention, and accompanied\nby appropriate captions. For mathematical expressions, the system aims to check sequential\nequation numbering, proper formatting of variables and units, and whether all symbols are\ndefined clearly within the text.\n10\n",
+    "Another important objective is to validate citation and reference integrity. The system seeks\nto ensure that in-text citations correctly correspond to entries in the reference list, that refer-\nences are complete and properly ordered, and that citation styles such as IEEE or APA are\nconsistently applied. By automating these checks, the platform reduces the likelihood of sub-\nmission rejections due to referencing errors.\nThe project also aims to reduce manual correction effort for both students and faculty mem-\nbers. By generating structured and actionable feedback reports within a short processing time,\nthe system encourages students to independently refine their work before submission. This\nobjective directly contributes to improving overall academic writing quality and promoting\nself-learning.\nFrom a methodological perspective, the system follows a structured processing pipeline.\nThe process begins when a user uploads a research paper in PDF or DOC format. The backend\nthen extracts textual content, figures, tables, equations, and references using document parsing\nutilities.\nFollowing extraction, a rule-based engine employing regular expressions and pattern-matching\ntechniques analyzes structural formatting aspects. These rules are designed to detect errors such\nas skipped numbering sequences, incorrect caption placement, improper punctuation, inconsis-\ntent typography, and citation bracket formatting issues.\nIn parallel, machine learning models are applied to analyze the references section more\nintelligently. These models assist in identifying incomplete references, mismatches between\nin-text citations and bibliography entries, DOI validation issues, and inconsistencies in citation\nstyle formatting. The combination of rule-based logic and machine learning enhances both\naccuracy and contextual understanding.\nFinally, the detected issues are aggregated into a structured analysis report. The report cat-\negorizes errors by severity and type, provides specific suggestions for correction, and may in-\nclude an overall formatting compliance score. This report is then displayed through an intuitive\nweb interface, allowing users to easily review and implement the suggested improvements.\nThrough this systematic objective-driven methodology, our project aims to deliver a com-\nprehensive, efficient, and user-friendly solution for technical academic formatting verification.\n11\n",
+    "Simulation Platform and Requirements\nThe simulation platform for the project is designed to replicate a real-world academic docu-\nment processing environment where research papers are uploaded, analyzed, and evaluated for\nformatting compliance.\nThe validation checks implemented in the simulation environment are listed in Table 1.\nTable 1: Stage-1 Validation Checks Used in Simulation\n#\nCategory\nCheckable Requirement\n1\nFigures & Tables\nEvery figure and table is cited in the main text\n2\nFigures & Tables\nNo figure or table appears without textual reference\n3\nFigures\nFigure captions are placed below the figure\n4\nTables\nTable captions are placed above the table\n5\nFigures & Tables\nFigures and tables are numbered sequentially (no\nskipping)\n6\nFigures & Tables\nFigures and tables appear after first mention in text\n7\nTables\nUnits are specified in all column headers\n8\nFigures & Tables\nImages are clear, readable, and high resolution\n9\nEquations\nAll equations are numbered consecutively\n10\nEquations\nEquation numbers are in parentheses and flush right\n11\nEquations\nEvery equation is referenced in the text\n12\nEquations\nAll symbols are defined before or immediately after\nuse\n13\nMath Formatting\nVariables are italicized\n14\nMath Formatting\nFunctions and units are in roman (non-italic) font\n12\n",
+    "#\nCategory\nCheckable Requirement\n15\nMath Formatting\nProper punctuation is used after equations\n16\nCitations\nCitation style matches the target journal (IEEE/A-\nPA/etc.)\n17\nCitations\nBracket punctuation is correct (e.g., [1], not .[1])\n18\nCitations\nOne-to-one match between in-text citations and refer-\nence list\n19\nReferences\nNo missing or uncited references\n20\nReferences\nReferences are ordered correctly\n21\nReferences\nReferences are complete (authors, title, venue, year,\npages)\n22\nReferences\nDOI included wherever available\n23\nReferences\nJournal title casing is consistent\n24\nReferences\nURLs and DOIs are valid and unbroken\n25\nReferences\nRecent references included (last 5 years where rele-\nvant)\n26\nAcronyms\nAcronyms are defined at first occurrence\n27\nUnits\nNon-breaking space between number and unit (e.g.,\n10 kg)\n28\nTypography\nEn-dash used for numeric ranges (e.g., 10–20)\n29\nTypography\nConsistent spacing after commas and full stops\n30\nConsistency\nNotation, symbols, and terminology used consistently\nThe frontend of the platform is built using modern web technologies such as React.js or\nNext.js, combined with CSS for responsive and clean user interface design. The purpose of the\nfrontend is to provide a smooth document upload experience, display structured error reports,\nand ensure intuitive navigation. The interface is designed to clearly categorize detected issues\nunder sections such as figures, equations, citations, references, and typography, making it easy\nfor users to understand and correct errors.\n13\n",
+    "The backend of the system is implemented using Node.js or Python with FastAPI. The\nbackend handles core processing tasks, including document parsing, rule-based validation, ma-\nchine learning inference, and report generation. FastAPI is particularly suitable due to its high\nperformance, asynchronous capabilities, and compatibility with machine learning workflows.\nThe backend acts as the central processing unit of the platform, coordinating data extraction,\nanalysis, and structured output generation.\nFor document analysis and machine learning operations, we have used Python as the pri-\nmary programming language due to its rich ecosystem of libraries. Regular expressions and\nrule-based engines are employed to detect formatting patterns such as figure numbering, cita-\ntion brackets, equation formatting, and punctuation consistency. In addition, Natural Language\nProcessing techniques and Scikit-learn models assist in more complex tasks such as citation-\nreference matching, reference completeness verification, and DOI validation. This hybrid ap-\nproach ensures both speed and contextual intelligence in error detection.\nThe system requires a reliable database layer, such as PostgreSQL or MongoDB, to manage\nuser session data, analysis results, and system logs temporarily. While uploaded documents are\nnot stored permanently in order to maintain privacy, temporary storage ensures smooth report\ngeneration and retrieval. Data deletion policies are implemented to remove documents after\nprocessing, ensuring compliance with privacy and academic integrity standards.\nFrom an infrastructure perspective, the platform is deployed on a cloud-based virtual ma-\nchine capable of handling document uploads and concurrent processing requests. Containeriza-\ntion using Docker ensures portability and consistent deployment across environments. Object\nstorage is utilized for temporary file management, while monitoring and logging services main-\ntain system reliability, uptime tracking, and performance diagnostics.\nFor machine learning model training and experimentation, a short-term GPU-enabled com-\npute instance may be required. This is particularly useful during development and optimization\nphases to improve model accuracy in reference classification and pattern recognition. Once\ntrained, inference can be performed efficiently on standard CPU-based servers to reduce oper-\national costs.\nSecurity and accessibility are also essential requirements of the platform. A registered do-\n14\n",
+    "main name and SSL certificate are necessary to ensure secure HTTPS communication between\nusers and the server. Authentication mechanisms can be integrated in later stages to support\ninstitutional adoption and personalized report tracking.\nOverall, the simulation platform integrates modern web technologies, cloud infrastructure,\nand machine learning frameworks to create a scalable and efficient academic formatting veri-\nfication system. The combination of frontend usability, backend computational efficiency, and\nsecure deployment ensures that the system can operate reliably under real-world academic us-\nage conditions.\n15\n",
+    "Proposed Method\nThe proposed system is designed to automatically analyze technical research documents and\nidentify structural, formatting, and reference-related issues. The methodology of the system is\ndescribed below.\n1. Document Upload and Input Handling\nThe process begins with the user uploading a research paper through a web-based inter-\nface. The system accepts documents in PDF or DOC format. Once uploaded, the file\nis securely stored and passed to the processing module for further analysis. The inter-\nface is designed to be simple and accessible, allowing students to quickly submit their\ndocuments for evaluation.\n2. Text Extraction and Preprocessing\nAfter the document is uploaded, the system extracts textual and structural content using\ndocument parsing libraries. The extracted content is cleaned and organized into logical\ncomponents such as headings, paragraphs, figures, tables, equations, and references. Pre-\nprocessing ensures that the data is structured properly so that different validation modules\ncan analyze each component efficiently.\n3. Structural and Formatting Validation\nThe system applies a rule-based validation engine to identify formatting inconsistencies.\nRegular expression techniques are used to check figure and table numbering, caption\nplacement, equation numbering, and citation formats. The system also verifies whether\nfigures, tables, and equations are properly referenced within the text and whether their\nnumbering sequence is consistent throughout the document.\n16\n",
+    "4. Citation and Reference Analysis\nTo ensure accuracy in academic referencing, the system performs citation verification\nusing natural language processing techniques. It checks the relationship between in-text\ncitations and the bibliography to detect missing references, duplicates, or mismatches.\nThe system also validates whether the citation format follows standard styles such as\nIEEE or APA.\n5. Contextual Analysis of Technical Elements\nThe proposed method includes multi-modal analysis to evaluate figures and equations\nin context. The system checks whether each figure or equation is accompanied by an\nappropriate explanation in the surrounding text. This ensures that technical elements are\nnot only present but are also properly integrated into the document.\n6. Report Generation and Feedback\nAfter completing the analysis, the system generates a detailed report that categorizes\nerrors based on type and severity. The report includes actionable suggestions for im-\nprovement, allowing users to correct issues before final submission. The entire analysis\nprocess is optimized for speed and produces results within approximately 40 seconds.\n7. System Benefits\nThe proposed system is lightweight, scalable, and cost-effective for students. It reduces\nmanual formatting effort and helps improve the overall quality of academic submissions.\nAdditionally, it minimizes the workload of faculty members by automating repetitive\nformatting checks.\n8. Comparison with Existing Solutions\nThe advantages of the proposed system over existing tools are presented in Table 2.\n17\n",
+    "Table 2: Comparison between Fix my Paper and Existing Solutions\nFix my Paper (our solution)\nExisting Solutions\nAdvanced AI-driven analysis\nBasic formatting checks\nImage and equation context check\nLimited technical paper support\nAffordable for students\nHigher cost barrier\nLightning-fast results in just 40 sec-\nonds\nSlower processing (up to 2 minutes)\nTailored for technical papers\nGeneric approach to all papers\nEmpowers students and reduces\nfaculty workload\nFocuses mainly on language and\nstyle\n18\n",
+    "Conclusion\nOur project proposes a scalable and intelligent academic formatting verification system specifi-\ncally designed for technical research papers in engineering and related disciplines. Unlike con-\nventional writing tools that focus mainly on grammar and language refinement, this platform\nconcentrates on structural accuracy, formatting compliance, and reference integrity. By inte-\ngrating rule-based validation mechanisms with machine learning models, the system is capable\nof performing a detailed analysis of figures, tables, equations, citations, references, typography,\nand document consistency within a single unified framework.\nThe combination of deterministic rule engines and data-driven models enhances both pre-\ncision and contextual understanding. Rule-based logic ensures strict adherence to predefined\nacademic standards, such as sequential numbering of figures and equations, correct caption\nplacement, proper citation bracket formatting, and consistent punctuation. At the same time,\nmachine learning models provide intelligent validation of reference sections by identifying\nincomplete entries, mismatches between in-text citations and bibliography items, DOI irregu-\nlarities, and style inconsistencies. This hybrid architecture allows the system to deliver com-\nprehensive and reliable formatting verification.\nOne of the primary impacts of the platform is the improvement of student academic writing\nquality. By receiving structured, categorized feedback before submission, students can identify\nrecurring formatting mistakes and correct them independently. Over time, this promotes better\nunderstanding of academic conventions and strengthens technical writing skills. Instead of\nrelying solely on manual feedback from faculty members, students gain access to an automated\nassistant that supports continuous learning and self-correction.\nThe system also significantly reduces repetitive faculty workload. Formatting errors such\nas incorrect numbering, missing references, undefined variables, and citation mismatches of-\n19\n",
+    "ten consume substantial review time despite being non-conceptual issues. By automating the\ndetection of such errors, the platform enables faculty members to focus more on evaluating the\ntechnical depth and originality of the research rather than routine formatting corrections. This\ncontributes to improved efficiency in academic evaluation processes.\nAnother important contribution of the solution is enhanced compliance with journal and\ninstitutional standards. Research papers intended for publication must adhere strictly to pre-\nscribed formatting guidelines such as IEEE or APA styles. Even minor inconsistencies can re-\nsult in rejection or revision requests. By verifying citation styles, reference ordering, structural\nconsistency, and typographic conventions, the system increases the likelihood of submissions\nmeeting professional standards on the first attempt.\nAffordability and accessibility are also central to the platform’s design philosophy. Many\nexisting academic support tools are expensive subscription-based services that may not be ac-\ncessible to all students. This project aims to provide fast and cost-effective automated assis-\ntance, delivering detailed analysis reports within a short processing time. This ensures that\nstudents from diverse academic backgrounds can benefit from advanced formatting verification\nwithout financial barriers.\nWith pilot testing, iterative refinement, and performance optimization, the system has strong\npotential for institutional-level adoption across engineering colleges and technical universities.\nIt can be integrated into submission workflows, departmental review processes, or research\nlabs to establish a standardized pre-submission verification mechanism. In the long term, the\nplatform may evolve into a comprehensive academic quality assurance tool, supporting large-\nscale document validation while promoting higher standards of technical writing excellence.\n20\n",
+    "References\n• English grammar and writing app. https://www.gingersoftware.com/grammarcheck.\n• Languagetool free ai grammar checker. https://languagetool.org, 2018.\n• The bea-2019 dataset for grammatical, lexical, and spelling errors.\nhttps://www.cl.cam.ac.uk/research/nl/bea2019/, 2019.\n• A grammatical error correction model for english essay scoring based on statistical meth-\nods. Hindawi, 2022.\n• Writefull vs grammarly: What’s the difference?, 2022. Blog: Comparison of accuracy\nand application.\n• The 11 best ai tools for academic writing, 2023. Master Academia.\n• Automated academic writing and proofreading. https://www.writefull.com, 2023.\n• Research and analysis of grammatical error correction technology. SCIRP Journal, 2024.\n• Free, powerful english grammar checker. https://www.scribens.com, 2025.\n• Grammarly grammar checker. https://www.grammarly.com/grammar-check, 2025.\n• Stefano Bann‘o. Using grammatical error correction to automatically assess l2 profi-\nciency.\nComputer Speech Language, 2024. https://www.sciencedirect.com/.\n• Christopher Bryant, Zhenhao Yuan, Muhammad Rizqi Qorib, Huan Cao, Hwee Tou Ng,\n21\n",
+    "and Ted Briscoe. Grammatical error correction: A survey of the state of the art. Compu-\ntational Linguistics, 49(3):643–701, 2023.\n• Robert ¨Ostling. Evaluation of really good grammatical error correction. In Proceedings\nof LREC 2024, pages 6582–6593, 2024.\n22\n"
+  ],
+  "total_pages": 23,
+  "line_count": 440,
+  "lines": [
+    {
+      "text": "An Intelligent System for Academic Manuscript",
+      "page_num": 0,
+      "bbox": {
+        "x0": 114.3219985961914,
+        "y0": 70.59224700927734,
+        "x1": 480.9581298828125,
+        "y1": 88.5250473022461
+      }
+    },
+    {
+      "text": "Formatting and Compliance",
+      "page_num": 0,
+      "bbox": {
+        "x0": 189.27099609375,
+        "y0": 98.9382553100586,
+        "x1": 406.0068359375,
+        "y1": 116.87105560302734
+      }
+    },
+    {
+      "text": "A project report submitted in partial fulfillment of the requirements",
+      "page_num": 0,
+      "bbox": {
+        "x0": 109.94599914550781,
+        "y0": 162.73123168945312,
+        "x1": 485.3345642089844,
+        "y1": 176.67893981933594
+      }
+    },
+    {
+      "text": "for the award of the degree of",
+      "page_num": 0,
+      "bbox": {
+        "x0": 215.04000854492188,
+        "y0": 183.65225219726562,
+        "x1": 380.2366027832031,
+        "y1": 197.59996032714844
+      }
+    },
+    {
+      "text": "B. Tech.in Computer Science and Engineering",
+      "page_num": 0,
+      "bbox": {
+        "x0": 158.37901306152344,
+        "y0": 220.3759307861328,
+        "x1": 436.9006652832031,
+        "y1": 234.32362365722656
+      }
+    },
+    {
+      "text": "By",
+      "page_num": 0,
+      "bbox": {
+        "x0": 289.4990234375,
+        "y0": 260.1882629394531,
+        "x1": 305.7760009765625,
+        "y1": 274.1359558105469
+      }
+    },
+    {
+      "text": "Aarushi Jain (2022UCS1591)",
+      "page_num": 0,
+      "bbox": {
+        "x0": 211.33702087402344,
+        "y0": 288.40692138671875,
+        "x1": 383.9398498535156,
+        "y1": 302.4819641113281
+      }
+    },
+    {
+      "text": "Aayushi Jain (2022UCS1606)",
+      "page_num": 0,
+      "bbox": {
+        "x0": 210.94601440429688,
+        "y0": 316.7529296875,
+        "x1": 384.32989501953125,
+        "y1": 330.8279724121094
+      }
+    },
+    {
+      "text": "Aarushi Kushwaha (2022UCS1615)",
+      "page_num": 0,
+      "bbox": {
+        "x0": 192.34701538085938,
+        "y0": 345.09991455078125,
+        "x1": 402.9294128417969,
+        "y1": 359.1749572753906
+      }
+    },
+    {
+      "text": "Under the supervision of",
+      "page_num": 0,
+      "bbox": {
+        "x0": 228.49301147460938,
+        "y0": 401.9202575683594,
+        "x1": 366.7845153808594,
+        "y1": 415.8679504394531
+      }
+    },
+    {
+      "text": "Dr.Vijay Kumar Bohat",
+      "page_num": 0,
+      "bbox": {
+        "x0": 227.38401794433594,
+        "y0": 430.138916015625,
+        "x1": 367.8931884765625,
+        "y1": 444.08660888671875
+      }
+    },
+    {
+      "text": "Computer Science and Engineering",
+      "page_num": 0,
+      "bbox": {
+        "x0": 192.06201171875,
+        "y0": 458.48590087890625,
+        "x1": 403.2162780761719,
+        "y1": 472.43359375
+      }
+    },
+    {
+      "text": "Netaji Subhas University of Technology, Delhi",
+      "page_num": 0,
+      "bbox": {
+        "x0": 159.5150146484375,
+        "y0": 486.8319091796875,
+        "x1": 432.2763671875,
+        "y1": 500.77960205078125
+      }
+    },
+    {
+      "text": "NETAJI SUBHAS UNIVERSITY OF TECHNOLOGY",
+      "page_num": 0,
+      "bbox": {
+        "x0": 110.1500015258789,
+        "y0": 663.2505493164062,
+        "x1": 485.1272888183594,
+        "y1": 679.1907958984375
+      }
+    },
+    {
+      "text": "DELHI-110078",
+      "page_num": 0,
+      "bbox": {
+        "x0": 245.385986328125,
+        "y0": 679.1906127929688,
+        "x1": 349.889892578125,
+        "y1": 695.130859375
+      }
+    },
+    {
+      "text": "MARCH 2026",
+      "page_num": 0,
+      "bbox": {
+        "x0": 248.71697998046875,
+        "y0": 709.3035888671875,
+        "x1": 346.5578918457031,
+        "y1": 725.2438354492188
+      }
+    },
+    {
+      "text": "CERTIFICATE",
+      "page_num": 1,
+      "bbox": {
+        "x0": 248.78900146484375,
+        "y0": 72.94403076171875,
+        "x1": 346.48663330078125,
+        "y1": 87.29022979736328
+      }
+    },
+    {
+      "text": "This is to certify that the project titled An Intelligent System for Academic Manuscript",
+      "page_num": 1,
+      "bbox": {
+        "x0": 89.55900573730469,
+        "y0": 120.14519500732422,
+        "x1": 523.2816162109375,
+        "y1": 132.2095489501953
+      }
+    },
+    {
+      "text": "Formatting and Compliance is a bonafide record of the work done by",
+      "page_num": 1,
+      "bbox": {
+        "x0": 72.00000762939453,
+        "y0": 144.05621337890625,
+        "x1": 412.5917053222656,
+        "y1": 156.1205596923828
+      }
+    },
+    {
+      "text": "Aarushi Jain (2022UCS1591)",
+      "page_num": 1,
+      "bbox": {
+        "x0": 223.33700561523438,
+        "y0": 209.26422119140625,
+        "x1": 371.9401550292969,
+        "y1": 221.21942138671875
+      }
+    },
+    {
+      "text": "Aayushi Jain (2022UCS1606)",
+      "page_num": 1,
+      "bbox": {
+        "x0": 223.0019989013672,
+        "y0": 233.1741943359375,
+        "x1": 372.2746276855469,
+        "y1": 245.12939453125
+      }
+    },
+    {
+      "text": "Aarushi Kushwaha (2022UCS1615)",
+      "page_num": 1,
+      "bbox": {
+        "x0": 207.05999755859375,
+        "y0": 257.08416748046875,
+        "x1": 388.2171630859375,
+        "y1": 269.03936767578125
+      }
+    },
+    {
+      "text": "under my supervision and guidance in partial fulfillment of the requirements for the award of",
+      "page_num": 1,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 322.4023132324219,
+        "x1": 523.27294921875,
+        "y1": 334.3575134277344
+      }
+    },
+    {
+      "text": "the degree of Bachelor of Technology in Computer Science and Engineering of the Netaji",
+      "page_num": 1,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 346.2031555175781,
+        "x1": 523.2728881835938,
+        "y1": 358.26751708984375
+      }
+    },
+    {
+      "text": "Subhas University of Technology, DELHI-110078, during the year 2025 - 2026.",
+      "page_num": 1,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 370.1131591796875,
+        "x1": 464.8598327636719,
+        "y1": 382.1775207519531
+      }
+    },
+    {
+      "text": "Their work is genuine and has not been submitted for the award of any other degree to the",
+      "page_num": 1,
+      "bbox": {
+        "x0": 89.55899810791016,
+        "y0": 394.1333312988281,
+        "x1": 523.2816162109375,
+        "y1": 406.0885314941406
+      }
+    },
+    {
+      "text": "best of my knowledge.",
+      "page_num": 1,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 418.0433349609375,
+        "x1": 180.6129913330078,
+        "y1": 429.99853515625
+      }
+    },
+    {
+      "text": "DATE:",
+      "page_num": 1,
+      "bbox": {
+        "x0": 89.55899810791016,
+        "y0": 512.7101440429688,
+        "x1": 125.19744873046875,
+        "y1": 524.6653442382812
+      }
+    },
+    {
+      "text": "Dr.Vijay Kumar Bohat",
+      "page_num": 1,
+      "bbox": {
+        "x0": 402.8399963378906,
+        "y0": 617.4501342773438,
+        "x1": 523.2766723632812,
+        "y1": 629.4053344726562
+      }
+    },
+    {
+      "text": "Assistant Professor",
+      "page_num": 1,
+      "bbox": {
+        "x0": 431.29400634765625,
+        "y0": 641.4692993164062,
+        "x1": 523.2772827148438,
+        "y1": 653.4244995117188
+      }
+    },
+    {
+      "text": "Division of Computer Science",
+      "page_num": 1,
+      "bbox": {
+        "x0": 378.4639892578125,
+        "y0": 665.3793334960938,
+        "x1": 523.27734375,
+        "y1": 677.3345336914062
+      }
+    },
+    {
+      "text": "Netaji Subhas University of Technology",
+      "page_num": 1,
+      "bbox": {
+        "x0": 331.33697509765625,
+        "y0": 689.290283203125,
+        "x1": 523.2777099609375,
+        "y1": 701.2454833984375
+      }
+    },
+    {
+      "text": "1",
+      "page_num": 1,
+      "bbox": {
+        "x0": 294.64898681640625,
+        "y0": 790.7113037109375,
+        "x1": 300.6265869140625,
+        "y1": 802.66650390625
+      }
+    },
+    {
+      "text": "DECLARATION",
+      "page_num": 2,
+      "bbox": {
+        "x0": 244.52099609375,
+        "y0": 72.94403076171875,
+        "x1": 350.7546691894531,
+        "y1": 87.29022979736328
+      }
+    },
+    {
+      "text": "This is to certify that the work which is being hereby presented by us in this project titled",
+      "page_num": 2,
+      "bbox": {
+        "x0": 89.55899047851562,
+        "y0": 120.25434875488281,
+        "x1": 523.2816162109375,
+        "y1": 132.2095489501953
+      }
+    },
+    {
+      "text": "“An Intelligent System for Academic Manuscript Formatting and Compliance” in partial",
+      "page_num": 2,
+      "bbox": {
+        "x0": 71.99999237060547,
+        "y0": 144.05621337890625,
+        "x1": 523.27294921875,
+        "y1": 156.1205596923828
+      }
+    },
+    {
+      "text": "fulfilment of the award of the Bachelor of Technology submitted at the Department of Computer",
+      "page_num": 2,
+      "bbox": {
+        "x0": 71.99999237060547,
+        "y0": 168.07533264160156,
+        "x1": 523.27294921875,
+        "y1": 180.03053283691406
+      }
+    },
+    {
+      "text": "ScienceandEngineering,NetajiSubhasUniversityofTechnology,NewDelhi,isagenuine",
+      "page_num": 2,
+      "bbox": {
+        "x0": 71.99999237060547,
+        "y0": 191.9853057861328,
+        "x1": 523.2728271484375,
+        "y1": 203.9405059814453
+      }
+    },
+    {
+      "text": "accountofourworkcarriedoutduringtheperiodfromDecember2025toFebruary2026",
+      "page_num": 2,
+      "bbox": {
+        "x0": 71.99999237060547,
+        "y0": 215.8963165283203,
+        "x1": 523.2727661132812,
+        "y1": 227.8515167236328
+      }
+    },
+    {
+      "text": "undertheguidanceofDr.VijayKumarBohat,DepartmentofComputerScience,Netaji",
+      "page_num": 2,
+      "bbox": {
+        "x0": 71.99999237060547,
+        "y0": 239.6971435546875,
+        "x1": 523.2728881835938,
+        "y1": 251.76148986816406
+      }
+    },
+    {
+      "text": "Subhas University of Technology, New Delhi.",
+      "page_num": 2,
+      "bbox": {
+        "x0": 71.99999237060547,
+        "y0": 263.7162780761719,
+        "x1": 291.74853515625,
+        "y1": 275.6714782714844
+      }
+    },
+    {
+      "text": "The matter embodied in the project report to the best of our knowledge has not been sub-",
+      "page_num": 2,
+      "bbox": {
+        "x0": 89.55899047851562,
+        "y0": 287.6272888183594,
+        "x1": 523.2816772460938,
+        "y1": 299.5824890136719
+      }
+    },
+    {
+      "text": "mitted for the award of any other degree elsewhere.",
+      "page_num": 2,
+      "bbox": {
+        "x0": 71.99999237060547,
+        "y0": 311.5372619628906,
+        "x1": 317.7032470703125,
+        "y1": 323.4924621582031
+      }
+    },
+    {
+      "text": "DATE:",
+      "page_num": 2,
+      "bbox": {
+        "x0": 89.55899047851562,
+        "y0": 406.2041015625,
+        "x1": 125.19744110107422,
+        "y1": 418.1593017578125
+      }
+    },
+    {
+      "text": "Aarushi JainAayushi JainAarushi Kushwaha",
+      "page_num": 2,
+      "bbox": {
+        "x0": 89.55899047851562,
+        "y0": 509.14410400390625,
+        "x1": 534.8544311523438,
+        "y1": 521.0993041992188
+      }
+    },
+    {
+      "text": "(2022UCS1591)(2022UCS1606)(2022UCS1615)",
+      "page_num": 2,
+      "bbox": {
+        "x0": 89.55899047851562,
+        "y0": 533.1642456054688,
+        "x1": 534.8543090820312,
+        "y1": 545.1194458007812
+      }
+    },
+    {
+      "text": "2",
+      "page_num": 2,
+      "bbox": {
+        "x0": 294.64898681640625,
+        "y0": 790.7112426757812,
+        "x1": 300.6265869140625,
+        "y1": 802.6664428710938
+      }
+    },
+    {
+      "text": "ACKNOWLEDGEMENT",
+      "page_num": 3,
+      "bbox": {
+        "x0": 217.88800048828125,
+        "y0": 72.94403076171875,
+        "x1": 377.3890380859375,
+        "y1": 87.29022979736328
+      }
+    },
+    {
+      "text": "WewouldliketoexpressoursinceregratitudetoDr.VijayKumarBohat,Departmentof",
+      "page_num": 3,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 120.25434875488281,
+        "x1": 523.27294921875,
+        "y1": 132.2095489501953
+      }
+    },
+    {
+      "text": "Computer Science and Engineering, Netaji Subhas University of Technology, Delhi, for his in-",
+      "page_num": 3,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 144.1653594970703,
+        "x1": 523.2728881835938,
+        "y1": 156.1205596923828
+      }
+    },
+    {
+      "text": "valuable guidance and support throughout the brainstorming, theoretical framework, and partial",
+      "page_num": 3,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 168.07533264160156,
+        "x1": 523.2728881835938,
+        "y1": 180.03053283691406
+      }
+    },
+    {
+      "text": "implementation of this project.His insights, encouragement, and constructive feedback greatly",
+      "page_num": 3,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 191.9853057861328,
+        "x1": 523.2728271484375,
+        "y1": 203.9405059814453
+      }
+    },
+    {
+      "text": "enhanced our understanding and helped shape the direction of this work.",
+      "page_num": 3,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 215.8963165283203,
+        "x1": 418.84423828125,
+        "y1": 227.8515167236328
+      }
+    },
+    {
+      "text": "We are also thankful for the environment of learning and collaboration provided by the de-",
+      "page_num": 3,
+      "bbox": {
+        "x0": 89.55899810791016,
+        "y0": 251.7613067626953,
+        "x1": 523.2815551757812,
+        "y1": 263.7165222167969
+      }
+    },
+    {
+      "text": "partment, which allowed us to explore ideas freely and translate them into practical outcomes.",
+      "page_num": 3,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 275.6712951660156,
+        "x1": 521.419921875,
+        "y1": 287.6264953613281
+      }
+    },
+    {
+      "text": "3",
+      "page_num": 3,
+      "bbox": {
+        "x0": 294.64898681640625,
+        "y0": 790.7112426757812,
+        "x1": 300.6265869140625,
+        "y1": 802.6664428710938
+      }
+    },
+    {
+      "text": "Table Of Contents",
+      "page_num": 4,
+      "bbox": {
+        "x0": 201.00599670410156,
+        "y0": 144.63246154785156,
+        "x1": 394.2710266113281,
+        "y1": 169.4195556640625
+      }
+    },
+    {
+      "text": "CERTIFICATE......................................2",
+      "page_num": 4,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 229.94720458984375,
+        "x1": 523.27294921875,
+        "y1": 242.0115509033203
+      }
+    },
+    {
+      "text": "DECLARATION......................................3",
+      "page_num": 4,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 265.564208984375,
+        "x1": 523.27294921875,
+        "y1": 277.6285705566406
+      }
+    },
+    {
+      "text": "ACKNOWLEDGEMENT.................................3",
+      "page_num": 4,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 301.18023681640625,
+        "x1": 523.27294921875,
+        "y1": 313.2445983886719
+      }
+    },
+    {
+      "text": "TABLE OF CONTENTS.................................4",
+      "page_num": 4,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 336.7962341308594,
+        "x1": 523.27294921875,
+        "y1": 348.860595703125
+      }
+    },
+    {
+      "text": "INTRODUCTION.....................................5",
+      "page_num": 4,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 372.4132385253906,
+        "x1": 523.27294921875,
+        "y1": 384.47760009765625
+      }
+    },
+    {
+      "text": "MOTIVATION.......................................6",
+      "page_num": 4,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 408.02923583984375,
+        "x1": 523.27294921875,
+        "y1": 420.0935974121094
+      }
+    },
+    {
+      "text": "LITERATURE REVIEW.................................7",
+      "page_num": 4,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 443.6452331542969,
+        "x1": 523.27294921875,
+        "y1": 455.7095947265625
+      }
+    },
+    {
+      "text": "PROBLEM STATEMENT................................9",
+      "page_num": 4,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 479.2622375488281,
+        "x1": 523.27294921875,
+        "y1": 491.32659912109375
+      }
+    },
+    {
+      "text": "OBJECTIVES.......................................10",
+      "page_num": 4,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 514.8782348632812,
+        "x1": 523.27294921875,
+        "y1": 526.9425659179688
+      }
+    },
+    {
+      "text": "SIMULATION PLATFORM12...............................",
+      "page_num": 4,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 550.4942016601562,
+        "x1": 523.27294921875,
+        "y1": 562.5585327148438
+      }
+    },
+    {
+      "text": "PROPOSED METHOD..................................16",
+      "page_num": 4,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 586.1112670898438,
+        "x1": 523.27294921875,
+        "y1": 598.1755981445312
+      }
+    },
+    {
+      "text": "CONCLUSION......................................19",
+      "page_num": 4,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 621.7272338867188,
+        "x1": 523.27294921875,
+        "y1": 633.7915649414062
+      }
+    },
+    {
+      "text": "REFERENCES .......................................21",
+      "page_num": 4,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 657.3432006835938,
+        "x1": 523.27294921875,
+        "y1": 669.4075317382812
+      }
+    },
+    {
+      "text": "4",
+      "page_num": 4,
+      "bbox": {
+        "x0": 294.64898681640625,
+        "y0": 790.7113647460938,
+        "x1": 300.6265869140625,
+        "y1": 802.6665649414062
+      }
+    },
+    {
+      "text": "Introduction",
+      "page_num": 5,
+      "bbox": {
+        "x0": 230.37899780273438,
+        "y0": 144.63246154785156,
+        "x1": 364.8985595703125,
+        "y1": 169.4195556640625
+      }
+    },
+    {
+      "text": "FixmyPaperisaweb-basedintelligentacademicformattingverificationplatformthatisde-",
+      "page_num": 5,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 218.35035705566406,
+        "x1": 523.2728271484375,
+        "y1": 230.30555725097656
+      }
+    },
+    {
+      "text": "signedtoautomaticallyanalyzeresearchpapersanddetectstructural,syntactic,citation,and",
+      "page_num": 5,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 242.26136779785156,
+        "x1": 523.2728881835938,
+        "y1": 254.21656799316406
+      }
+    },
+    {
+      "text": "formatting-related errors. Academic writing in technical domains follows strict formatting stan-",
+      "page_num": 5,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 266.1713562011719,
+        "x1": 523.2728271484375,
+        "y1": 278.1265563964844
+      }
+    },
+    {
+      "text": "dards prescribed by institutions and journals like IEEE, APA etc.These standards ensure clar-",
+      "page_num": 5,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 290.0813293457031,
+        "x1": 523.27294921875,
+        "y1": 302.0365295410156
+      }
+    },
+    {
+      "text": "ity, reproducibility, and professional presentation of research work.",
+      "page_num": 5,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 313.9923400878906,
+        "x1": 392.38739013671875,
+        "y1": 325.9475402832031
+      }
+    },
+    {
+      "text": "However,undergraduatestudentsoftenlackformaltraininginacademicwritingconven-",
+      "page_num": 5,
+      "bbox": {
+        "x0": 89.55899810791016,
+        "y0": 337.90234375,
+        "x1": 523.2816162109375,
+        "y1": 349.8575439453125
+      }
+    },
+    {
+      "text": "tions.Whiletheymaypossessstrongtechnicalknowledge,theyfrequentlymakeformatting",
+      "page_num": 5,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 361.8123474121094,
+        "x1": 523.27294921875,
+        "y1": 373.7675476074219
+      }
+    },
+    {
+      "text": "mistakes such as:",
+      "page_num": 5,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 385.7233581542969,
+        "x1": 154.89735412597656,
+        "y1": 397.6785583496094
+      }
+    },
+    {
+      "text": "•Improper ordering of figures and tables",
+      "page_num": 5,
+      "bbox": {
+        "x0": 91.22799682617188,
+        "y0": 419.5963439941406,
+        "x1": 288.8474426269531,
+        "y1": 431.5515441894531
+      }
+    },
+    {
+      "text": "•Missing figure/table captions",
+      "page_num": 5,
+      "bbox": {
+        "x0": 91.22799682617188,
+        "y0": 456.4583435058594,
+        "x1": 240.0702362060547,
+        "y1": 468.4135437011719
+      }
+    },
+    {
+      "text": "•Equations without numbering or explanation",
+      "page_num": 5,
+      "bbox": {
+        "x0": 91.22799682617188,
+        "y0": 493.3193359375,
+        "x1": 314.9337158203125,
+        "y1": 505.2745361328125
+      }
+    },
+    {
+      "text": "•Incorrect citation styles",
+      "page_num": 5,
+      "bbox": {
+        "x0": 91.22799682617188,
+        "y0": 530.1813354492188,
+        "x1": 213.48187255859375,
+        "y1": 542.1365356445312
+      }
+    },
+    {
+      "text": "•Mismatched in-text citations and reference lists",
+      "page_num": 5,
+      "bbox": {
+        "x0": 91.22799682617188,
+        "y0": 567.0432739257812,
+        "x1": 327.85723876953125,
+        "y1": 578.9984741210938
+      }
+    },
+    {
+      "text": "•Inconsistent typography and notation",
+      "page_num": 5,
+      "bbox": {
+        "x0": 91.22799682617188,
+        "y0": 603.9053344726562,
+        "x1": 278.8529357910156,
+        "y1": 615.8605346679688
+      }
+    },
+    {
+      "text": "Mostofthewritingtoolsthatcurrentlyexistprimarilyfocusongrammarandlanguage",
+      "page_num": 5,
+      "bbox": {
+        "x0": 89.55899810791016,
+        "y0": 640.7662963867188,
+        "x1": 523.28173828125,
+        "y1": 652.7214965820312
+      }
+    },
+    {
+      "text": "improvement, offering little support for technical formatting compliance.Fix my Paper helps",
+      "page_num": 5,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 664.6773071289062,
+        "x1": 523.2728881835938,
+        "y1": 676.6325073242188
+      }
+    },
+    {
+      "text": "bridge this gap by integrating rule-based validation and machine learning techniques to generate",
+      "page_num": 5,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 688.5872802734375,
+        "x1": 523.27294921875,
+        "y1": 700.54248046875
+      }
+    },
+    {
+      "text": "structured, actionable improvement reports within seconds.",
+      "page_num": 5,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 712.497314453125,
+        "x1": 354.8719787597656,
+        "y1": 724.4525146484375
+      }
+    },
+    {
+      "text": "5",
+      "page_num": 5,
+      "bbox": {
+        "x0": 294.64898681640625,
+        "y0": 790.7113037109375,
+        "x1": 300.6265869140625,
+        "y1": 802.66650390625
+      }
+    },
+    {
+      "text": "Motivation",
+      "page_num": 6,
+      "bbox": {
+        "x0": 239.36399841308594,
+        "y0": 144.63246154785156,
+        "x1": 355.9129638671875,
+        "y1": 169.4195556640625
+      }
+    },
+    {
+      "text": "Themotivationfordevelopingourprojectarisesfromthegrowingimportanceofacademic",
+      "page_num": 6,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 218.35035705566406,
+        "x1": 523.2728271484375,
+        "y1": 230.30555725097656
+      }
+    },
+    {
+      "text": "writingqualityintechnicaleducation.Studentswithtechnicalbackgroundsareincreasingly",
+      "page_num": 6,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 242.26136779785156,
+        "x1": 523.2728271484375,
+        "y1": 254.21656799316406
+      }
+    },
+    {
+      "text": "required to produce research papers, project reports, and theses that adhere to strict formatting",
+      "page_num": 6,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 266.1713562011719,
+        "x1": 523.2728881835938,
+        "y1": 278.1265563964844
+      }
+    },
+    {
+      "text": "standardsdefinedbyacademicinstitutionsandjournals.Whilestudentsoftenpossessstrong",
+      "page_num": 6,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 290.0813293457031,
+        "x1": 523.2728881835938,
+        "y1": 302.0365295410156
+      }
+    },
+    {
+      "text": "technical knowledge,they frequently lack adequate training in academic writing conventions,",
+      "page_num": 6,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 313.9923400878906,
+        "x1": 523.27294921875,
+        "y1": 325.9475402832031
+      }
+    },
+    {
+      "text": "resulting in structural and formatting inconsistencies that negatively affect the clarity and pro-",
+      "page_num": 6,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 337.90234375,
+        "x1": 523.2728271484375,
+        "y1": 349.8575439453125
+      }
+    },
+    {
+      "text": "fessionalism of their work.",
+      "page_num": 6,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 361.8123474121094,
+        "x1": 200.05213928222656,
+        "y1": 373.7675476074219
+      }
+    },
+    {
+      "text": "A key motivating factor is the limited time available for faculty members to provide detailed",
+      "page_num": 6,
+      "bbox": {
+        "x0": 89.55899810791016,
+        "y0": 385.7233581542969,
+        "x1": 523.2816772460938,
+        "y1": 397.6785583496094
+      }
+    },
+    {
+      "text": "formatting feedback.Professors must manage multiple responsibilities, including teaching, re-",
+      "page_num": 6,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 409.63336181640625,
+        "x1": 523.27294921875,
+        "y1": 421.58856201171875
+      }
+    },
+    {
+      "text": "search, and administrative duties, which restricts their ability to thoroughly review formatting",
+      "page_num": 6,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 433.5433654785156,
+        "x1": 523.27294921875,
+        "y1": 445.4985656738281
+      }
+    },
+    {
+      "text": "aspectsofeverystudentsubmission.Asaresult,manyformattingerrorspersistacrosssub-",
+      "page_num": 6,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 457.4543762207031,
+        "x1": 523.2730102539062,
+        "y1": 469.4095764160156
+      }
+    },
+    {
+      "text": "missions, slowing students’ development of academic writing skills and increasing the overall",
+      "page_num": 6,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 481.3643798828125,
+        "x1": 523.2730102539062,
+        "y1": 493.319580078125
+      }
+    },
+    {
+      "text": "review burden.",
+      "page_num": 6,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 505.2743835449219,
+        "x1": 142.87042236328125,
+        "y1": 517.2295532226562
+      }
+    },
+    {
+      "text": "Additionally, existing writing support tools primarily focus on grammar correction and lan-",
+      "page_num": 6,
+      "bbox": {
+        "x0": 89.55899810791016,
+        "y0": 529.1853637695312,
+        "x1": 523.28173828125,
+        "y1": 541.1405639648438
+      }
+    },
+    {
+      "text": "guageenhancement,offeringminimalassistancefortechnicalformattingissues.Toolsthat",
+      "page_num": 6,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 553.0953979492188,
+        "x1": 523.2728881835938,
+        "y1": 565.0505981445312
+      }
+    },
+    {
+      "text": "do address citation management often operate independently and do not verify contextual cor-",
+      "page_num": 6,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 577.00537109375,
+        "x1": 523.2728881835938,
+        "y1": 588.9605712890625
+      }
+    },
+    {
+      "text": "rectnesswithinthedocument.Thisfragmentedsupportcreatesagapinautomatedacademic",
+      "page_num": 6,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 600.9163818359375,
+        "x1": 523.2728881835938,
+        "y1": 612.87158203125
+      }
+    },
+    {
+      "text": "quality assurance for technical papers.",
+      "page_num": 6,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 624.8263549804688,
+        "x1": 254.92648315429688,
+        "y1": 636.7815551757812
+      }
+    },
+    {
+      "text": "The need for an affordable and student-friendly automated solution further strengthens the",
+      "page_num": 6,
+      "bbox": {
+        "x0": 89.55899810791016,
+        "y0": 648.7373657226562,
+        "x1": 523.2816162109375,
+        "y1": 660.6925659179688
+      }
+    },
+    {
+      "text": "motivation behind this project.Many available platforms are subscription-based and may not",
+      "page_num": 6,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 672.6473999023438,
+        "x1": 523.27294921875,
+        "y1": 684.6026000976562
+      }
+    },
+    {
+      "text": "beaccessibletoallstudents.Therefore,alightweightandspecializedplatformcapableof",
+      "page_num": 6,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 696.557373046875,
+        "x1": 523.2728881835938,
+        "y1": 708.5125732421875
+      }
+    },
+    {
+      "text": "delivering fast,actionable feedback on technical formatting can significantly improve student",
+      "page_num": 6,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 720.4683837890625,
+        "x1": 523.2728271484375,
+        "y1": 732.423583984375
+      }
+    },
+    {
+      "text": "productivity, reduce faculty workload, and enhance overall research paper quality.",
+      "page_num": 6,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 744.3783569335938,
+        "x1": 463.29364013671875,
+        "y1": 756.3335571289062
+      }
+    },
+    {
+      "text": "6",
+      "page_num": 6,
+      "bbox": {
+        "x0": 294.64898681640625,
+        "y0": 790.7113647460938,
+        "x1": 300.6265869140625,
+        "y1": 802.6665649414062
+      }
+    },
+    {
+      "text": "Literature Review",
+      "page_num": 7,
+      "bbox": {
+        "x0": 201.34100341796875,
+        "y0": 144.63246154785156,
+        "x1": 393.9367370605469,
+        "y1": 169.4195556640625
+      }
+    },
+    {
+      "text": "Thedomainofacademicwritingassistancehasbeenwidelyexploredthroughvarioustools",
+      "page_num": 7,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 218.35035705566406,
+        "x1": 523.27294921875,
+        "y1": 230.30555725097656
+      }
+    },
+    {
+      "text": "and research efforts aimed at improving the quality of scholarly documents.A significant por-",
+      "page_num": 7,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 242.26136779785156,
+        "x1": 523.2728881835938,
+        "y1": 254.21656799316406
+      }
+    },
+    {
+      "text": "tion of existing solutions focus on grammar correction and language refinement, helping users",
+      "page_num": 7,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 266.1713562011719,
+        "x1": 523.2728271484375,
+        "y1": 278.1265563964844
+      }
+    },
+    {
+      "text": "enhance sentence structure, vocabulary, and readability. While these tools are effective for gen-",
+      "page_num": 7,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 290.0813293457031,
+        "x1": 523.2727661132812,
+        "y1": 302.0365295410156
+      }
+    },
+    {
+      "text": "eral writingimprovement,they provide limited support for technical formatting requirements",
+      "page_num": 7,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 313.9923400878906,
+        "x1": 523.27294921875,
+        "y1": 325.9475402832031
+      }
+    },
+    {
+      "text": "specific to research papers.",
+      "page_num": 7,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 337.90234375,
+        "x1": 200.8052978515625,
+        "y1": 349.8575439453125
+      }
+    },
+    {
+      "text": "Plagiarismdetectionsystemsrepresentanothercategoryofrelatedsolutions.Theseplat-",
+      "page_num": 7,
+      "bbox": {
+        "x0": 89.55899810791016,
+        "y0": 361.8123474121094,
+        "x1": 523.28173828125,
+        "y1": 373.7675476074219
+      }
+    },
+    {
+      "text": "forms are primarily designed to verify the originality of the content by comparing documents",
+      "page_num": 7,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 385.7233581542969,
+        "x1": 523.27294921875,
+        "y1": 397.6785583496094
+      }
+    },
+    {
+      "text": "againstlargeacademicdatabases.Althoughtheyplayanessentialroleinmaintainingaca-",
+      "page_num": 7,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 409.63336181640625,
+        "x1": 523.2728881835938,
+        "y1": 421.58856201171875
+      }
+    },
+    {
+      "text": "demic integrity, they do not address formatting correctness, structural consistency, or citation-",
+      "page_num": 7,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 433.5433654785156,
+        "x1": 523.2728881835938,
+        "y1": 445.4985656738281
+      }
+    },
+    {
+      "text": "referencemappingwithinadocument.Consequently,plagiarismtoolsalonecannotensure",
+      "page_num": 7,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 457.4543762207031,
+        "x1": 523.27294921875,
+        "y1": 469.4095764160156
+      }
+    },
+    {
+      "text": "comprehensive academic formatting compliance.",
+      "page_num": 7,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 481.3643798828125,
+        "x1": 306.5849304199219,
+        "y1": 493.319580078125
+      }
+    },
+    {
+      "text": "Citation management software help in assisting researchers in creating and managing cita-",
+      "page_num": 7,
+      "bbox": {
+        "x0": 89.55899810791016,
+        "y0": 505.2743835449219,
+        "x1": 523.2815551757812,
+        "y1": 517.2295532226562
+      }
+    },
+    {
+      "text": "tions in multiple styles. However, these tools typically operate as standalone utilities and do not",
+      "page_num": 7,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 529.1853637695312,
+        "x1": 523.2728881835938,
+        "y1": 541.1405639648438
+      }
+    },
+    {
+      "text": "verifywhetherin-textcitationsareproperlylinkedtothereferencelistorwhetherreferences",
+      "page_num": 7,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 553.0953979492188,
+        "x1": 523.2728881835938,
+        "y1": 565.0505981445312
+      }
+    },
+    {
+      "text": "arecompleteandcorrectlyordered.Moreover,theylackthecapabilitytodetectcontextual",
+      "page_num": 7,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 577.00537109375,
+        "x1": 523.2728881835938,
+        "y1": 588.9605712890625
+      }
+    },
+    {
+      "text": "errorssuchasmissingcitations,incorrectbracketpunctuation,ormismatchedcitationstyles",
+      "page_num": 7,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 600.9163818359375,
+        "x1": 523.27294921875,
+        "y1": 612.87158203125
+      }
+    },
+    {
+      "text": "across a document.",
+      "page_num": 7,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 624.8263549804688,
+        "x1": 163.30184936523438,
+        "y1": 636.7815551757812
+      }
+    },
+    {
+      "text": "RecentresearchinNaturalLanguageProcessinganddocumentanalysishasintroduced",
+      "page_num": 7,
+      "bbox": {
+        "x0": 89.55899810791016,
+        "y0": 648.7373657226562,
+        "x1": 523.2816772460938,
+        "y1": 660.6925659179688
+      }
+    },
+    {
+      "text": "techniques for automated document segmentation, citation extraction, and metadata classifica-",
+      "page_num": 7,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 672.6473999023438,
+        "x1": 523.27294921875,
+        "y1": 684.6026000976562
+      }
+    },
+    {
+      "text": "tion.Machine learning models have been applied to identify reference structures and improve",
+      "page_num": 7,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 696.557373046875,
+        "x1": 523.27294921875,
+        "y1": 708.5125732421875
+      }
+    },
+    {
+      "text": "academicindexingsystems.Despitetheseadvances,mostoftheresearchfocusesonlarge-",
+      "page_num": 7,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 720.4683837890625,
+        "x1": 523.27294921875,
+        "y1": 732.423583984375
+      }
+    },
+    {
+      "text": "scale academic database management rather than providing practical tools at the student-level",
+      "page_num": 7,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 744.3783569335938,
+        "x1": 523.2728271484375,
+        "y1": 756.3335571289062
+      }
+    },
+    {
+      "text": "7",
+      "page_num": 7,
+      "bbox": {
+        "x0": 294.64898681640625,
+        "y0": 790.7113647460938,
+        "x1": 300.6265869140625,
+        "y1": 802.6665649414062
+      }
+    },
+    {
+      "text": "for formatting verification and improvement.",
+      "page_num": 8,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 74.88832092285156,
+        "x1": 286.2969665527344,
+        "y1": 86.84352111816406
+      }
+    },
+    {
+      "text": "The review of the existing literature highlights a clear gap in integrated solutions that com-",
+      "page_num": 8,
+      "bbox": {
+        "x0": 89.55899810791016,
+        "y0": 98.79933166503906,
+        "x1": 523.2816772460938,
+        "y1": 110.75453186035156
+      }
+    },
+    {
+      "text": "bine structural validation, citation verification, and technical formatting analysis within a single",
+      "page_num": 8,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 122.70930480957031,
+        "x1": 523.2730102539062,
+        "y1": 134.6645050048828
+      }
+    },
+    {
+      "text": "platform.There is a lack of lightweight, affordable systems specifically designed for technical",
+      "page_num": 8,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 146.61927795410156,
+        "x1": 523.2728881835938,
+        "y1": 158.57447814941406
+      }
+    },
+    {
+      "text": "research papers that can detect formatting inconsistencies related to figures, tables, equations,",
+      "page_num": 8,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 170.53028869628906,
+        "x1": 523.27294921875,
+        "y1": 182.48548889160156
+      }
+    },
+    {
+      "text": "andreferenceswhileofferingactionableimprovementsuggestions.Theproposedplatform",
+      "page_num": 8,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 194.4402618408203,
+        "x1": 523.27294921875,
+        "y1": 206.3954620361328
+      }
+    },
+    {
+      "text": "addressesthisgapbyintegratingrule-basedvalidationwithmachinelearningtechniquesto",
+      "page_num": 8,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 218.35023498535156,
+        "x1": 523.2730102539062,
+        "y1": 230.30543518066406
+      }
+    },
+    {
+      "text": "provide comprehensive formatting assistance tailored to student research needs.",
+      "page_num": 8,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 242.26124572753906,
+        "x1": 452.8328552246094,
+        "y1": 254.21644592285156
+      }
+    },
+    {
+      "text": "8",
+      "page_num": 8,
+      "bbox": {
+        "x0": 276.64898681640625,
+        "y0": 790.7112426757812,
+        "x1": 282.6265869140625,
+        "y1": 802.6664428710938
+      }
+    },
+    {
+      "text": "Problem Statement",
+      "page_num": 9,
+      "bbox": {
+        "x0": 195.63999938964844,
+        "y0": 144.63246154785156,
+        "x1": 399.63775634765625,
+        "y1": 169.4195556640625
+      }
+    },
+    {
+      "text": "Undergraduateandpostgraduatestudentsintechnicaldisciplinesarerequiredtopreparere-",
+      "page_num": 9,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 218.35035705566406,
+        "x1": 523.2728881835938,
+        "y1": 230.30555725097656
+      }
+    },
+    {
+      "text": "searchpapersandprojectreportsthatfollowstrictacademicformattingstandardsprescribed",
+      "page_num": 9,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 242.26136779785156,
+        "x1": 523.2728881835938,
+        "y1": 254.21656799316406
+      }
+    },
+    {
+      "text": "byuniversities,conferences,andjournals.However,manystudentslackformaltrainingin",
+      "page_num": 9,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 266.1713562011719,
+        "x1": 523.27294921875,
+        "y1": 278.1265563964844
+      }
+    },
+    {
+      "text": "technical writing and formatting conventions, which results in frequent structural and stylistic",
+      "page_num": 9,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 290.0813293457031,
+        "x1": 523.2728881835938,
+        "y1": 302.0365295410156
+      }
+    },
+    {
+      "text": "errors in their submissions.These errors include improper figure and table referencing,miss-",
+      "page_num": 9,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 313.9923400878906,
+        "x1": 523.2728881835938,
+        "y1": 325.9475402832031
+      }
+    },
+    {
+      "text": "ing or incorrectly placed captions, unnumbered or unexplained equations, inconsistent citation",
+      "page_num": 9,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 337.90234375,
+        "x1": 523.2728881835938,
+        "y1": 349.8575439453125
+      }
+    },
+    {
+      "text": "styles, and mismatches between in-text citations and the reference list.",
+      "page_num": 9,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 361.8123474121094,
+        "x1": 408.1682434082031,
+        "y1": 373.7675476074219
+      }
+    },
+    {
+      "text": "The absence of timely and detailed feedback further aggravates the problem.Faculty mem-",
+      "page_num": 9,
+      "bbox": {
+        "x0": 89.55899810791016,
+        "y0": 385.7233581542969,
+        "x1": 523.2816162109375,
+        "y1": 397.6785583496094
+      }
+    },
+    {
+      "text": "bers often face a heavy workload and are unable to provide comprehensive formatting correc-",
+      "page_num": 9,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 409.63336181640625,
+        "x1": 523.27294921875,
+        "y1": 421.58856201171875
+      }
+    },
+    {
+      "text": "tions for every submission.As a result, students repeatedly make similar mistakes, leading to",
+      "page_num": 9,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 433.5433654785156,
+        "x1": 523.2728881835938,
+        "y1": 445.4985656738281
+      }
+    },
+    {
+      "text": "poor document quality, increased review cycles, and delays in evaluation or publication.",
+      "page_num": 9,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 457.4543762207031,
+        "x1": 492.1893615722656,
+        "y1": 469.4095764160156
+      }
+    },
+    {
+      "text": "Existingwritingassistancetoolsprimarilyfocusongrammarandlanguageimprovement",
+      "page_num": 9,
+      "bbox": {
+        "x0": 89.55899810791016,
+        "y0": 481.3643798828125,
+        "x1": 523.28173828125,
+        "y1": 493.319580078125
+      }
+    },
+    {
+      "text": "andofferlimitedsupportfortechnicalformattingverification.Toolsthathandlecitationsor",
+      "page_num": 9,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 505.2743835449219,
+        "x1": 523.2728881835938,
+        "y1": 517.2295532226562
+      }
+    },
+    {
+      "text": "referencesworkinisolationanddonotvalidatetheoverallstructuralconsistencyofthedoc-",
+      "page_num": 9,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 529.1853637695312,
+        "x1": 523.2728881835938,
+        "y1": 541.1405639648438
+      }
+    },
+    {
+      "text": "ument.Consequently,thereisalackofanintegrated,automatedsolutionthatcananalyze",
+      "page_num": 9,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 553.0953979492188,
+        "x1": 523.27294921875,
+        "y1": 565.0505981445312
+      }
+    },
+    {
+      "text": "multiplecomponentsofatechnicalpaper,includingtextstructure,figures,tables,equations,",
+      "page_num": 9,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 577.00537109375,
+        "x1": 523.27294921875,
+        "y1": 588.9605712890625
+      }
+    },
+    {
+      "text": "and references.",
+      "page_num": 9,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 600.9163818359375,
+        "x1": 144.35284423828125,
+        "y1": 612.87158203125
+      }
+    },
+    {
+      "text": "Therefore,thereisaneedforacomprehensiveandautomatedsystemthatcanaccurately",
+      "page_num": 9,
+      "bbox": {
+        "x0": 89.55899810791016,
+        "y0": 624.8263549804688,
+        "x1": 523.2816162109375,
+        "y1": 636.7815551757812
+      }
+    },
+    {
+      "text": "detectformattinginconsistencies,structuralerrors,andreference-relatedissuesintechnical",
+      "page_num": 9,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 648.7373657226562,
+        "x1": 523.2728271484375,
+        "y1": 660.6925659179688
+      }
+    },
+    {
+      "text": "academic documents and provide actionable feedback to help students improve the quality and",
+      "page_num": 9,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 672.6473999023438,
+        "x1": 523.27294921875,
+        "y1": 684.6026000976562
+      }
+    },
+    {
+      "text": "compliance of their research papers.",
+      "page_num": 9,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 696.557373046875,
+        "x1": 244.95584106445312,
+        "y1": 708.5125732421875
+      }
+    },
+    {
+      "text": "9",
+      "page_num": 9,
+      "bbox": {
+        "x0": 294.64898681640625,
+        "y0": 790.7113647460938,
+        "x1": 300.6265869140625,
+        "y1": 802.6665649414062
+      }
+    },
+    {
+      "text": "Objectives",
+      "page_num": 10,
+      "bbox": {
+        "x0": 242.1280059814453,
+        "y0": 144.63246154785156,
+        "x1": 353.1494140625,
+        "y1": 169.4195556640625
+      }
+    },
+    {
+      "text": "The primary objective of our project is to develop an intelligent, automated system capable of",
+      "page_num": 10,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 218.35035705566406,
+        "x1": 523.2728881835938,
+        "y1": 230.30555725097656
+      }
+    },
+    {
+      "text": "verifying the structural and formatting correctness of technical research papers. The platform is",
+      "page_num": 10,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 242.26136779785156,
+        "x1": 523.2728881835938,
+        "y1": 254.21656799316406
+      }
+    },
+    {
+      "text": "designed to go beyond traditional grammar-checking tools by focusing specifically on academic",
+      "page_num": 10,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 266.1713562011719,
+        "x1": 523.2728271484375,
+        "y1": 278.1265563964844
+      }
+    },
+    {
+      "text": "formatting standards required in engineering and scientific writing.The purpose of this project",
+      "page_num": 10,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 290.0813293457031,
+        "x1": 523.2730102539062,
+        "y1": 302.0365295410156
+      }
+    },
+    {
+      "text": "is to ensure that research documents comply with institutional and journal-specific guidelines",
+      "page_num": 10,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 313.9923400878906,
+        "x1": 523.27294921875,
+        "y1": 325.9475402832031
+      }
+    },
+    {
+      "text": "prior to submission.",
+      "page_num": 10,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 337.90234375,
+        "x1": 167.31881713867188,
+        "y1": 349.8575439453125
+      }
+    },
+    {
+      "text": "Figure 1:System Architecture of Fix my Paper",
+      "page_num": 10,
+      "bbox": {
+        "x0": 184.9669952392578,
+        "y0": 586.6293334960938,
+        "x1": 410.3105773925781,
+        "y1": 598.5845336914062
+      }
+    },
+    {
+      "text": "Oneofthekeyobjectivesistoautomaticallydetectformattinginconsistenciesrelatedto",
+      "page_num": 10,
+      "bbox": {
+        "x0": 89.55899810791016,
+        "y0": 627.0753173828125,
+        "x1": 523.28173828125,
+        "y1": 639.030517578125
+      }
+    },
+    {
+      "text": "figures, tables, and equations.This includes verifying whether figures and tables are properly",
+      "page_num": 10,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 650.9852905273438,
+        "x1": 523.2728881835938,
+        "y1": 662.9404907226562
+      }
+    },
+    {
+      "text": "numbered,correctlyreferencedinthetext,placedaftertheirfirstmention,andaccompanied",
+      "page_num": 10,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 674.8953247070312,
+        "x1": 523.2728881835938,
+        "y1": 686.8505249023438
+      }
+    },
+    {
+      "text": "byappropriatecaptions.Formathematicalexpressions,thesystemaimstochecksequential",
+      "page_num": 10,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 698.8063354492188,
+        "x1": 523.27294921875,
+        "y1": 710.7615356445312
+      }
+    },
+    {
+      "text": "equationnumbering,properformattingofvariablesandunits,andwhetherallsymbolsare",
+      "page_num": 10,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 722.71630859375,
+        "x1": 523.2728271484375,
+        "y1": 734.6715087890625
+      }
+    },
+    {
+      "text": "defined clearly within the text.",
+      "page_num": 10,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 746.6262817382812,
+        "x1": 217.59042358398438,
+        "y1": 758.5814819335938
+      }
+    },
+    {
+      "text": "10",
+      "page_num": 10,
+      "bbox": {
+        "x0": 291.6600036621094,
+        "y0": 790.7113037109375,
+        "x1": 303.6152038574219,
+        "y1": 802.66650390625
+      }
+    },
+    {
+      "text": "Another important objective is to validate citation and reference integrity. The system seeks",
+      "page_num": 11,
+      "bbox": {
+        "x0": 89.55899810791016,
+        "y0": 74.88832092285156,
+        "x1": 523.28173828125,
+        "y1": 86.84352111816406
+      }
+    },
+    {
+      "text": "toensurethatin-textcitationscorrectlycorrespondtoentriesinthereferencelist,thatrefer-",
+      "page_num": 11,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 98.79933166503906,
+        "x1": 523.27294921875,
+        "y1": 110.75453186035156
+      }
+    },
+    {
+      "text": "encesarecompleteandproperlyordered,andthatcitationstylessuchasIEEEorAPAare",
+      "page_num": 11,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 122.70930480957031,
+        "x1": 523.2728881835938,
+        "y1": 134.6645050048828
+      }
+    },
+    {
+      "text": "consistently applied.By automating these checks, the platform reduces the likelihood of sub-",
+      "page_num": 11,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 146.61927795410156,
+        "x1": 523.2728881835938,
+        "y1": 158.57447814941406
+      }
+    },
+    {
+      "text": "mission rejections due to referencing errors.",
+      "page_num": 11,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 170.53028869628906,
+        "x1": 282.49517822265625,
+        "y1": 182.48548889160156
+      }
+    },
+    {
+      "text": "The project also aims to reduce manual correction effort for both students and faculty mem-",
+      "page_num": 11,
+      "bbox": {
+        "x0": 89.55899810791016,
+        "y0": 194.4402618408203,
+        "x1": 523.2816162109375,
+        "y1": 206.3954620361328
+      }
+    },
+    {
+      "text": "bers.By generating structured and actionable feedback reports within a short processing time,",
+      "page_num": 11,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 218.35023498535156,
+        "x1": 523.272705078125,
+        "y1": 230.30543518066406
+      }
+    },
+    {
+      "text": "thesystemencouragesstudentstoindependentlyrefinetheirworkbeforesubmission.This",
+      "page_num": 11,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 242.26124572753906,
+        "x1": 523.27294921875,
+        "y1": 254.21644592285156
+      }
+    },
+    {
+      "text": "objectivedirectlycontributestoimprovingoverallacademicwritingqualityandpromoting",
+      "page_num": 11,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 266.1712341308594,
+        "x1": 523.2728881835938,
+        "y1": 278.1264343261719
+      }
+    },
+    {
+      "text": "self-learning.",
+      "page_num": 11,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 290.0812072753906,
+        "x1": 135.41036987304688,
+        "y1": 302.0364074707031
+      }
+    },
+    {
+      "text": "Fromamethodologicalperspective,thesystemfollowsastructuredprocessingpipeline.",
+      "page_num": 11,
+      "bbox": {
+        "x0": 89.55899810791016,
+        "y0": 313.9922180175781,
+        "x1": 523.2816162109375,
+        "y1": 325.9474182128906
+      }
+    },
+    {
+      "text": "The process begins when a user uploads a research paper in PDF or DOC format.The backend",
+      "page_num": 11,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 337.9022216796875,
+        "x1": 523.2728881835938,
+        "y1": 349.857421875
+      }
+    },
+    {
+      "text": "then extracts textual content, figures, tables, equations, and references using document parsing",
+      "page_num": 11,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 361.8122253417969,
+        "x1": 523.2728881835938,
+        "y1": 373.7674255371094
+      }
+    },
+    {
+      "text": "utilities.",
+      "page_num": 11,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 385.7232360839844,
+        "x1": 110.86636352539062,
+        "y1": 397.6784362792969
+      }
+    },
+    {
+      "text": "Following extraction, a rule-based engine employing regular expressions and pattern-matching",
+      "page_num": 11,
+      "bbox": {
+        "x0": 89.55899810791016,
+        "y0": 409.63323974609375,
+        "x1": 535.667236328125,
+        "y1": 421.58843994140625
+      }
+    },
+    {
+      "text": "techniques analyzes structural formatting aspects. These rules are designed to detect errors such",
+      "page_num": 11,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 433.5432434082031,
+        "x1": 523.27294921875,
+        "y1": 445.4984436035156
+      }
+    },
+    {
+      "text": "as skipped numbering sequences, incorrect caption placement, improper punctuation, inconsis-",
+      "page_num": 11,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 457.4542541503906,
+        "x1": 523.27294921875,
+        "y1": 469.4094543457031
+      }
+    },
+    {
+      "text": "tent typography, and citation bracket formatting issues.",
+      "page_num": 11,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 481.3642578125,
+        "x1": 334.69158935546875,
+        "y1": 493.3194580078125
+      }
+    },
+    {
+      "text": "Inparallel,machinelearningmodelsareappliedtoanalyzethereferencessectionmore",
+      "page_num": 11,
+      "bbox": {
+        "x0": 89.55899810791016,
+        "y0": 505.2742614746094,
+        "x1": 523.28173828125,
+        "y1": 517.2294311523438
+      }
+    },
+    {
+      "text": "intelligently.Thesemodelsassistinidentifyingincompletereferences,mismatchesbetween",
+      "page_num": 11,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 529.1852416992188,
+        "x1": 523.27294921875,
+        "y1": 541.1404418945312
+      }
+    },
+    {
+      "text": "in-text citations and bibliography entries, DOI validation issues, and inconsistencies in citation",
+      "page_num": 11,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 553.0952758789062,
+        "x1": 523.2728881835938,
+        "y1": 565.0504760742188
+      }
+    },
+    {
+      "text": "styleformatting.Thecombinationofrule-basedlogicandmachinelearningenhancesboth",
+      "page_num": 11,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 577.0062255859375,
+        "x1": 523.27294921875,
+        "y1": 588.96142578125
+      }
+    },
+    {
+      "text": "accuracy and contextual understanding.",
+      "page_num": 11,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 600.916259765625,
+        "x1": 260.88018798828125,
+        "y1": 612.8714599609375
+      }
+    },
+    {
+      "text": "Finally, the detected issues are aggregated into a structured analysis report.The report cat-",
+      "page_num": 11,
+      "bbox": {
+        "x0": 89.55899810791016,
+        "y0": 624.8262329101562,
+        "x1": 523.2816772460938,
+        "y1": 636.7814331054688
+      }
+    },
+    {
+      "text": "egorizes errors by severity and type, provides specific suggestions for correction, and may in-",
+      "page_num": 11,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 648.7372436523438,
+        "x1": 523.2728271484375,
+        "y1": 660.6924438476562
+      }
+    },
+    {
+      "text": "clude an overall formatting compliance score. This report is then displayed through an intuitive",
+      "page_num": 11,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 672.6472778320312,
+        "x1": 523.2728271484375,
+        "y1": 684.6024780273438
+      }
+    },
+    {
+      "text": "web interface, allowing users to easily review and implement the suggested improvements.",
+      "page_num": 11,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 696.5572509765625,
+        "x1": 505.9259033203125,
+        "y1": 708.512451171875
+      }
+    },
+    {
+      "text": "Through this systematic objective-driven methodology,our project aims to deliver a com-",
+      "page_num": 11,
+      "bbox": {
+        "x0": 89.55899810791016,
+        "y0": 720.46826171875,
+        "x1": 523.2816162109375,
+        "y1": 732.4234619140625
+      }
+    },
+    {
+      "text": "prehensive, efficient, and user-friendly solution for technical academic formatting verification.",
+      "page_num": 11,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 744.3782348632812,
+        "x1": 519.6744384765625,
+        "y1": 756.3334350585938
+      }
+    },
+    {
+      "text": "11",
+      "page_num": 11,
+      "bbox": {
+        "x0": 273.6600036621094,
+        "y0": 790.7112426757812,
+        "x1": 285.6152038574219,
+        "y1": 802.6664428710938
+      }
+    },
+    {
+      "text": "Simulation Platform and Requirements",
+      "page_num": 12,
+      "bbox": {
+        "x0": 89.20500183105469,
+        "y0": 144.63246154785156,
+        "x1": 506.0743713378906,
+        "y1": 169.4195556640625
+      }
+    },
+    {
+      "text": "Thesimulationplatformfortheprojectisdesignedtoreplicateareal-worldacademicdocu-",
+      "page_num": 12,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 218.35035705566406,
+        "x1": 523.2728881835938,
+        "y1": 230.30555725097656
+      }
+    },
+    {
+      "text": "ment processing environment where research papers are uploaded, analyzed, and evaluated for",
+      "page_num": 12,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 242.26136779785156,
+        "x1": 523.2728271484375,
+        "y1": 254.21656799316406
+      }
+    },
+    {
+      "text": "formatting compliance.",
+      "page_num": 12,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 266.1713562011719,
+        "x1": 183.56591796875,
+        "y1": 278.1265563964844
+      }
+    },
+    {
+      "text": "The validation checks implemented in the simulation environment are listed in Table 1.",
+      "page_num": 12,
+      "bbox": {
+        "x0": 89.55899810791016,
+        "y0": 290.0813293457031,
+        "x1": 505.8868713378906,
+        "y1": 302.0365295410156
+      }
+    },
+    {
+      "text": "Table 1:Stage-1 Validation Checks Used in Simulation",
+      "page_num": 12,
+      "bbox": {
+        "x0": 163.93299865722656,
+        "y0": 321.3623352050781,
+        "x1": 428.3581237792969,
+        "y1": 333.3175354003906
+      }
+    },
+    {
+      "text": "#CategoryCheckable Requirement",
+      "page_num": 12,
+      "bbox": {
+        "x0": 101.03199768066406,
+        "y0": 364.8871765136719,
+        "x1": 362.76568603515625,
+        "y1": 376.8423767089844
+      }
+    },
+    {
+      "text": "1Figures & TablesEvery figure and table is cited in the main text",
+      "page_num": 12,
+      "bbox": {
+        "x0": 101.03199768066406,
+        "y0": 389.3053283691406,
+        "x1": 459.5788879394531,
+        "y1": 401.2605285644531
+      }
+    },
+    {
+      "text": "2Figures & TablesNo figure or table appears without textual reference",
+      "page_num": 12,
+      "bbox": {
+        "x0": 101.03199768066406,
+        "y0": 413.61431884765625,
+        "x1": 485.6172790527344,
+        "y1": 425.56951904296875
+      }
+    },
+    {
+      "text": "3FiguresFigure captions are placed below the figure",
+      "page_num": 12,
+      "bbox": {
+        "x0": 101.03199768066406,
+        "y0": 437.92333984375,
+        "x1": 445.3402099609375,
+        "y1": 449.8785400390625
+      }
+    },
+    {
+      "text": "4TablesTable captions are placed above the table",
+      "page_num": 12,
+      "bbox": {
+        "x0": 101.03199768066406,
+        "y0": 462.2313232421875,
+        "x1": 435.01092529296875,
+        "y1": 474.1865234375
+      }
+    },
+    {
+      "text": "5Figures & TablesFiguresandtablesarenumberedsequentially(no",
+      "page_num": 12,
+      "bbox": {
+        "x0": 101.03199768066406,
+        "y0": 486.54034423828125,
+        "x1": 494.2489318847656,
+        "y1": 498.49554443359375
+      }
+    },
+    {
+      "text": "skipping)",
+      "page_num": 12,
+      "bbox": {
+        "x0": 239.125,
+        "y0": 510.4513854980469,
+        "x1": 284.291748046875,
+        "y1": 522.4065551757812
+      }
+    },
+    {
+      "text": "6Figures & TablesFigures and tables appear after first mention in text",
+      "page_num": 12,
+      "bbox": {
+        "x0": 101.03199768066406,
+        "y0": 534.7593383789062,
+        "x1": 482.66436767578125,
+        "y1": 546.7145385742188
+      }
+    },
+    {
+      "text": "7TablesUnits are specified in all column headers",
+      "page_num": 12,
+      "bbox": {
+        "x0": 101.03199768066406,
+        "y0": 559.0682983398438,
+        "x1": 433.69586181640625,
+        "y1": 571.0234985351562
+      }
+    },
+    {
+      "text": "8Figures & TablesImages are clear, readable, and high resolution",
+      "page_num": 12,
+      "bbox": {
+        "x0": 101.03199768066406,
+        "y0": 583.3773193359375,
+        "x1": 461.74273681640625,
+        "y1": 595.33251953125
+      }
+    },
+    {
+      "text": "9EquationsAll equations are numbered consecutively",
+      "page_num": 12,
+      "bbox": {
+        "x0": 101.03199768066406,
+        "y0": 607.6863403320312,
+        "x1": 439.852783203125,
+        "y1": 619.6415405273438
+      }
+    },
+    {
+      "text": "10EquationsEquation numbers are in parentheses and flush right",
+      "page_num": 12,
+      "bbox": {
+        "x0": 101.03199768066406,
+        "y0": 631.9953002929688,
+        "x1": 487.1595153808594,
+        "y1": 643.9505004882812
+      }
+    },
+    {
+      "text": "11EquationsEvery equation is referenced in the text",
+      "page_num": 12,
+      "bbox": {
+        "x0": 101.03199768066406,
+        "y0": 656.3043212890625,
+        "x1": 426.67816162109375,
+        "y1": 668.259521484375
+      }
+    },
+    {
+      "text": "12EquationsAllsymbolsaredefinedbeforeorimmediatelyafter",
+      "page_num": 12,
+      "bbox": {
+        "x0": 101.03199768066406,
+        "y0": 680.61328125,
+        "x1": 494.2490234375,
+        "y1": 692.5684814453125
+      }
+    },
+    {
+      "text": "use",
+      "page_num": 12,
+      "bbox": {
+        "x0": 239.125,
+        "y0": 704.5233154296875,
+        "x1": 255.061279296875,
+        "y1": 716.478515625
+      }
+    },
+    {
+      "text": "13Math FormattingVariables are italicized",
+      "page_num": 12,
+      "bbox": {
+        "x0": 101.03199768066406,
+        "y0": 728.8323364257812,
+        "x1": 348.012939453125,
+        "y1": 740.7875366210938
+      }
+    },
+    {
+      "text": "14Math FormattingFunctions and units are in roman (non-italic) font",
+      "page_num": 12,
+      "bbox": {
+        "x0": 101.03199768066406,
+        "y0": 753.1412963867188,
+        "x1": 475.2162780761719,
+        "y1": 765.0964965820312
+      }
+    },
+    {
+      "text": "12",
+      "page_num": 12,
+      "bbox": {
+        "x0": 291.6600036621094,
+        "y0": 790.7113037109375,
+        "x1": 303.6152038574219,
+        "y1": 802.66650390625
+      }
+    },
+    {
+      "text": "#CategoryCheckable Requirement",
+      "page_num": 13,
+      "bbox": {
+        "x0": 101.03199768066406,
+        "y0": 79.96013641357422,
+        "x1": 362.76568603515625,
+        "y1": 91.91533660888672
+      }
+    },
+    {
+      "text": "15Math FormattingProper punctuation is used after equations",
+      "page_num": 13,
+      "bbox": {
+        "x0": 101.03199768066406,
+        "y0": 104.37831115722656,
+        "x1": 440.0082092285156,
+        "y1": 116.33351135253906
+      }
+    },
+    {
+      "text": "16CitationsCitationstylematchesthetargetjournal(IEEE/A-",
+      "page_num": 13,
+      "bbox": {
+        "x0": 101.03199768066406,
+        "y0": 128.6873321533203,
+        "x1": 494.2489318847656,
+        "y1": 140.6425323486328
+      }
+    },
+    {
+      "text": "PA/etc.)",
+      "page_num": 13,
+      "bbox": {
+        "x0": 239.125,
+        "y0": 152.59730529785156,
+        "x1": 277.53704833984375,
+        "y1": 164.55250549316406
+      }
+    },
+    {
+      "text": "17CitationsBracket punctuation is correct (e.g., [1], not .[1])",
+      "page_num": 13,
+      "bbox": {
+        "x0": 101.03199768066406,
+        "y0": 176.9063262939453,
+        "x1": 472.0720520019531,
+        "y1": 188.8615264892578
+      }
+    },
+    {
+      "text": "18CitationsOne-to-one match between in-text citations and refer-",
+      "page_num": 13,
+      "bbox": {
+        "x0": 101.03199768066406,
+        "y0": 201.21534729003906,
+        "x1": 494.2489318847656,
+        "y1": 213.17054748535156
+      }
+    },
+    {
+      "text": "ence list",
+      "page_num": 13,
+      "bbox": {
+        "x0": 239.125,
+        "y0": 225.1253204345703,
+        "x1": 278.6369323730469,
+        "y1": 237.0805206298828
+      }
+    },
+    {
+      "text": "19ReferencesNo missing or uncited references",
+      "page_num": 13,
+      "bbox": {
+        "x0": 101.03199768066406,
+        "y0": 249.43434143066406,
+        "x1": 397.1607666015625,
+        "y1": 261.3895568847656
+      }
+    },
+    {
+      "text": "20ReferencesReferences are ordered correctly",
+      "page_num": 13,
+      "bbox": {
+        "x0": 101.03199768066406,
+        "y0": 273.7433166503906,
+        "x1": 394.7936096191406,
+        "y1": 285.6985168457031
+      }
+    },
+    {
+      "text": "21ReferencesReferencesarecomplete(authors,title,venue,year,",
+      "page_num": 13,
+      "bbox": {
+        "x0": 101.03199768066406,
+        "y0": 298.0513610839844,
+        "x1": 494.24896240234375,
+        "y1": 310.0065612792969
+      }
+    },
+    {
+      "text": "pages)",
+      "page_num": 13,
+      "bbox": {
+        "x0": 239.125,
+        "y0": 321.9623718261719,
+        "x1": 270.32806396484375,
+        "y1": 333.9175720214844
+      }
+    },
+    {
+      "text": "22ReferencesDOI included wherever available",
+      "page_num": 13,
+      "bbox": {
+        "x0": 101.03199768066406,
+        "y0": 346.2713317871094,
+        "x1": 397.1248779296875,
+        "y1": 358.2265319824219
+      }
+    },
+    {
+      "text": "23ReferencesJournal title casing is consistent",
+      "page_num": 13,
+      "bbox": {
+        "x0": 101.03199768066406,
+        "y0": 370.579345703125,
+        "x1": 391.21905517578125,
+        "y1": 382.5345458984375
+      }
+    },
+    {
+      "text": "24ReferencesURLs and DOIs are valid and unbroken",
+      "page_num": 13,
+      "bbox": {
+        "x0": 101.03199768066406,
+        "y0": 394.8883361816406,
+        "x1": 429.2843933105469,
+        "y1": 406.8435363769531
+      }
+    },
+    {
+      "text": "25ReferencesRecentreferencesincluded(last5yearswhererele-",
+      "page_num": 13,
+      "bbox": {
+        "x0": 101.03199768066406,
+        "y0": 419.19732666015625,
+        "x1": 494.2489318847656,
+        "y1": 431.15252685546875
+      }
+    },
+    {
+      "text": "vant)",
+      "page_num": 13,
+      "bbox": {
+        "x0": 239.125,
+        "y0": 443.1073303222656,
+        "x1": 263.39404296875,
+        "y1": 455.0625305175781
+      }
+    },
+    {
+      "text": "26AcronymsAcronyms are defined at first occurrence",
+      "page_num": 13,
+      "bbox": {
+        "x0": 101.03199768066406,
+        "y0": 467.41632080078125,
+        "x1": 433.1578674316406,
+        "y1": 479.37152099609375
+      }
+    },
+    {
+      "text": "27UnitsNon-breakingspacebetweennumberandunit(e.g.,",
+      "page_num": 13,
+      "bbox": {
+        "x0": 101.03199768066406,
+        "y0": 491.725341796875,
+        "x1": 494.2489929199219,
+        "y1": 503.6805419921875
+      }
+    },
+    {
+      "text": "10 kg)",
+      "page_num": 13,
+      "bbox": {
+        "x0": 239.125,
+        "y0": 515.6353149414062,
+        "x1": 270.0052795410156,
+        "y1": 527.5905151367188
+      }
+    },
+    {
+      "text": "28TypographyEn-dash used for numeric ranges (e.g., 10–20)",
+      "page_num": 13,
+      "bbox": {
+        "x0": 101.03199768066406,
+        "y0": 539.9442749023438,
+        "x1": 460.5711364746094,
+        "y1": 551.8994750976562
+      }
+    },
+    {
+      "text": "29TypographyConsistent spacing after commas and full stops",
+      "page_num": 13,
+      "bbox": {
+        "x0": 101.03199768066406,
+        "y0": 564.2532958984375,
+        "x1": 464.26531982421875,
+        "y1": 576.20849609375
+      }
+    },
+    {
+      "text": "30ConsistencyNotation, symbols, and terminology used consistently",
+      "page_num": 13,
+      "bbox": {
+        "x0": 101.03199768066406,
+        "y0": 588.5623168945312,
+        "x1": 494.2489318847656,
+        "y1": 600.5175170898438
+      }
+    },
+    {
+      "text": "ThefrontendoftheplatformisbuiltusingmodernwebtechnologiessuchasReact.jsor",
+      "page_num": 13,
+      "bbox": {
+        "x0": 89.55899810791016,
+        "y0": 631.9993286132812,
+        "x1": 523.2816162109375,
+        "y1": 643.9545288085938
+      }
+    },
+    {
+      "text": "Next.js, combined with CSS for responsive and clean user interface design.The purpose of the",
+      "page_num": 13,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 655.9093017578125,
+        "x1": 523.27294921875,
+        "y1": 667.864501953125
+      }
+    },
+    {
+      "text": "frontend is to provide a smooth document upload experience, display structured error reports,",
+      "page_num": 13,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 679.8203125,
+        "x1": 523.27294921875,
+        "y1": 691.7755126953125
+      }
+    },
+    {
+      "text": "and ensure intuitive navigation.The interface is designed to clearly categorize detected issues",
+      "page_num": 13,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 703.7302856445312,
+        "x1": 523.2728271484375,
+        "y1": 715.6854858398438
+      }
+    },
+    {
+      "text": "under sections such as figures, equations, citations, references, and typography, making it easy",
+      "page_num": 13,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 727.6403198242188,
+        "x1": 523.2728881835938,
+        "y1": 739.5955200195312
+      }
+    },
+    {
+      "text": "for users to understand and correct errors.",
+      "page_num": 13,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 751.5513305664062,
+        "x1": 271.5202941894531,
+        "y1": 763.5065307617188
+      }
+    },
+    {
+      "text": "13",
+      "page_num": 13,
+      "bbox": {
+        "x0": 273.6600036621094,
+        "y0": 790.7113037109375,
+        "x1": 285.6152038574219,
+        "y1": 802.66650390625
+      }
+    },
+    {
+      "text": "ThebackendofthesystemisimplementedusingNode.jsorPythonwithFastAPI.The",
+      "page_num": 14,
+      "bbox": {
+        "x0": 89.55899810791016,
+        "y0": 74.88832092285156,
+        "x1": 523.28173828125,
+        "y1": 86.84352111816406
+      }
+    },
+    {
+      "text": "backend handles core processing tasks, including document parsing, rule-based validation, ma-",
+      "page_num": 14,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 98.79933166503906,
+        "x1": 523.2728881835938,
+        "y1": 110.75453186035156
+      }
+    },
+    {
+      "text": "chine learning inference, and report generation.FastAPI is particularly suitable due to its high",
+      "page_num": 14,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 122.70930480957031,
+        "x1": 523.2728881835938,
+        "y1": 134.6645050048828
+      }
+    },
+    {
+      "text": "performance,asynchronouscapabilities,andcompatibilitywithmachinelearningworkflows.",
+      "page_num": 14,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 146.61927795410156,
+        "x1": 523.27294921875,
+        "y1": 158.57447814941406
+      }
+    },
+    {
+      "text": "Thebackendactsasthecentralprocessingunitoftheplatform,coordinatingdataextraction,",
+      "page_num": 14,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 170.53028869628906,
+        "x1": 523.27294921875,
+        "y1": 182.48548889160156
+      }
+    },
+    {
+      "text": "analysis, and structured output generation.",
+      "page_num": 14,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 194.4402618408203,
+        "x1": 274.54498291015625,
+        "y1": 206.3954620361328
+      }
+    },
+    {
+      "text": "Fordocumentanalysisandmachinelearningoperations,wehaveusedPythonasthepri-",
+      "page_num": 14,
+      "bbox": {
+        "x0": 89.55899810791016,
+        "y0": 218.35023498535156,
+        "x1": 523.2816162109375,
+        "y1": 230.30543518066406
+      }
+    },
+    {
+      "text": "maryprogramminglanguageduetoitsrichecosystemoflibraries.Regularexpressionsand",
+      "page_num": 14,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 242.26124572753906,
+        "x1": 523.2728881835938,
+        "y1": 254.21644592285156
+      }
+    },
+    {
+      "text": "rule-based engines are employed to detect formatting patterns such as figure numbering, cita-",
+      "page_num": 14,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 266.1712341308594,
+        "x1": 523.2728881835938,
+        "y1": 278.1264343261719
+      }
+    },
+    {
+      "text": "tion brackets, equation formatting, and punctuation consistency.In addition, Natural Language",
+      "page_num": 14,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 290.0812072753906,
+        "x1": 523.27294921875,
+        "y1": 302.0364074707031
+      }
+    },
+    {
+      "text": "ProcessingtechniquesandScikit-learnmodelsassistinmorecomplextaskssuchascitation-",
+      "page_num": 14,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 313.9922180175781,
+        "x1": 523.2728881835938,
+        "y1": 325.9474182128906
+      }
+    },
+    {
+      "text": "reference matching,reference completeness verification, and DOI validation.This hybrid ap-",
+      "page_num": 14,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 337.9022216796875,
+        "x1": 523.2728271484375,
+        "y1": 349.857421875
+      }
+    },
+    {
+      "text": "proach ensures both speed and contextual intelligence in error detection.",
+      "page_num": 14,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 361.8122253417969,
+        "x1": 417.78021240234375,
+        "y1": 373.7674255371094
+      }
+    },
+    {
+      "text": "The system requires a reliable database layer, such as PostgreSQL or MongoDB, to manage",
+      "page_num": 14,
+      "bbox": {
+        "x0": 89.55899810791016,
+        "y0": 385.7232360839844,
+        "x1": 523.2816162109375,
+        "y1": 397.6784362792969
+      }
+    },
+    {
+      "text": "user session data, analysis results, and system logs temporarily.While uploaded documents are",
+      "page_num": 14,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 409.63323974609375,
+        "x1": 523.2728881835938,
+        "y1": 421.58843994140625
+      }
+    },
+    {
+      "text": "not stored permanently in order to maintain privacy, temporary storage ensures smooth report",
+      "page_num": 14,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 433.5432434082031,
+        "x1": 523.2728271484375,
+        "y1": 445.4984436035156
+      }
+    },
+    {
+      "text": "generationandretrieval.Datadeletionpoliciesareimplementedtoremovedocumentsafter",
+      "page_num": 14,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 457.4542541503906,
+        "x1": 523.2728881835938,
+        "y1": 469.4094543457031
+      }
+    },
+    {
+      "text": "processing, ensuring compliance with privacy and academic integrity standards.",
+      "page_num": 14,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 481.3642578125,
+        "x1": 453.5382080078125,
+        "y1": 493.3194580078125
+      }
+    },
+    {
+      "text": "From an infrastructure perspective,the platform is deployed on a cloud-based virtual ma-",
+      "page_num": 14,
+      "bbox": {
+        "x0": 89.55899810791016,
+        "y0": 505.2742614746094,
+        "x1": 523.2816772460938,
+        "y1": 517.2294311523438
+      }
+    },
+    {
+      "text": "chine capable of handling document uploads and concurrent processing requests. Containeriza-",
+      "page_num": 14,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 529.1852416992188,
+        "x1": 523.2728881835938,
+        "y1": 541.1404418945312
+      }
+    },
+    {
+      "text": "tion using Docker ensures portability and consistent deployment across environments.Object",
+      "page_num": 14,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 553.0952758789062,
+        "x1": 523.27294921875,
+        "y1": 565.0504760742188
+      }
+    },
+    {
+      "text": "storage is utilized for temporary file management, while monitoring and logging services main-",
+      "page_num": 14,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 577.0062255859375,
+        "x1": 523.27294921875,
+        "y1": 588.96142578125
+      }
+    },
+    {
+      "text": "tain system reliability, uptime tracking, and performance diagnostics.",
+      "page_num": 14,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 600.916259765625,
+        "x1": 402.6091003417969,
+        "y1": 612.8714599609375
+      }
+    },
+    {
+      "text": "For machine learning model training and experimentation, a short-term GPU-enabled com-",
+      "page_num": 14,
+      "bbox": {
+        "x0": 89.55899810791016,
+        "y0": 624.8262329101562,
+        "x1": 523.2816162109375,
+        "y1": 636.7814331054688
+      }
+    },
+    {
+      "text": "pute instance may be required.This is particularly useful during development and optimization",
+      "page_num": 14,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 648.7372436523438,
+        "x1": 523.27294921875,
+        "y1": 660.6924438476562
+      }
+    },
+    {
+      "text": "phasestoimprovemodelaccuracyinreferenceclassificationandpatternrecognition.Once",
+      "page_num": 14,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 672.6472778320312,
+        "x1": 523.27294921875,
+        "y1": 684.6024780273438
+      }
+    },
+    {
+      "text": "trained, inference can be performed efficiently on standard CPU-based servers to reduce oper-",
+      "page_num": 14,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 696.5572509765625,
+        "x1": 523.2728271484375,
+        "y1": 708.512451171875
+      }
+    },
+    {
+      "text": "ational costs.",
+      "page_num": 14,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 720.46826171875,
+        "x1": 134.4300537109375,
+        "y1": 732.4234619140625
+      }
+    },
+    {
+      "text": "Security and accessibility are also essential requirements of the platform.A registered do-",
+      "page_num": 14,
+      "bbox": {
+        "x0": 89.55899810791016,
+        "y0": 744.3782348632812,
+        "x1": 523.2816772460938,
+        "y1": 756.3334350585938
+      }
+    },
+    {
+      "text": "14",
+      "page_num": 14,
+      "bbox": {
+        "x0": 273.6600036621094,
+        "y0": 790.7112426757812,
+        "x1": 285.6152038574219,
+        "y1": 802.6664428710938
+      }
+    },
+    {
+      "text": "main name and SSL certificate are necessary to ensure secure HTTPS communication between",
+      "page_num": 15,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 74.88832092285156,
+        "x1": 523.2728881835938,
+        "y1": 86.84352111816406
+      }
+    },
+    {
+      "text": "usersandtheserver.Authenticationmechanismscanbeintegratedinlaterstagestosupport",
+      "page_num": 15,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 98.79933166503906,
+        "x1": 523.2728271484375,
+        "y1": 110.75453186035156
+      }
+    },
+    {
+      "text": "institutional adoption and personalized report tracking.",
+      "page_num": 15,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 122.70930480957031,
+        "x1": 334.32098388671875,
+        "y1": 134.6645050048828
+      }
+    },
+    {
+      "text": "Overall, the simulation platform integrates modern web technologies, cloud infrastructure,",
+      "page_num": 15,
+      "bbox": {
+        "x0": 89.55899810791016,
+        "y0": 146.61927795410156,
+        "x1": 523.2816162109375,
+        "y1": 158.57447814941406
+      }
+    },
+    {
+      "text": "and machine learning frameworks to create a scalable and efficient academic formatting veri-",
+      "page_num": 15,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 170.53028869628906,
+        "x1": 523.2728271484375,
+        "y1": 182.48548889160156
+      }
+    },
+    {
+      "text": "fication system.The combination of frontend usability, backend computational efficiency, and",
+      "page_num": 15,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 194.4402618408203,
+        "x1": 523.2728881835938,
+        "y1": 206.3954620361328
+      }
+    },
+    {
+      "text": "secure deployment ensures that the system can operate reliably under real-world academic us-",
+      "page_num": 15,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 218.35023498535156,
+        "x1": 523.2727661132812,
+        "y1": 230.30543518066406
+      }
+    },
+    {
+      "text": "age conditions.",
+      "page_num": 15,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 242.26124572753906,
+        "x1": 144.38873291015625,
+        "y1": 254.21644592285156
+      }
+    },
+    {
+      "text": "15",
+      "page_num": 15,
+      "bbox": {
+        "x0": 273.6600036621094,
+        "y0": 790.7112426757812,
+        "x1": 285.6152038574219,
+        "y1": 802.6664428710938
+      }
+    },
+    {
+      "text": "Proposed Method",
+      "page_num": 16,
+      "bbox": {
+        "x0": 203.88099670410156,
+        "y0": 144.63246154785156,
+        "x1": 391.3953857421875,
+        "y1": 169.4195556640625
+      }
+    },
+    {
+      "text": "Theproposedsystemisdesignedtoautomaticallyanalyzetechnicalresearchdocumentsand",
+      "page_num": 16,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 218.35035705566406,
+        "x1": 523.2728881835938,
+        "y1": 230.30555725097656
+      }
+    },
+    {
+      "text": "identify structural, formatting, and reference-related issues.The methodology of the system is",
+      "page_num": 16,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 242.26136779785156,
+        "x1": 523.2727661132812,
+        "y1": 254.21656799316406
+      }
+    },
+    {
+      "text": "described below.",
+      "page_num": 16,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 266.1713562011719,
+        "x1": 151.93246459960938,
+        "y1": 278.1265563964844
+      }
+    },
+    {
+      "text": "1.Document Upload and Input Handling",
+      "page_num": 16,
+      "bbox": {
+        "x0": 86.44599914550781,
+        "y0": 302.9241943359375,
+        "x1": 298.567138671875,
+        "y1": 314.9885559082031
+      }
+    },
+    {
+      "text": "The process begins with the user uploading a research paper through a web-based inter-",
+      "page_num": 16,
+      "bbox": {
+        "x0": 101.26499938964844,
+        "y0": 331.92535400390625,
+        "x1": 523.2716064453125,
+        "y1": 343.88055419921875
+      }
+    },
+    {
+      "text": "face.ThesystemacceptsdocumentsinPDForDOCformat.Onceuploaded,thefile",
+      "page_num": 16,
+      "bbox": {
+        "x0": 101.26499938964844,
+        "y0": 355.8353576660156,
+        "x1": 523.271484375,
+        "y1": 367.7905578613281
+      }
+    },
+    {
+      "text": "issecurelystoredandpassedtotheprocessingmoduleforfurtheranalysis.Theinter-",
+      "page_num": 16,
+      "bbox": {
+        "x0": 101.26499938964844,
+        "y0": 379.745361328125,
+        "x1": 523.2716064453125,
+        "y1": 391.7005615234375
+      }
+    },
+    {
+      "text": "faceisdesignedtobesimpleandaccessible,allowingstudentstoquicklysubmittheir",
+      "page_num": 16,
+      "bbox": {
+        "x0": 101.26499938964844,
+        "y0": 403.6563720703125,
+        "x1": 523.2716064453125,
+        "y1": 415.611572265625
+      }
+    },
+    {
+      "text": "documents for evaluation.",
+      "page_num": 16,
+      "bbox": {
+        "x0": 101.26499938964844,
+        "y0": 427.5663757324219,
+        "x1": 225.18064880371094,
+        "y1": 439.5215759277344
+      }
+    },
+    {
+      "text": "2.Text Extraction and Preprocessing",
+      "page_num": 16,
+      "bbox": {
+        "x0": 86.44599914550781,
+        "y0": 461.3302001953125,
+        "x1": 277.38250732421875,
+        "y1": 473.3945617675781
+      }
+    },
+    {
+      "text": "After the document is uploaded, the system extracts textual and structural content using",
+      "page_num": 16,
+      "bbox": {
+        "x0": 101.26499938964844,
+        "y0": 490.33135986328125,
+        "x1": 523.2716064453125,
+        "y1": 502.28656005859375
+      }
+    },
+    {
+      "text": "document parsing libraries.The extracted content is cleaned and organized into logical",
+      "page_num": 16,
+      "bbox": {
+        "x0": 101.26499938964844,
+        "y0": 514.2413330078125,
+        "x1": 523.2715454101562,
+        "y1": 526.196533203125
+      }
+    },
+    {
+      "text": "components such as headings, paragraphs, figures, tables, equations, and references. Pre-",
+      "page_num": 16,
+      "bbox": {
+        "x0": 101.26499938964844,
+        "y0": 538.1513061523438,
+        "x1": 523.2716064453125,
+        "y1": 550.1065063476562
+      }
+    },
+    {
+      "text": "processing ensures that the data is structured properly so that different validation modules",
+      "page_num": 16,
+      "bbox": {
+        "x0": 101.26499938964844,
+        "y0": 562.0623168945312,
+        "x1": 523.271484375,
+        "y1": 574.0175170898438
+      }
+    },
+    {
+      "text": "can analyze each component efficiently.",
+      "page_num": 16,
+      "bbox": {
+        "x0": 101.26499938964844,
+        "y0": 585.9723510742188,
+        "x1": 291.7471618652344,
+        "y1": 597.9275512695312
+      }
+    },
+    {
+      "text": "3.Structural and Formatting Validation",
+      "page_num": 16,
+      "bbox": {
+        "x0": 86.44599914550781,
+        "y0": 619.7362060546875,
+        "x1": 293.4742126464844,
+        "y1": 631.800537109375
+      }
+    },
+    {
+      "text": "The system applies a rule-based validation engine to identify formatting inconsistencies.",
+      "page_num": 16,
+      "bbox": {
+        "x0": 101.26499938964844,
+        "y0": 648.7373657226562,
+        "x1": 523.2716064453125,
+        "y1": 660.6925659179688
+      }
+    },
+    {
+      "text": "Regularexpressiontechniquesareusedtocheckfigureandtablenumbering,caption",
+      "page_num": 16,
+      "bbox": {
+        "x0": 101.26499938964844,
+        "y0": 672.6473388671875,
+        "x1": 523.2716064453125,
+        "y1": 684.6025390625
+      }
+    },
+    {
+      "text": "placement,equation numbering,and citation formats.The system also verifies whether",
+      "page_num": 16,
+      "bbox": {
+        "x0": 101.26499938964844,
+        "y0": 696.557373046875,
+        "x1": 523.2716064453125,
+        "y1": 708.5125732421875
+      }
+    },
+    {
+      "text": "figures,tables,andequationsareproperlyreferencedwithinthetextandwhethertheir",
+      "page_num": 16,
+      "bbox": {
+        "x0": 101.26499938964844,
+        "y0": 720.4683227539062,
+        "x1": 523.2715454101562,
+        "y1": 732.4235229492188
+      }
+    },
+    {
+      "text": "numbering sequence is consistent throughout the document.",
+      "page_num": 16,
+      "bbox": {
+        "x0": 101.26499938964844,
+        "y0": 744.3783569335938,
+        "x1": 387.83111572265625,
+        "y1": 756.3335571289062
+      }
+    },
+    {
+      "text": "16",
+      "page_num": 16,
+      "bbox": {
+        "x0": 291.6600036621094,
+        "y0": 790.7113647460938,
+        "x1": 303.6152038574219,
+        "y1": 802.6665649414062
+      }
+    },
+    {
+      "text": "4.Citation and Reference Analysis",
+      "page_num": 17,
+      "bbox": {
+        "x0": 86.44599914550781,
+        "y0": 74.77916717529297,
+        "x1": 265.4153137207031,
+        "y1": 86.84352111816406
+      }
+    },
+    {
+      "text": "Toensureaccuracyinacademicreferencing,thesystemperformscitationverification",
+      "page_num": 17,
+      "bbox": {
+        "x0": 101.26499938964844,
+        "y0": 103.78034973144531,
+        "x1": 523.2716674804688,
+        "y1": 115.73554992675781
+      }
+    },
+    {
+      "text": "using natural language processing techniques.It checks the relationship between in-text",
+      "page_num": 17,
+      "bbox": {
+        "x0": 101.26499938964844,
+        "y0": 127.69032287597656,
+        "x1": 523.2715454101562,
+        "y1": 139.64552307128906
+      }
+    },
+    {
+      "text": "citationsandthebibliographytodetectmissingreferences,duplicates,ormismatches.",
+      "page_num": 17,
+      "bbox": {
+        "x0": 101.26499938964844,
+        "y0": 151.60133361816406,
+        "x1": 523.2716064453125,
+        "y1": 163.55653381347656
+      }
+    },
+    {
+      "text": "Thesystemalsovalidateswhetherthecitationformatfollowsstandardstylessuchas",
+      "page_num": 17,
+      "bbox": {
+        "x0": 101.26499938964844,
+        "y0": 175.5113067626953,
+        "x1": 523.2716064453125,
+        "y1": 187.4665069580078
+      }
+    },
+    {
+      "text": "IEEE or APA.",
+      "page_num": 17,
+      "bbox": {
+        "x0": 101.26499938964844,
+        "y0": 199.42127990722656,
+        "x1": 168.8955535888672,
+        "y1": 211.37648010253906
+      }
+    },
+    {
+      "text": "5.Contextual Analysis of Technical Elements",
+      "page_num": 17,
+      "bbox": {
+        "x0": 86.44599914550781,
+        "y0": 233.18511962890625,
+        "x1": 318.6757507324219,
+        "y1": 245.2494659423828
+      }
+    },
+    {
+      "text": "Theproposedmethodincludesmulti-modalanalysistoevaluatefiguresandequations",
+      "page_num": 17,
+      "bbox": {
+        "x0": 101.26499938964844,
+        "y0": 262.1863098144531,
+        "x1": 523.271484375,
+        "y1": 274.1415100097656
+      }
+    },
+    {
+      "text": "incontext.Thesystemcheckswhethereachfigureorequationisaccompaniedbyan",
+      "page_num": 17,
+      "bbox": {
+        "x0": 101.26499938964844,
+        "y0": 286.0962829589844,
+        "x1": 523.2715454101562,
+        "y1": 298.0514831542969
+      }
+    },
+    {
+      "text": "appropriate explanation in the surrounding text.This ensures that technical elements are",
+      "page_num": 17,
+      "bbox": {
+        "x0": 101.26499938964844,
+        "y0": 310.0072937011719,
+        "x1": 523.2716064453125,
+        "y1": 321.9624938964844
+      }
+    },
+    {
+      "text": "not only present but are also properly integrated into the document.",
+      "page_num": 17,
+      "bbox": {
+        "x0": 101.26499938964844,
+        "y0": 333.91729736328125,
+        "x1": 422.5968322753906,
+        "y1": 345.87249755859375
+      }
+    },
+    {
+      "text": "6.Report Generation and Feedback",
+      "page_num": 17,
+      "bbox": {
+        "x0": 86.44599914550781,
+        "y0": 367.68115234375,
+        "x1": 271.978759765625,
+        "y1": 379.7455139160156
+      }
+    },
+    {
+      "text": "Aftercompletingtheanalysis,thesystemgeneratesadetailedreportthatcategorizes",
+      "page_num": 17,
+      "bbox": {
+        "x0": 101.26499938964844,
+        "y0": 396.68231201171875,
+        "x1": 523.2716064453125,
+        "y1": 408.63751220703125
+      }
+    },
+    {
+      "text": "errorsbasedontypeandseverity.Thereportincludesactionablesuggestionsforim-",
+      "page_num": 17,
+      "bbox": {
+        "x0": 101.26499938964844,
+        "y0": 420.5923156738281,
+        "x1": 523.271484375,
+        "y1": 432.5475158691406
+      }
+    },
+    {
+      "text": "provement, allowing users to correct issues before final submission.The entire analysis",
+      "page_num": 17,
+      "bbox": {
+        "x0": 101.26499938964844,
+        "y0": 444.5023193359375,
+        "x1": 523.2716064453125,
+        "y1": 456.45751953125
+      }
+    },
+    {
+      "text": "process is optimized for speed and produces results within approximately 40 seconds.",
+      "page_num": 17,
+      "bbox": {
+        "x0": 101.26499938964844,
+        "y0": 468.413330078125,
+        "x1": 511.0055236816406,
+        "y1": 480.3685302734375
+      }
+    },
+    {
+      "text": "7.System Benefits",
+      "page_num": 17,
+      "bbox": {
+        "x0": 86.44599914550781,
+        "y0": 502.17718505859375,
+        "x1": 181.28660583496094,
+        "y1": 514.2415161132812
+      }
+    },
+    {
+      "text": "The proposed system is lightweight, scalable, and cost-effective for students.It reduces",
+      "page_num": 17,
+      "bbox": {
+        "x0": 101.26499938964844,
+        "y0": 531.1773071289062,
+        "x1": 523.2715454101562,
+        "y1": 543.1325073242188
+      }
+    },
+    {
+      "text": "manual formatting effort and helps improve the overall quality of academic submissions.",
+      "page_num": 17,
+      "bbox": {
+        "x0": 101.26499938964844,
+        "y0": 555.0883178710938,
+        "x1": 523.271728515625,
+        "y1": 567.0435180664062
+      }
+    },
+    {
+      "text": "Additionally,itminimizestheworkloadoffacultymembersbyautomatingrepetitive",
+      "page_num": 17,
+      "bbox": {
+        "x0": 101.26499938964844,
+        "y0": 578.9983520507812,
+        "x1": 523.2716064453125,
+        "y1": 590.9535522460938
+      }
+    },
+    {
+      "text": "formatting checks.",
+      "page_num": 17,
+      "bbox": {
+        "x0": 101.26499938964844,
+        "y0": 602.9083251953125,
+        "x1": 190.24754333496094,
+        "y1": 614.863525390625
+      }
+    },
+    {
+      "text": "8.Comparison with Existing Solutions",
+      "page_num": 17,
+      "bbox": {
+        "x0": 86.44599914550781,
+        "y0": 636.6721801757812,
+        "x1": 284.9382019042969,
+        "y1": 648.7365112304688
+      }
+    },
+    {
+      "text": "The advantages of the proposed system over existing tools are presented in Table 2.",
+      "page_num": 17,
+      "bbox": {
+        "x0": 101.26499938964844,
+        "y0": 665.67333984375,
+        "x1": 499.899169921875,
+        "y1": 677.6285400390625
+      }
+    },
+    {
+      "text": "17",
+      "page_num": 17,
+      "bbox": {
+        "x0": 273.6600036621094,
+        "y0": 790.7113037109375,
+        "x1": 285.6152038574219,
+        "y1": 802.66650390625
+      }
+    },
+    {
+      "text": "Table 2:Comparison between Fix my Paper and Existing Solutions",
+      "page_num": 18,
+      "bbox": {
+        "x0": 136.62100219726562,
+        "y0": 81.04933166503906,
+        "x1": 458.6582336425781,
+        "y1": 93.00453186035156
+      }
+    },
+    {
+      "text": "Fix my Paper (our solution)Existing Solutions",
+      "page_num": 18,
+      "bbox": {
+        "x0": 121.38200378417969,
+        "y0": 95.03514862060547,
+        "x1": 395.8341979980469,
+        "y1": 106.99034881591797
+      }
+    },
+    {
+      "text": "Advanced AI-driven analysisBasic formatting checks",
+      "page_num": 18,
+      "bbox": {
+        "x0": 121.38200378417969,
+        "y0": 109.98829650878906,
+        "x1": 419.36199951171875,
+        "y1": 121.94349670410156
+      }
+    },
+    {
+      "text": "Image and equation context checkLimited technical paper support",
+      "page_num": 18,
+      "bbox": {
+        "x0": 121.38200378417969,
+        "y0": 124.83332824707031,
+        "x1": 456.2198791503906,
+        "y1": 136.7885284423828
+      }
+    },
+    {
+      "text": "Affordable for studentsHigher cost barrier",
+      "page_num": 18,
+      "bbox": {
+        "x0": 121.38200378417969,
+        "y0": 139.6773223876953,
+        "x1": 394.11260986328125,
+        "y1": 151.6325225830078
+      }
+    },
+    {
+      "text": "Lightning-fast results in just 40 sec-Slower processing (up to 2 minutes)",
+      "page_num": 18,
+      "bbox": {
+        "x0": 121.38200378417969,
+        "y0": 154.5213165283203,
+        "x1": 473.8896484375,
+        "y1": 166.4765167236328
+      }
+    },
+    {
+      "text": "onds",
+      "page_num": 18,
+      "bbox": {
+        "x0": 121.38200378417969,
+        "y0": 168.96730041503906,
+        "x1": 143.9653778076172,
+        "y1": 180.92250061035156
+      }
+    },
+    {
+      "text": "Tailored for technical papersGeneric approach to all papers",
+      "page_num": 18,
+      "bbox": {
+        "x0": 121.38200378417969,
+        "y0": 183.8123321533203,
+        "x1": 449.88360595703125,
+        "y1": 195.7675323486328
+      }
+    },
+    {
+      "text": "EmpowersstudentsandreducesFocusesmainlyonlanguageand",
+      "page_num": 18,
+      "bbox": {
+        "x0": 121.38200378417969,
+        "y0": 198.6563262939453,
+        "x1": 473.8896484375,
+        "y1": 210.6115264892578
+      }
+    },
+    {
+      "text": "faculty workloadstyle",
+      "page_num": 18,
+      "bbox": {
+        "x0": 121.38200378417969,
+        "y0": 213.10231018066406,
+        "x1": 326.39837646484375,
+        "y1": 225.05751037597656
+      }
+    },
+    {
+      "text": "18",
+      "page_num": 18,
+      "bbox": {
+        "x0": 273.6600036621094,
+        "y0": 790.7113037109375,
+        "x1": 285.6152038574219,
+        "y1": 802.66650390625
+      }
+    },
+    {
+      "text": "Conclusion",
+      "page_num": 19,
+      "bbox": {
+        "x0": 238.41000366210938,
+        "y0": 144.63246154785156,
+        "x1": 356.8675231933594,
+        "y1": 169.4195556640625
+      }
+    },
+    {
+      "text": "Our project proposes a scalable and intelligent academic formatting verification system specifi-",
+      "page_num": 19,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 218.35035705566406,
+        "x1": 523.2728881835938,
+        "y1": 230.30555725097656
+      }
+    },
+    {
+      "text": "cally designed for technical research papers in engineering and related disciplines.Unlike con-",
+      "page_num": 19,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 242.26136779785156,
+        "x1": 523.27294921875,
+        "y1": 254.21656799316406
+      }
+    },
+    {
+      "text": "ventionalwritingtoolsthatfocusmainlyongrammarandlanguagerefinement,thisplatform",
+      "page_num": 19,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 266.1713562011719,
+        "x1": 523.27294921875,
+        "y1": 278.1265563964844
+      }
+    },
+    {
+      "text": "concentratesonstructuralaccuracy,formattingcompliance,andreferenceintegrity.Byinte-",
+      "page_num": 19,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 290.0813293457031,
+        "x1": 523.2728271484375,
+        "y1": 302.0365295410156
+      }
+    },
+    {
+      "text": "grating rule-based validation mechanisms with machine learning models, the system is capable",
+      "page_num": 19,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 313.9923400878906,
+        "x1": 523.2728881835938,
+        "y1": 325.9475402832031
+      }
+    },
+    {
+      "text": "of performing a detailed analysis of figures, tables, equations, citations, references, typography,",
+      "page_num": 19,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 337.90234375,
+        "x1": 523.27294921875,
+        "y1": 349.8575439453125
+      }
+    },
+    {
+      "text": "and document consistency within a single unified framework.",
+      "page_num": 19,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 361.8123474121094,
+        "x1": 365.5957946777344,
+        "y1": 373.7675476074219
+      }
+    },
+    {
+      "text": "The combination of deterministic rule engines and data-driven models enhances both pre-",
+      "page_num": 19,
+      "bbox": {
+        "x0": 89.55899810791016,
+        "y0": 385.7233581542969,
+        "x1": 523.28173828125,
+        "y1": 397.6785583496094
+      }
+    },
+    {
+      "text": "cisionandcontextualunderstanding.Rule-basedlogicensuresstrictadherencetopredefined",
+      "page_num": 19,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 409.63336181640625,
+        "x1": 523.27294921875,
+        "y1": 421.58856201171875
+      }
+    },
+    {
+      "text": "academicstandards,suchassequentialnumberingoffiguresandequations,correctcaption",
+      "page_num": 19,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 433.5433654785156,
+        "x1": 523.2728881835938,
+        "y1": 445.4985656738281
+      }
+    },
+    {
+      "text": "placement,propercitationbracketformatting,andconsistentpunctuation.Atthesametime,",
+      "page_num": 19,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 457.4543762207031,
+        "x1": 523.2728271484375,
+        "y1": 469.4095764160156
+      }
+    },
+    {
+      "text": "machinelearningmodelsprovideintelligentvalidationofreferencesectionsbyidentifying",
+      "page_num": 19,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 481.3643798828125,
+        "x1": 523.2728881835938,
+        "y1": 493.319580078125
+      }
+    },
+    {
+      "text": "incomplete entries, mismatches between in-text citations and bibliography items, DOI irregu-",
+      "page_num": 19,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 505.2743835449219,
+        "x1": 523.2728271484375,
+        "y1": 517.2295532226562
+      }
+    },
+    {
+      "text": "larities,andstyleinconsistencies.Thishybridarchitectureallowsthesystemtodelivercom-",
+      "page_num": 19,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 529.1853637695312,
+        "x1": 523.2728271484375,
+        "y1": 541.1405639648438
+      }
+    },
+    {
+      "text": "prehensive and reliable formatting verification.",
+      "page_num": 19,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 553.0953979492188,
+        "x1": 296.1241149902344,
+        "y1": 565.0505981445312
+      }
+    },
+    {
+      "text": "One of the primary impacts of the platform is the improvement of student academic writing",
+      "page_num": 19,
+      "bbox": {
+        "x0": 89.55899810791016,
+        "y0": 577.00537109375,
+        "x1": 523.2816772460938,
+        "y1": 588.9605712890625
+      }
+    },
+    {
+      "text": "quality.By receiving structured, categorized feedback before submission, students can identify",
+      "page_num": 19,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 600.9163818359375,
+        "x1": 523.27294921875,
+        "y1": 612.87158203125
+      }
+    },
+    {
+      "text": "recurring formatting mistakes and correct them independently.Over time, this promotes better",
+      "page_num": 19,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 624.8263549804688,
+        "x1": 523.2728881835938,
+        "y1": 636.7815551757812
+      }
+    },
+    {
+      "text": "understandingofacademicconventionsandstrengthenstechnicalwritingskills.Insteadof",
+      "page_num": 19,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 648.7373657226562,
+        "x1": 523.2728881835938,
+        "y1": 660.6925659179688
+      }
+    },
+    {
+      "text": "relying solely on manual feedback from faculty members, students gain access to an automated",
+      "page_num": 19,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 672.6473999023438,
+        "x1": 523.27294921875,
+        "y1": 684.6026000976562
+      }
+    },
+    {
+      "text": "assistant that supports continuous learning and self-correction.",
+      "page_num": 19,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 696.557373046875,
+        "x1": 370.5093688964844,
+        "y1": 708.5125732421875
+      }
+    },
+    {
+      "text": "Thesystemalsosignificantlyreducesrepetitivefacultyworkload.Formattingerrorssuch",
+      "page_num": 19,
+      "bbox": {
+        "x0": 89.55899810791016,
+        "y0": 720.4683837890625,
+        "x1": 523.2816772460938,
+        "y1": 732.423583984375
+      }
+    },
+    {
+      "text": "asincorrectnumbering,missingreferences,undefinedvariables,andcitationmismatchesof-",
+      "page_num": 19,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 744.3783569335938,
+        "x1": 523.27294921875,
+        "y1": 756.3335571289062
+      }
+    },
+    {
+      "text": "19",
+      "page_num": 19,
+      "bbox": {
+        "x0": 291.6600036621094,
+        "y0": 790.7113647460938,
+        "x1": 303.6152038574219,
+        "y1": 802.6665649414062
+      }
+    },
+    {
+      "text": "tenconsumesubstantialreviewtimedespitebeingnon-conceptualissues.Byautomatingthe",
+      "page_num": 20,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 74.88832092285156,
+        "x1": 523.27294921875,
+        "y1": 86.84352111816406
+      }
+    },
+    {
+      "text": "detection of such errors, the platform enables faculty members to focus more on evaluating the",
+      "page_num": 20,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 98.79933166503906,
+        "x1": 523.27294921875,
+        "y1": 110.75453186035156
+      }
+    },
+    {
+      "text": "technical depth and originality of the research rather than routine formatting corrections.This",
+      "page_num": 20,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 122.70930480957031,
+        "x1": 523.2728881835938,
+        "y1": 134.6645050048828
+      }
+    },
+    {
+      "text": "contributes to improved efficiency in academic evaluation processes.",
+      "page_num": 20,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 146.61927795410156,
+        "x1": 399.6920166015625,
+        "y1": 158.57447814941406
+      }
+    },
+    {
+      "text": "Anotherimportantcontributionofthesolutionisenhancedcompliancewithjournaland",
+      "page_num": 20,
+      "bbox": {
+        "x0": 89.55899810791016,
+        "y0": 170.53028869628906,
+        "x1": 523.2817993164062,
+        "y1": 182.48548889160156
+      }
+    },
+    {
+      "text": "institutionalstandards.Researchpapersintendedforpublicationmustadherestrictlytopre-",
+      "page_num": 20,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 194.4402618408203,
+        "x1": 523.2728881835938,
+        "y1": 206.3954620361328
+      }
+    },
+    {
+      "text": "scribed formatting guidelines such as IEEE or APA styles.Even minor inconsistencies can re-",
+      "page_num": 20,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 218.35023498535156,
+        "x1": 523.27294921875,
+        "y1": 230.30543518066406
+      }
+    },
+    {
+      "text": "sult in rejection or revision requests.By verifying citation styles, reference ordering, structural",
+      "page_num": 20,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 242.26124572753906,
+        "x1": 523.2730102539062,
+        "y1": 254.21644592285156
+      }
+    },
+    {
+      "text": "consistency,and typographic conventions,the system increases the likelihood of submissions",
+      "page_num": 20,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 266.1712341308594,
+        "x1": 523.27294921875,
+        "y1": 278.1264343261719
+      }
+    },
+    {
+      "text": "meeting professional standards on the first attempt.",
+      "page_num": 20,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 290.0812072753906,
+        "x1": 316.0653991699219,
+        "y1": 302.0364074707031
+      }
+    },
+    {
+      "text": "Affordability and accessibility are also central to the platform’s design philosophy.Many",
+      "page_num": 20,
+      "bbox": {
+        "x0": 89.55899810791016,
+        "y0": 313.9922180175781,
+        "x1": 523.2816162109375,
+        "y1": 325.9474182128906
+      }
+    },
+    {
+      "text": "existing academic support tools are expensive subscription-based services that may not be ac-",
+      "page_num": 20,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 337.9022216796875,
+        "x1": 523.2728271484375,
+        "y1": 349.857421875
+      }
+    },
+    {
+      "text": "cessibletoallstudents.Thisprojectaimstoprovidefastandcost-effectiveautomatedassis-",
+      "page_num": 20,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 361.8122253417969,
+        "x1": 523.2728271484375,
+        "y1": 373.7674255371094
+      }
+    },
+    {
+      "text": "tance,deliveringdetailedanalysisreportswithinashortprocessingtime.Thisensuresthat",
+      "page_num": 20,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 385.7232360839844,
+        "x1": 523.2728881835938,
+        "y1": 397.6784362792969
+      }
+    },
+    {
+      "text": "students from diverse academic backgrounds can benefit from advanced formatting verification",
+      "page_num": 20,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 409.63323974609375,
+        "x1": 523.2728881835938,
+        "y1": 421.58843994140625
+      }
+    },
+    {
+      "text": "without financial barriers.",
+      "page_num": 20,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 433.5432434082031,
+        "x1": 195.18637084960938,
+        "y1": 445.4984436035156
+      }
+    },
+    {
+      "text": "With pilot testing, iterative refinement, and performance optimization, the system has strong",
+      "page_num": 20,
+      "bbox": {
+        "x0": 89.55899810791016,
+        "y0": 457.4542541503906,
+        "x1": 523.2816772460938,
+        "y1": 469.4094543457031
+      }
+    },
+    {
+      "text": "potential for institutional-level adoption across engineering colleges and technical universities.",
+      "page_num": 20,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 481.3642578125,
+        "x1": 523.27294921875,
+        "y1": 493.3194580078125
+      }
+    },
+    {
+      "text": "Itcanbeintegratedintosubmissionworkflows,departmentalreviewprocesses,orresearch",
+      "page_num": 20,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 505.2742614746094,
+        "x1": 523.27294921875,
+        "y1": 517.2294311523438
+      }
+    },
+    {
+      "text": "labsto establisha standardizedpre-submission verification mechanism.In the long term,the",
+      "page_num": 20,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 529.1852416992188,
+        "x1": 523.27294921875,
+        "y1": 541.1404418945312
+      }
+    },
+    {
+      "text": "platform may evolve into a comprehensive academic quality assurance tool, supporting large-",
+      "page_num": 20,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 553.0952758789062,
+        "x1": 523.27294921875,
+        "y1": 565.0504760742188
+      }
+    },
+    {
+      "text": "scale document validation while promoting higher standards of technical writing excellence.",
+      "page_num": 20,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 577.0062255859375,
+        "x1": 513.4576416015625,
+        "y1": 588.96142578125
+      }
+    },
+    {
+      "text": "20",
+      "page_num": 20,
+      "bbox": {
+        "x0": 273.6600036621094,
+        "y0": 790.7112426757812,
+        "x1": 285.6152038574219,
+        "y1": 802.6664428710938
+      }
+    },
+    {
+      "text": "References",
+      "page_num": 21,
+      "bbox": {
+        "x0": 240.05799865722656,
+        "y0": 144.63246154785156,
+        "x1": 355.21881103515625,
+        "y1": 169.4195556640625
+      }
+    },
+    {
+      "text": "•English grammar and writing app.https://www.gingersoftware.com/grammarcheck.",
+      "page_num": 21,
+      "bbox": {
+        "x0": 91.22799682617188,
+        "y0": 218.35035705566406,
+        "x1": 502.5107727050781,
+        "y1": 230.30555725097656
+      }
+    },
+    {
+      "text": "•Languagetool free ai grammar checker.https://languagetool.org, 2018.",
+      "page_num": 21,
+      "bbox": {
+        "x0": 91.22799682617188,
+        "y0": 253.99537658691406,
+        "x1": 438.9808654785156,
+        "y1": 265.9505920410156
+      }
+    },
+    {
+      "text": "•The bea-2019 dataset for grammatical, lexical, and spelling errors.",
+      "page_num": 21,
+      "bbox": {
+        "x0": 91.22799682617188,
+        "y0": 289.6404113769531,
+        "x1": 418.8124084472656,
+        "y1": 301.5956115722656
+      }
+    },
+    {
+      "text": "https://www.cl.cam.ac.uk/research/nl/bea2019/, 2019.",
+      "page_num": 21,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 325.284423828125,
+        "x1": 329.2160949707031,
+        "y1": 337.2396240234375
+      }
+    },
+    {
+      "text": "•A grammatical error correction model for english essay scoring based on statistical meth-",
+      "page_num": 21,
+      "bbox": {
+        "x0": 91.22799682617188,
+        "y0": 358.2444152832031,
+        "x1": 523.2769165039062,
+        "y1": 370.1996154785156
+      }
+    },
+    {
+      "text": "ods.Hindawi, 2022.",
+      "page_num": 21,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 391.20440673828125,
+        "x1": 169.171875,
+        "y1": 403.15960693359375
+      }
+    },
+    {
+      "text": "•Writefull vs grammarly:What’s the difference?, 2022.Blog:Comparison of accuracy",
+      "page_num": 21,
+      "bbox": {
+        "x0": 91.22799682617188,
+        "y0": 424.1654052734375,
+        "x1": 512.6488037109375,
+        "y1": 436.12060546875
+      }
+    },
+    {
+      "text": "and application.",
+      "page_num": 21,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 457.1253967285156,
+        "x1": 148.36981201171875,
+        "y1": 469.0805969238281
+      }
+    },
+    {
+      "text": "•The 11 best ai tools for academic writing, 2023.Master Academia.",
+      "page_num": 21,
+      "bbox": {
+        "x0": 91.22799682617188,
+        "y0": 490.08538818359375,
+        "x1": 421.717529296875,
+        "y1": 502.04058837890625
+      }
+    },
+    {
+      "text": "•Automated academic writing and proofreading.https://www.writefull.com, 2023.",
+      "page_num": 21,
+      "bbox": {
+        "x0": 91.22799682617188,
+        "y0": 525.7293701171875,
+        "x1": 490.6870422363281,
+        "y1": 537.6845703125
+      }
+    },
+    {
+      "text": "•Research and analysis of grammatical error correction technology. SCIRP Journal, 2024.",
+      "page_num": 21,
+      "bbox": {
+        "x0": 91.22799682617188,
+        "y0": 561.3743286132812,
+        "x1": 523.2769775390625,
+        "y1": 573.3295288085938
+      }
+    },
+    {
+      "text": "•Free, powerful english grammar checker.https://www.scribens.com, 2025.",
+      "page_num": 21,
+      "bbox": {
+        "x0": 91.22799682617188,
+        "y0": 597.0193481445312,
+        "x1": 458.04937744140625,
+        "y1": 608.9745483398438
+      }
+    },
+    {
+      "text": "•Grammarly grammar checker.https://www.grammarly.com/grammar-check, 2025.",
+      "page_num": 21,
+      "bbox": {
+        "x0": 91.22799682617188,
+        "y0": 632.6633911132812,
+        "x1": 496.1625061035156,
+        "y1": 644.6185913085938
+      }
+    },
+    {
+      "text": "•StefanoBann‘o.Usinggrammaticalerrorcorrectiontoautomaticallyassessl2profi-",
+      "page_num": 21,
+      "bbox": {
+        "x0": 91.22799682617188,
+        "y0": 668.308349609375,
+        "x1": 523.2770385742188,
+        "y1": 680.2635498046875
+      }
+    },
+    {
+      "text": "ciency.",
+      "page_num": 21,
+      "bbox": {
+        "x0": 101.26499938964844,
+        "y0": 692.2183837890625,
+        "x1": 134.5004425048828,
+        "y1": 704.173583984375
+      }
+    },
+    {
+      "text": "Computer SpeechLanguage, 2024.https://www.sciencedirect.com/.",
+      "page_num": 21,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 727.8633422851562,
+        "x1": 400.6603698730469,
+        "y1": 739.8185424804688
+      }
+    },
+    {
+      "text": "•Christopher Bryant, Zhenhao Yuan, Muhammad Rizqi Qorib, Huan Cao, Hwee Tou Ng,",
+      "page_num": 21,
+      "bbox": {
+        "x0": 91.22799682617188,
+        "y0": 760.8233642578125,
+        "x1": 521.997802734375,
+        "y1": 772.778564453125
+      }
+    },
+    {
+      "text": "21",
+      "page_num": 21,
+      "bbox": {
+        "x0": 291.6600036621094,
+        "y0": 790.7113647460938,
+        "x1": 303.6152038574219,
+        "y1": 802.6665649414062
+      }
+    },
+    {
+      "text": "andTedBriscoe.Grammaticalerrorcorrection:Asurveyofthestateoftheart.Compu-",
+      "page_num": 22,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 74.88832092285156,
+        "x1": 523.2727661132812,
+        "y1": 86.84352111816406
+      }
+    },
+    {
+      "text": "tational Linguistics, 49(3):643–701, 2023.",
+      "page_num": 22,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 98.79933166503906,
+        "x1": 273.911376953125,
+        "y1": 110.75453186035156
+      }
+    },
+    {
+      "text": "•Robert ¨Ostling.Evaluation of really good grammatical error correction.In Proceedings",
+      "page_num": 22,
+      "bbox": {
+        "x0": 91.22799682617188,
+        "y0": 132.1748504638672,
+        "x1": 523.2769165039062,
+        "y1": 144.6275177001953
+      }
+    },
+    {
+      "text": "of LREC 2024, pages 6582–6593, 2024.",
+      "page_num": 22,
+      "bbox": {
+        "x0": 72.0,
+        "y0": 166.54530334472656,
+        "x1": 265.26776123046875,
+        "y1": 178.50050354003906
+      }
+    },
+    {
+      "text": "22",
+      "page_num": 22,
+      "bbox": {
+        "x0": 273.6600036621094,
+        "y0": 790.7113037109375,
+        "x1": 285.6152038574219,
+        "y1": 802.66650390625
+      }
+    }
+  ]
+}

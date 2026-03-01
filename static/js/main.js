@@ -3,19 +3,23 @@
 let currentJobId = null;
 let allErrors = [];
 
-// DOM Elements
-const uploadSection = document.getElementById('upload-section');
-const processingSection = document.getElementById('processing-section');
-const resultsSection = document.getElementById('results-section');
-const uploadArea = document.getElementById('upload-area');
-const fileInput = document.getElementById('file-input');
-const browseBtn = document.getElementById('browse-btn');
-const downloadBtn = document.getElementById('download-btn');
-const newUploadBtn = document.getElementById('new-upload-btn');
+// DOM Elements (will be initialized after DOM loads)
+let uploadSection, processingSection, resultsSection, uploadArea, fileInput, browseBtn, downloadBtn, newUploadBtn;
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Research Paper Error Checker - JavaScript loaded');
+    
+    // Initialize DOM elements
+    uploadSection = document.getElementById('upload-section');
+    processingSection = document.getElementById('processing-section');
+    resultsSection = document.getElementById('results-section');
+    uploadArea = document.getElementById('upload-area');
+    fileInput = document.getElementById('file-input');
+    browseBtn = document.getElementById('browse-btn');
+    downloadBtn = document.getElementById('download-btn');
+    newUploadBtn = document.getElementById('new-upload-btn');
+    
     console.log('DOM elements:', {
         uploadSection: !!uploadSection,
         processingSection: !!processingSection,
@@ -162,29 +166,46 @@ async function handleFileUpload(file) {
 }
 
 function displayResults(result) {
-    // Show results section
+    console.log('displayResults called with:', result);
+    
     showSection(resultsSection);
-    
-    // Update error stats
-    document.getElementById('total-errors').textContent = result.error_count;
-    
-    const uniquePages = new Set(result.errors.map(e => e.page_num));
-    document.getElementById('pages-with-errors').textContent = uniquePages.size;
-    
-    // Update document statistics
-    if (result.statistics) {
-        document.getElementById('total-words').textContent = result.statistics.total_words.toLocaleString();
-        document.getElementById('total-pages').textContent = result.statistics.total_pages;
-        document.getElementById('total-images').textContent = result.statistics.total_images;
-        document.getElementById('total-tables').textContent = result.statistics.total_tables;
-        document.getElementById('total-figures').textContent = result.statistics.total_figures;
+
+    const totalErrorsEl = document.getElementById('total-errors');
+    const pagesWithErrorsEl = document.getElementById('pages-with-errors');
+    const errorTypesContainer = document.getElementById('error-types-container');
+    const errorList = document.getElementById('error-list');
+
+    console.log('Elements found:', {
+        totalErrorsEl: !!totalErrorsEl,
+        pagesWithErrorsEl: !!pagesWithErrorsEl,
+        errorTypesContainer: !!errorTypesContainer,
+        errorList: !!errorList
+    });
+
+    if (!totalErrorsEl || !pagesWithErrorsEl || !errorTypesContainer || !errorList) {
+        console.error("One or more required DOM elements missing:", {
+            totalErrorsEl: !!totalErrorsEl,
+            pagesWithErrorsEl: !!pagesWithErrorsEl,
+            errorTypesContainer: !!errorTypesContainer,
+            errorList: !!errorList
+        });
+        return;
     }
-    
-    // Display error types summary
+
+    console.log('Setting error count to:', result.error_count);
+    totalErrorsEl.textContent = result.error_count;
+
+    const uniquePages = new Set(result.errors.map(e => e.page_num));
+    console.log('Setting pages with errors to:', uniquePages.size);
+    pagesWithErrorsEl.textContent = uniquePages.size;
+
+    console.log('Displaying error types summary...');
     displayErrorTypesSummary(result.errors);
     
-    // Display detailed error list
+    console.log('Displaying error list...');
     displayErrorList(result.errors);
+    
+    console.log('displayResults complete!');
 }
 
 function displayErrorTypesSummary(errors) {
@@ -224,12 +245,31 @@ function displayErrorTypesSummary(errors) {
 function displayErrorList(errors, filter = 'all') {
     const errorList = document.getElementById('error-list');
     errorList.innerHTML = '';
-    
+
     // Filter errors
-    const filteredErrors = filter === 'all' 
-        ? errors 
-        : errors.filter(e => e.error_type === filter);
-    
+    let filteredErrors;
+    if (filter === 'all') {
+        filteredErrors = errors;
+    } else if (filter === 'numbering') {
+        // Special category: includes figure, table, and equation numbering
+        filteredErrors = errors.filter(e => 
+            e.error_type === 'invalid_figure_label' || 
+            e.error_type === 'invalid_table_numbering' || 
+            e.error_type === 'equation_numbering'
+        );
+    } else if (filter === 'structure') {
+        // Special category: includes all structure-related checks
+        filteredErrors = errors.filter(e => 
+            e.error_type === 'missing_abstract' ||
+            e.error_type === 'missing_index_terms' ||
+            e.error_type === 'missing_references' ||
+            e.error_type === 'non_roman_heading' ||
+            e.error_type === 'missing_introduction'
+        );
+    } else {
+        filteredErrors = errors.filter(e => e.error_type === filter);
+    }
+
     if (filteredErrors.length === 0) {
         errorList.innerHTML = '<p style="text-align: center; color: #666;">No errors found for this filter.</p>';
         return;
@@ -270,12 +310,27 @@ function handleFilterClick(button) {
 
 function getErrorTypeDescription(type) {
     const descriptions = {
-        'citation_punctuation': 'Punctuation before citations',
-        'dash_usage': 'Hyphen instead of en-dash',
-        'punctuation_spacing': 'Incorrect spacing after punctuation',
-        'unit_spacing': 'Incorrect spacing before units',
-        'equation_punctuation': 'Missing punctuation after equations',
-        'missing_doi': 'References missing DOI'
+        // Structure checks
+        'missing_abstract': 'Missing Abstract section',
+        'missing_index_terms': 'Missing Index Terms section',
+        'missing_references': 'Missing References section',
+        'non_roman_heading': 'Non-Roman numeral section heading',
+        'missing_introduction': 'Missing or misformatted Introduction',
+        
+        // Numbering checks
+        'invalid_figure_label': 'Incorrect figure label format',
+        'invalid_table_numbering': 'Incorrect table numbering',
+        'equation_numbering': 'Equation numbering issues',
+        
+        // Typography checks
+        'spacing_error': 'Multiple consecutive spaces',
+        'punctuation_spacing': 'Punctuation spacing issues',
+        'repeated_word': 'Repeated consecutive words',
+        'punctuation_error': 'Multiple punctuation marks',
+        'whitespace_error': 'Trailing whitespace',
+        'citation_format': 'Incorrect et al. formatting',
+        'writing_style': 'First-person pronouns',
+        'non_ieee_reference_format': 'Reference format issues'
     };
     return descriptions[type] || type;
 }

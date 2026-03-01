@@ -54,37 +54,7 @@
                     </div>
                 </div>
 
-                <!-- Document Statistics Infographics -->
-                <div class="document-stats">
-                    <h3>📊 Document Statistics</h3>
-                    <div class="stats-grid-info">
-                        <div class="info-card">
-                            <div class="info-icon">📝</div>
-                            <div class="info-number" id="total-words">0</div>
-                            <div class="info-label">Total Words</div>
-                        </div>
-                        <div class="info-card">
-                            <div class="info-icon">📄</div>
-                            <div class="info-number" id="total-pages">0</div>
-                            <div class="info-label">Pages</div>
-                        </div>
-                        <div class="info-card">
-                            <div class="info-icon">🖼️</div>
-                            <div class="info-number" id="total-images">0</div>
-                            <div class="info-label">Images</div>
-                        </div>
-                        <div class="info-card">
-                            <div class="info-icon">📊</div>
-                            <div class="info-number" id="total-tables">0</div>
-                            <div class="info-label">Tables</div>
-                        </div>
-                        <div class="info-card">
-                            <div class="info-icon">📈</div>
-                            <div class="info-number" id="total-figures">0</div>
-                            <div class="info-label">Figures</div>
-                        </div>
-                    </div>
-                </div>
+
 
                 <!-- Error Summary -->
                 <div class="error-summary">
@@ -97,12 +67,15 @@
                     <h3>Detailed Error Report</h3>
                     <div class="filter-buttons">
                         <button class="filter-btn active" data-filter="all">All Errors</button>
-                        <button class="filter-btn" data-filter="citation_punctuation">Citation Issues</button>
-                        <button class="filter-btn" data-filter="dash_usage">Dash Usage</button>
-                        <button class="filter-btn" data-filter="punctuation_spacing">Spacing Issues</button>
-                        <button class="filter-btn" data-filter="unit_spacing">Unit Spacing</button>
-                        <button class="filter-btn" data-filter="equation_punctuation">Equation Punctuation</button>
-                        <button class="filter-btn" data-filter="missing_doi">Missing DOI</button>
+                        <button class="filter-btn" data-filter="structure">Structure Issues</button>
+                        <button class="filter-btn" data-filter="numbering">Figure/Table/Equation Numbering</button>
+                        <button class="filter-btn" data-filter="spacing_error">Spacing Issues</button>
+                        <button class="filter-btn" data-filter="punctuation_spacing">Punctuation Spacing</button>
+                        <button class="filter-btn" data-filter="punctuation_error">Punctuation Errors</button>
+                        <button class="filter-btn" data-filter="repeated_word">Repeated Words</button>
+                        <button class="filter-btn" data-filter="whitespace_error">Whitespace</button>
+                        <button class="filter-btn" data-filter="citation_format">Citation Format</button>
+                        <button class="filter-btn" data-filter="writing_style">Writing Style</button>
                     </div>
                     <div id="error-list"></div>
                 </div>
@@ -114,14 +87,14 @@
         </main>
 
         <footer>
-            <p>Checks for common formatting errors in research papers</p>
+            <p>Checks for 17 formatting and compliance errors in research papers</p>
             <div class="error-types-legend">
-                <span class="legend-item"><span class="legend-color" style="background-color: rgba(255, 204, 204, 0.5);"></span> Citation Issues</span>
-                <span class="legend-item"><span class="legend-color" style="background-color: rgba(255, 255, 153, 0.5);"></span> Dash Usage</span>
-                <span class="legend-item"><span class="legend-color" style="background-color: rgba(255, 230, 179, 0.5);"></span> Spacing Issues</span>
-                <span class="legend-item"><span class="legend-color" style="background-color: rgba(204, 230, 255, 0.5);"></span> Unit Spacing</span>
-                <span class="legend-item"><span class="legend-color" style="background-color: rgba(255, 204, 255, 0.5);"></span> Equation Punctuation</span>
-                <span class="legend-item"><span class="legend-color" style="background-color: rgba(230, 255, 230, 0.5);"></span> Missing DOI</span>
+                <span class="legend-item"><span class="legend-color" style="background-color: rgba(59, 130, 246, 0.3);"></span> Structure</span>
+                <span class="legend-item"><span class="legend-color" style="background-color: rgba(139, 92, 246, 0.3);"></span> Numbering</span>
+                <span class="legend-item"><span class="legend-color" style="background-color: rgba(236, 72, 153, 0.3);"></span> Spacing</span>
+                <span class="legend-item"><span class="legend-color" style="background-color: rgba(249, 115, 22, 0.3);"></span> Punctuation</span>
+                <span class="legend-item"><span class="legend-color" style="background-color: rgba(34, 197, 94, 0.3);"></span> Typography</span>
+                <span class="legend-item"><span class="legend-color" style="background-color: rgba(234, 179, 8, 0.3);"></span> Writing Style</span>
             </div>
         </footer>
     </div>

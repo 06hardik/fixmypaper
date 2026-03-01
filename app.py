@@ -70,9 +70,19 @@ def upload_file():
         output_path = os.path.join(app.config['PROCESSED_FOLDER'], f"{job_id}_{output_filename}")
         
         print(f"[PROCESSING] Starting PDF processing...")
-        errors, annotated_path, statistics = process_pdf(input_path, output_path)
+        errors, annotated_path, statistics, extracted_data = process_pdf(input_path, output_path)
         print(f"[PROCESSING] Complete! Found {len(errors)} errors")
         print(f"[PROCESSING] Statistics: {statistics}")
+        
+        # Save extracted data as JSON (for analysis/debugging)
+        json_filename = f"{job_id}_extracted_data.json"
+        json_path = os.path.join(app.config['PROCESSED_FOLDER'], json_filename)
+        
+        import json
+        with open(json_path, 'w', encoding='utf-8') as json_file:
+            json.dump(extracted_data, json_file, indent=2, ensure_ascii=False)
+        
+        print(f"[PROCESSING] Extracted data saved to: {json_path}")
         
         # Store results
         processing_results[job_id] = {
