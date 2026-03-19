@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research Paper Checker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📄 Research Paper Checker</h1>
+            <p class="subtitle">AI-powered formatting compliance checker for IEEE research papers,
+            backed by GROBID's ML models and Camelot table extraction.</p>
+        </header>
+
+        <main>
+            <!-- Role Cards -->
+            <section class="section">
+                <h2 style="text-align:center; margin-bottom:25px; font-size:1.6rem;">Choose your role</h2>
+                <div class="role-grid">
+                    <a href="/professor" class="role-card role-prof">
+                        <div class="role-icon">👩‍🏫</div>
+                        <h3>Professor / Researcher</h3>
+                        <p>Create custom paper formats. Define mandatory sections and toggle checks on or off.</p>
+                        <ul>
+                            <li>Name and describe your format</li>
+                            <li>Select mandatory sections</li>
+                            <li>Toggle individual checks</li>
+                            <li>Saved locally for students</li>
+                        </ul>
+                        <span class="role-link">Go to Professor Mode →</span>
+                    </a>
+                    <a href="/student" class="role-card role-student">
+                        <div class="role-icon">🎓</div>
+                        <h3>Student</h3>
+                        <p>Upload your research paper PDF and check it against the IEEE standard or a professor-defined format.</p>
+                        <ul>
+                            <li>Pick a format</li>
+                            <li>Upload your PDF</li>
+                            <li>Get a detailed error report</li>
+                            <li>Download the annotated PDF</li>
+                        </ul>
+                        <span class="role-link">Go to Student Mode →</span>
+                    </a>
+                </div>
+            </section>
+
+            <!-- How it works -->
+            <section class="section">
+                <h2 style="text-align:center; margin-bottom:25px; font-size:1.6rem;">How it works</h2>
+                <div class="steps-grid">
+                    <div class="step-card"><div class="step-num">1</div><h4>GROBID Parses the PDF</h4><p>ML models extract structure: title, abstract, headings, figures, equations, and references.</p></div>
+                    <div class="step-card"><div class="step-num">2</div><h4>Camelot Extracts Tables</h4><p>Reads all tables from the PDF with accurate cell detection.</p></div>
+                    <div class="step-card"><div class="step-num">3</div><h4>20+ Checks Run</h4><p>Each check targets a specific IEEE formatting rule.</p></div>
+                    <div class="step-card"><div class="step-num">4</div><h4>Errors Highlighted</h4><p>Every issue is annotated directly in the PDF.</p></div>
+                    <div class="step-card"><div class="step-num">5</div><h4>Results Displayed</h4><p>A detailed report groups errors by category.</p></div>
+                </div>
+            </section>
+
+            <!-- Checks overview -->
+            <section class="section">
+                <h2 style="text-align:center; margin-bottom:25px; font-size:1.6rem;">Checks covered</h2>
+                <div class="checks-overview">
+                    {% for cat, names in checks_by_cat.items() %}
+                    <div class="check-cat-card">
+                        <h4>{{ cat }}</h4>
+                        {% for n in names %}
+                        <span class="check-pill">{{ n }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Powered by GROBID, Camelot, PyMuPDF &amp; Flask</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -3,17 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Research Paper Error Checker</title>
+    <title>Student Mode — Paper Checker</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>📄 Research Paper Error Checker</h1>
-            <p class="subtitle">Upload your research paper PDF to detect and highlight formatting errors</p>
+            <h1>🎓 Student Mode</h1>
+            <p class="subtitle">Upload your research paper PDF and check it against a format</p>
+            <a href="/" class="back-link">← Back to Home</a>
         </header>
 
         <main>
+            <!-- Format Selection -->
+            <section id="format-section" class="section">
+                <h3 style="margin-bottom:12px;">Select a format</h3>
+                <select id="format-select" class="format-select">
+                    {% for fmt in formats %}
+                    <option value="{{ fmt.id }}"
+                            data-sections='{{ fmt.mandatory_sections | tojson }}'
+                            data-checks='{{ fmt.enabled_checks | tojson }}'>
+                        {{ fmt.name }} — by {{ fmt.created_by }}
+                    </option>
+                    {% endfor %}
+                    {% if formats|length == 0 %}
+                    <option value="">No formats available</option>
+                    {% endif %}
+                </select>
+            </section>
+
             <!-- Upload Section -->
             <section id="upload-section" class="section">
                 <div class="upload-area" id="upload-area">
@@ -30,7 +48,7 @@
                 <div class="processing-animation">
                     <div class="spinner"></div>
                     <h2>Processing your PDF...</h2>
-                    <p>Detecting formatting errors and annotating the document</p>
+                    <p>Running GROBID, Camelot, and format checks — this may take 30–60 s</p>
                 </div>
             </section>
 
@@ -44,26 +62,17 @@
                 </div>
 
                 <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-number" id="total-errors">0</div>
-                        <div class="stat-label">Total Errors Found</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="pages-with-errors">0</div>
-                        <div class="stat-label">Pages with Errors</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="total-figures">0</div>
-                        <div class="stat-label">Figures (GROBID)</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="total-tables">0</div>
-                        <div class="stat-label">Tables (Camelot)</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="total-equations">0</div>
-                        <div class="stat-label">Equations</div>
-                    </div>
+                    <div class="stat-card"><div class="stat-number" id="total-errors">0</div><div class="stat-label">Errors Found</div></div>
+                    <div class="stat-card"><div class="stat-number" id="pages-with-errors">0</div><div class="stat-label">Pages with Errors</div></div>
+                    <div class="stat-card"><div class="stat-number" id="total-figures">0</div><div class="stat-label">Figures (GROBID)</div></div>
+                    <div class="stat-card"><div class="stat-number" id="total-tables">0</div><div class="stat-label">Tables (Camelot)</div></div>
+                    <div class="stat-card"><div class="stat-number" id="total-equations">0</div><div class="stat-label">Equations</div></div>
+                </div>
+
+                <!-- Required sections status -->
+                <div id="sections-status" class="sections-status hidden">
+                    <h3>📑 Required Sections</h3>
+                    <div id="sections-badges"></div>
                 </div>
 
                 <!-- Error Summary -->
@@ -77,15 +86,14 @@
                     <h3>Detailed Error Report</h3>
                     <div class="filter-buttons">
                         <button class="filter-btn active" data-filter="all">All Errors</button>
+                        <button class="filter-btn" data-filter="missing_required_section">Sections</button>
                         <button class="filter-btn" data-filter="metadata_incomplete">Metadata</button>
                         <button class="filter-btn" data-filter="abstract_word_count">Abstract Length</button>
-                        <button class="filter-btn" data-filter="structure">Structure Issues</button>
+                        <button class="filter-btn" data-filter="structure">Structure</button>
                         <button class="filter-btn" data-filter="numbering">Label Format</button>
                         <button class="filter-btn" data-filter="sequence">Sequential Numbering</button>
-                        <button class="filter-btn" data-filter="caption_placement">Caption Placement</button>
+                        <button class="filter-btn" data-filter="caption_placement">Captions</button>
                         <button class="filter-btn" data-filter="url_doi">URLs &amp; DOIs</button>
-                        <button class="filter-btn" data-filter="repeated_word">Repeated Words</button>
-                        <button class="filter-btn" data-filter="citation_format">Citation Format</button>
                         <button class="filter-btn" data-filter="writing_style">Writing Style</button>
                     </div>
                     <div id="error-list"></div>
@@ -98,27 +106,13 @@
                 <!-- Reference Quality Analysis -->
                 <div id="reference-analysis-section" class="reference-analysis hidden">
                     <h3 class="ref-heading">📚 Reference Quality Analysis</h3>
-
-                    <!-- Summary bar -->
                     <div id="ref-summary" class="ref-summary"></div>
-
-                    <!-- Per-entry details -->
                     <div id="ref-entries" class="ref-entries"></div>
                 </div>
             </section>
         </main>
 
-        <footer>
-            <p>Checks for 20+ formatting and compliance errors in research papers using GROBID</p>
-            <div class="error-types-legend">
-                <span class="legend-item"><span class="legend-color" style="background-color: rgba(59, 130, 246, 0.3);"></span> Structure</span>
-                <span class="legend-item"><span class="legend-color" style="background-color: rgba(139, 92, 246, 0.3);"></span> Numbering</span>
-                <span class="legend-item"><span class="legend-color" style="background-color: rgba(236, 72, 153, 0.3);"></span> Spacing</span>
-                <span class="legend-item"><span class="legend-color" style="background-color: rgba(249, 115, 22, 0.3);"></span> Punctuation</span>
-                <span class="legend-item"><span class="legend-color" style="background-color: rgba(34, 197, 94, 0.3);"></span> Typography</span>
-                <span class="legend-item"><span class="legend-color" style="background-color: rgba(234, 179, 8, 0.3);"></span> Writing Style</span>
-            </div>
-        </footer>
+        <footer><p><a href="/">← Home</a> · <a href="/professor">Professor Mode</a></p></footer>
     </div>
 
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>

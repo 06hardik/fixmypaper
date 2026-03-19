@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professor Mode — Paper Checker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>👩‍🏫 Professor Mode</h1>
+            <p class="subtitle">Create custom paper formats. Students will see your formats when they upload a paper.</p>
+            <a href="/" class="back-link">← Back to Home</a>
+        </header>
+
+        <main>
+            <!-- Tabs -->
+            <div class="prof-tabs">
+                <button class="prof-tab active" data-tab="create">➕ Create New Format</button>
+                <button class="prof-tab" data-tab="manage">📋 Manage Formats</button>
+            </div>
+
+            <!-- CREATE TAB -->
+            <section id="tab-create" class="prof-tab-content">
+                <div class="form-section">
+                    <h3>Format Details</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fmt-name">Format Name *</label>
+                            <input type="text" id="fmt-name" placeholder="e.g. CS 401 Final Paper">
+                        </div>
+                        <div class="form-group">
+                            <label for="fmt-author">Your Name *</label>
+                            <input type="text" id="fmt-author" placeholder="e.g. Prof. Smith">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="fmt-desc">Description</label>
+                        <textarea id="fmt-desc" rows="2" placeholder="Brief description of when to use this format."></textarea>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Mandatory Sections</h3>
+                    <p class="form-hint">The document must contain all selected sections. Missing ones will be flagged as errors.</p>
+                    <div class="checkbox-grid" id="sections-grid">
+                        {% for sec in all_sections %}
+                        <label class="cb-label">
+                            <input type="checkbox" name="section" value="{{ sec }}"
+                                   {{ 'checked' if sec in ['Abstract','Introduction','Conclusion','References'] }}>
+                            <span>{{ sec }}</span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Enabled Checks</h3>
+                    <p class="form-hint">Only selected checks will appear in student results.</p>
+                    <div class="checks-grid">
+                        {% for cat, checks in checks_by_cat.items() %}
+                        <div class="check-category">
+                            <h4>{{ cat }}</h4>
+                            {% for chk in checks %}
+                            <label class="cb-label">
+                                <input type="checkbox" name="check" value="{{ chk.id }}"
+                                       {{ 'checked' if chk.default }}>
+                                <span title="{{ chk.description }}">{{ chk.name }}</span>
+                            </label>
+                            {% endfor %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <button class="btn btn-primary btn-full" id="save-format-btn">💾 Save Format</button>
+                <div id="save-msg"></div>
+            </section>
+
+            <!-- MANAGE TAB -->
+            <section id="tab-manage" class="prof-tab-content hidden">
+                <div id="formats-list">
+                    {% if formats|length == 0 %}
+                    <p class="empty-msg">No formats saved yet. Create one above.</p>
+                    {% endif %}
+                    {% for fmt in formats %}
+                    <div class="format-card {{ 'system' if fmt.is_system }}" data-id="{{ fmt.id }}">
+                        <div class="format-header">
+                            <h4>{{ fmt.name }}{% if fmt.is_system %} <span class="sys-badge">System</span>{% endif %}</h4>
+                            <span class="format-meta">by {{ fmt.created_by }}</span>
+                        </div>
+                        {% if fmt.description %}
+                        <p class="format-desc">{{ fmt.description }}</p>
+                        {% endif %}
+                        <div class="format-pills">
+                            <strong>Sections:</strong>
+                            {% for s in fmt.mandatory_sections %}
+                            <span class="section-pill">{{ s }}</span>
+                            {% endfor %}
+                            {% if not fmt.mandatory_sections %}<span class="empty-pill">None</span>{% endif %}
+                        </div>
+                        <div class="format-checks-count">✅ {{ fmt.enabled_checks|length }} checks enabled</div>
+                        {% if not fmt.is_system %}
+                        <button class="btn btn-danger btn-sm delete-fmt-btn" data-id="{{ fmt.id }}" data-name="{{ fmt.name }}">🗑️ Delete</button>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+        </main>
+
+        <footer><p><a href="/">← Home</a> · <a href="/student">Student Mode →</a></p></footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/professor.js') }}"></script>
+</body>
+</html>

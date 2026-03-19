@@ -1,0 +1,62 @@
+{
+  "formats": [
+    {
+      "id": "ieee_standard",
+      "name": "IEEE Standard",
+      "created_by": "System",
+      "is_system": true,
+      "description": "Standard IEEE conference / journal paper format with all checks enabled.",
+      "mandatory_sections": [
+        "Abstract",
+        "Index Terms",
+        "Introduction",
+        "References"
+      ],
+      "enabled_checks": [
+        "metadata_completeness",
+        "abstract_exists",
+        "abstract_word_count",
+        "index_terms",
+        "references_section",
+        "roman_numeral_headings",
+        "introduction_section",
+        "figure_label_format",
+        "table_label_format",
+        "equation_numbering",
+        "figure_sequential",
+        "table_sequential",
+        "reference_sequential",
+        "caption_placement",
+        "reference_format",
+        "url_doi_validity",
+        "et_al_formatting"
+      ]
+    },
+    {
+      "id": "9c95dd63-5834-4f73-9708-fb7400c277f9",
+      "name": "BTP NSUT",
+      "created_by": "Aayushi",
+      "is_system": false,
+      "description": "For students in 4th year submitting their BTP Report",
+      "mandatory_sections": [
+        "Abstract",
+        "Introduction",
+        "Conclusion",
+        "Methodology",
+        "Index Terms"
+      ],
+      "enabled_checks": [
+        "metadata_completeness",
+        "index_terms",
+        "references_section",
+        "equation_numbering",
+        "figure_sequential",
+        "reference_sequential",
+        "caption_placement",
+        "reference_format",
+        "url_doi_validity",
+        "et_al_formatting"
+      ]
+    }
+  ]
+}
