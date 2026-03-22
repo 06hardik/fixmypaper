@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Mode — Paper Checker</title>
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     <div class="container">
@@ -67,8 +67,6 @@
                     <div class="stat-card"><div class="stat-number" id="total-figures">0</div><div class="stat-label">Figures (GROBID)</div></div>
                     <div class="stat-card"><div class="stat-number" id="total-tables">0</div><div class="stat-label">Tables (Camelot)</div></div>
                     <div class="stat-card"><div class="stat-number" id="total-equations">0</div><div class="stat-label">Equations</div></div>
-                    <div class="stat-card"><div class="stat-number" id="total-equations-pix2text">0</div><div class="stat-label">Equations (Pix2Text)</div></div>
-                    <div class="stat-card"><div class="stat-number" id="total-equations-merged">0</div><div class="stat-label">Equations (Merged)</div></div>
                 </div>
 
                 <!-- Required sections status -->
@@ -117,6 +115,6 @@
         <footer><p><a href="/">← Home</a> · <a href="/professor">Professor Mode</a></p></footer>
     </div>
 
-    <script src="/static/js/main.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>

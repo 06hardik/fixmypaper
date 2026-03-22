@@ -75,8 +75,6 @@ function displayResults(result) {
     if (el('total-figures')) el('total-figures').textContent = stats.total_figures || 0;
     if (el('total-tables')) el('total-tables').textContent = stats.total_tables || 0;
     if (el('total-equations')) el('total-equations').textContent = stats.total_equations || 0;
-    if (el('total-equations-pix2text')) el('total-equations-pix2text').textContent = stats.total_equations_pix2text || 0;
-    if (el('total-equations-merged')) el('total-equations-merged').textContent = stats.total_equations_merged || 0;
 
     displaySectionsStatus(result);
     displayErrorTypesSummary(result.errors);
