@@ -230,7 +230,7 @@ class ErrorInstance:
 class PDFErrorDetector:
     """Detects IEEE formatting compliance issues in research papers."""
 
-    GROBID_URL = "http://localhost:8080"
+    GROBID_URL = "https://ashjin-grobid-local-2.hf.space/"
 
     def __init__(self):
         self.full_text = ""

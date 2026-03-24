@@ -3,21 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Mode — Paper Checker</title>
+    <title>Student Dashboard | PaperInsight</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>🎓 Student Mode</h1>
-            <p class="subtitle">Upload your research paper PDF and check it against a format</p>
-            <a href="/" class="back-link">← Back to Home</a>
+    <div class="shell">
+        <header class="topbar">
+            <div class="brand-group">
+                <div class="brand-mark">PI</div>
+                <div>
+                    <p class="brand-name">PaperInsight</p>
+                    <p class="brand-caption">Student Dashboard</p>
+                </div>
+            </div>
+            <a href="/" class="back-link">Back to Home</a>
         </header>
 
-        <main>
+        <main class="page-content">
             <!-- Format Selection -->
-            <section id="format-section" class="section">
-                <h3 style="margin-bottom:12px;">Select a format</h3>
+            <section id="format-section" class="section card-section">
+                <div class="section-head">
+                    <h2>Submission Format</h2>
+                    <p>Select the format your paper should match.</p>
+                </div>
                 <select id="format-select" class="format-select">
                     {% for fmt in formats %}
                     <option value="{{ fmt.id }}"
@@ -33,34 +41,63 @@
             </section>
 
             <!-- Upload Section -->
-            <section id="upload-section" class="section">
+            <section id="upload-section" class="section card-section">
                 <div class="upload-area" id="upload-area">
-                    <div class="upload-icon">📤</div>
-                    <h2>Drop your PDF here or click to browse</h2>
-                    <p>Maximum file size: 50MB</p>
+                    <h2>Upload Manuscript</h2>
+                    <p>Drop a PDF here, or browse from your device. Maximum file size: 50MB.</p>
                     <input type="file" id="file-input" accept=".pdf" hidden>
-                    <button class="btn btn-primary" id="browse-btn">Browse Files</button>
+                    <button class="btn btn-primary" id="browse-btn">Choose PDF</button>
+                    <p id="selected-file-name" class="selected-file-name hidden"></p>
                 </div>
+                <div id="upload-empty-state" class="empty-state">
+                    <h4>No file uploaded yet</h4>
+                    <p>Upload a PDF to generate a full formatting quality report.</p>
+                </div>
+                <div id="error-banner" class="error-banner hidden"></div>
             </section>
 
             <!-- Processing Section -->
-            <section id="processing-section" class="section hidden">
+            <section id="processing-section" class="section card-section hidden">
                 <div class="processing-animation">
                     <div class="spinner"></div>
-                    <h2>Processing your PDF...</h2>
-                    <p>Running GROBID, Camelot, and format checks — this may take 30–60 s</p>
+                    <h2>Analyzing document quality...</h2>
+                    <p>Please wait while your report is being prepared.</p>
                 </div>
             </section>
 
             <!-- Results Section -->
-            <section id="results-section" class="section hidden">
+            <section id="results-section" class="section card-section hidden">
                 <div class="results-header">
-                    <h2>Analysis Complete!</h2>
+                    <h2>Quality Report Ready</h2>
                     <button class="btn btn-success" id="download-btn">
-                        <span>📥</span> Download Annotated PDF
+                        Download Annotated PDF
                     </button>
                 </div>
 
+                <div class="result-tabs" id="result-tabs">
+                    <button class="result-tab active" data-result-tab="overview">Overview</button>
+                    <button class="result-tab" data-result-tab="sections">Sections</button>
+                    <button class="result-tab" data-result-tab="insights">Insights</button>
+                </div>
+
+                <div id="tab-overview" class="result-tab-panel">
+                    <div class="overview-grid">
+                        <article class="overview-card">
+                            <p class="overview-label">Title</p>
+                            <h3 id="overview-title">-</h3>
+                        </article>
+                        <article class="overview-card">
+                            <p class="overview-label">Authors</p>
+                            <h3 id="overview-authors">-</h3>
+                        </article>
+                    </div>
+                    <article class="overview-card abstract-card">
+                        <p class="overview-label">Abstract</p>
+                        <p id="overview-abstract" class="overview-copy">-</p>
+                    </article>
+                </div>
+
+                <div id="tab-sections" class="result-tab-panel hidden">
                 <div class="stats-grid">
                     <div class="stat-card"><div class="stat-number" id="total-errors">0</div><div class="stat-label">Errors Found</div></div>
                     <div class="stat-card"><div class="stat-number" id="pages-with-errors">0</div><div class="stat-label">Pages with Errors</div></div>
@@ -71,7 +108,7 @@
 
                 <!-- Required sections status -->
                 <div id="sections-status" class="sections-status hidden">
-                    <h3>📑 Required Sections</h3>
+                    <h3>Required Sections</h3>
                     <div id="sections-badges"></div>
                 </div>
 
@@ -102,6 +139,13 @@
                 <div class="action-buttons">
                     <button class="btn btn-secondary" id="new-upload-btn">Upload Another PDF</button>
                 </div>
+                </div>
+
+                <div id="tab-insights" class="result-tab-panel hidden">
+                    <div class="overview-card">
+                        <p class="overview-label">Key Insights</p>
+                        <ul id="overview-insights" class="insights-list"></ul>
+                    </div>
 
                 <!-- Reference Quality Analysis -->
                 <div id="reference-analysis-section" class="reference-analysis hidden">
@@ -109,10 +153,14 @@
                     <div id="ref-summary" class="ref-summary"></div>
                     <div id="ref-entries" class="ref-entries"></div>
                 </div>
+                </div>
             </section>
         </main>
 
-        <footer><p><a href="/">← Home</a> · <a href="/professor">Professor Mode</a></p></footer>
+        <footer class="footer">
+            <p>PaperInsight</p>
+            <p class="footer-muted"><a href="/professor">Switch to Professor Dashboard</a></p>
+        </footer>
     </div>
 
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>

@@ -2,6 +2,7 @@
 
 let currentJobId = null;
 let allErrors = [];
+let currentResultData = null;
 
 let uploadSection, processingSection, resultsSection, uploadArea,
     fileInput, browseBtn, downloadBtn, newUploadBtn, formatSelect;
@@ -21,19 +22,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function setupEventListeners() {
     browseBtn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); fileInput.click(); });
-    fileInput.addEventListener('change', (e) => { if (e.target.files.length > 0) handleFileUpload(e.target.files[0]); });
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            showSelectedFile(e.target.files[0]);
+            handleFileUpload(e.target.files[0]);
+        }
+    });
     uploadArea.addEventListener('click', (e) => { if (e.target !== browseBtn && !browseBtn.contains(e.target)) fileInput.click(); });
     uploadArea.addEventListener('dragover', (e) => { e.preventDefault(); uploadArea.classList.add('dragover'); });
     uploadArea.addEventListener('dragleave', () => { uploadArea.classList.remove('dragover'); });
-    uploadArea.addEventListener('drop', (e) => { e.preventDefault(); uploadArea.classList.remove('dragover'); if (e.dataTransfer.files.length > 0) handleFileUpload(e.dataTransfer.files[0]); });
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+        if (e.dataTransfer.files.length > 0) {
+            showSelectedFile(e.dataTransfer.files[0]);
+            handleFileUpload(e.dataTransfer.files[0]);
+        }
+    });
     downloadBtn.addEventListener('click', () => { if (currentJobId) window.location.href = `/download/${currentJobId}`; });
     newUploadBtn.addEventListener('click', resetApp);
     document.addEventListener('click', (e) => { if (e.target.classList.contains('filter-btn')) handleFilterClick(e.target); });
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('result-tab')) {
+            switchResultTab(e.target.getAttribute('data-result-tab'));
+        }
+    });
 }
 
 async function handleFileUpload(file) {
-    if (!file.name.toLowerCase().endsWith('.pdf')) { alert('Please upload a PDF file.'); return; }
-    if (file.size > 50 * 1024 * 1024) { alert('File size must be less than 50MB.'); return; }
+    clearError();
+    if (!file.name.toLowerCase().endsWith('.pdf')) { showError('Please upload a PDF file.'); return; }
+    if (file.size > 50 * 1024 * 1024) { showError('File size must be less than 50MB.'); return; }
 
     showSection(processingSection);
 
@@ -53,18 +72,21 @@ async function handleFileUpload(file) {
         if (result.success) {
             currentJobId = result.job_id;
             allErrors = result.errors;
+            currentResultData = result;
             displayResults(result);
         } else {
             throw new Error('Processing failed');
         }
     } catch (error) {
-        alert(`Error: ${error.message}`);
+        showError(`Processing failed: ${error.message}`);
         resetApp();
     }
 }
 
 function displayResults(result) {
     showSection(resultsSection);
+    renderDocumentOverview(result.document_overview || {});
+    switchResultTab('overview');
 
     document.getElementById('total-errors').textContent = result.error_count;
     const uniquePages = new Set(result.errors.map(e => e.page_num));
@@ -83,6 +105,32 @@ function displayResults(result) {
     if (result.reference_analysis && !result.reference_analysis.error) {
         displayReferenceAnalysis(result.reference_analysis);
     }
+}
+
+function renderDocumentOverview(overview) {
+    const titleEl = document.getElementById('overview-title');
+    const authorEl = document.getElementById('overview-authors');
+    const abstractEl = document.getElementById('overview-abstract');
+    const insightsEl = document.getElementById('overview-insights');
+    if (!titleEl || !authorEl || !abstractEl || !insightsEl) return;
+
+    titleEl.textContent = overview.title || currentResultData?.original_filename || 'Not detected';
+    authorEl.textContent = overview.authors || 'Not detected';
+    abstractEl.textContent = overview.abstract || 'Not detected';
+
+    const insights = Array.isArray(overview.key_insights) ? overview.key_insights : [];
+    insightsEl.innerHTML = insights.length
+        ? insights.map(item => `<li>${escapeHtml(item)}</li>`).join('')
+        : '<li>No additional insights available.</li>';
+}
+
+function switchResultTab(name) {
+    document.querySelectorAll('.result-tab').forEach(tab => {
+        tab.classList.toggle('active', tab.getAttribute('data-result-tab') === name);
+    });
+    document.querySelectorAll('.result-tab-panel').forEach(panel => panel.classList.add('hidden'));
+    const panel = document.getElementById(`tab-${name}`);
+    if (panel) panel.classList.remove('hidden');
 }
 
 // ── Required sections status badges ──────────────────────────────────────────
@@ -306,11 +354,18 @@ function showSection(section) {
 function resetApp() {
     currentJobId = null;
     allErrors = [];
+    currentResultData = null;
     fileInput.value = '';
+    const selectedFile = document.getElementById('selected-file-name');
+    if (selectedFile) {
+        selectedFile.textContent = '';
+        selectedFile.classList.add('hidden');
+    }
     const ref = document.getElementById('reference-analysis-section');
     if (ref) ref.classList.add('hidden');
     const secStatus = document.getElementById('sections-status');
     if (secStatus) secStatus.classList.add('hidden');
+    clearError();
     showSection(uploadSection);
 }
 
@@ -318,4 +373,25 @@ function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
+}
+
+function showSelectedFile(file) {
+    const fileNameEl = document.getElementById('selected-file-name');
+    if (!fileNameEl) return;
+    fileNameEl.textContent = `Selected file: ${file.name}`;
+    fileNameEl.classList.remove('hidden');
+}
+
+function showError(message) {
+    const errorBanner = document.getElementById('error-banner');
+    if (!errorBanner) return;
+    errorBanner.textContent = message;
+    errorBanner.classList.remove('hidden');
+}
+
+function clearError() {
+    const errorBanner = document.getElementById('error-banner');
+    if (!errorBanner) return;
+    errorBanner.textContent = '';
+    errorBanner.classList.add('hidden');
 }
