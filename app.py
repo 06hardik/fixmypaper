@@ -27,6 +27,41 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() == 'pdf'
 
 
+def _build_document_overview(extracted_data, original_filename, statistics, error_count):
+    """Build a lightweight, UI-friendly summary from extracted data."""
+    full_text = (extracted_data or {}).get("full_text", "") or ""
+    lines = [ln.strip() for ln in full_text.splitlines() if ln.strip()]
+
+    title = lines[0] if lines else original_filename
+    # Heuristic: use the second non-empty line if it looks like author metadata.
+    authors = "Not detected"
+    if len(lines) > 1 and len(lines[1]) < 140:
+        authors = lines[1]
+
+    abstract = "Not detected"
+    lower_text = full_text.lower()
+    abstract_idx = lower_text.find("abstract")
+    if abstract_idx >= 0:
+        snippet = full_text[abstract_idx: abstract_idx + 1200]
+        parts = snippet.split("\n", 1)
+        abstract_candidate = parts[1] if len(parts) > 1 else snippet
+        abstract = " ".join(abstract_candidate.split())[:550] or "Not detected"
+
+    stats = statistics or {}
+    insights = [
+        f"{error_count} formatting issue(s) detected",
+        f"{stats.get('total_figures', 0)} figure(s) and {stats.get('total_tables', 0)} table(s) identified",
+        f"{stats.get('total_equations', 0)} equation(s) detected",
+    ]
+
+    return {
+        "title": title[:200],
+        "authors": authors[:240],
+        "abstract": abstract,
+        "key_insights": insights,
+    }
+
+
 def load_formats():
     if FORMATS_FILE.exists():
         with open(FORMATS_FILE) as f:
@@ -181,6 +216,9 @@ def upload_file():
             'statistics': statistics,
             'reference_analysis': reference_analysis,
             'mandatory_sections': required_sections,
+            'document_overview': _build_document_overview(
+                extracted_data, original_filename, statistics, len(errors)
+            ),
             'processed_at': datetime.now().isoformat(),
         }
 
@@ -192,6 +230,7 @@ def upload_file():
             'statistics': statistics,
             'reference_analysis': reference_analysis,
             'mandatory_sections': required_sections,
+            'document_overview': processing_results[job_id]['document_overview'],
             'success': True,
         })
 

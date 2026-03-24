@@ -3,22 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professor Mode — Paper Checker</title>
+    <title>Professor Dashboard | PaperInsight</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>👩‍🏫 Professor Mode</h1>
-            <p class="subtitle">Create custom paper formats. Students will see your formats when they upload a paper.</p>
-            <a href="/" class="back-link">← Back to Home</a>
+    <div class="shell">
+        <header class="topbar">
+            <div class="brand-group">
+                <div class="brand-mark">PI</div>
+                <div>
+                    <p class="brand-name">PaperInsight</p>
+                    <p class="brand-caption">Professor Dashboard</p>
+                </div>
+            </div>
+            <a href="/" class="back-link">Back to Home</a>
         </header>
 
-        <main>
+        <main class="page-content">
+            <section class="section card-section">
+                <div class="section-head">
+                    <h2>Format Management</h2>
+                    <p>Define publication expectations and deploy them to students instantly.</p>
+                </div>
+
             <!-- Tabs -->
             <div class="prof-tabs">
-                <button class="prof-tab active" data-tab="create">➕ Create New Format</button>
-                <button class="prof-tab" data-tab="manage">📋 Manage Formats</button>
+                <button class="prof-tab active" data-tab="create">Create Format</button>
+                <button class="prof-tab" data-tab="manage">Manage Formats</button>
             </div>
 
             <!-- CREATE TAB -->
@@ -28,22 +39,22 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="fmt-name">Format Name *</label>
-                            <input type="text" id="fmt-name" placeholder="e.g. CS 401 Final Paper">
+                            <input type="text" id="fmt-name" placeholder="e.g. Department Conference Template">
                         </div>
                         <div class="form-group">
                             <label for="fmt-author">Your Name *</label>
-                            <input type="text" id="fmt-author" placeholder="e.g. Prof. Smith">
+                            <input type="text" id="fmt-author" placeholder="e.g. Prof. A. Sharma">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="fmt-desc">Description</label>
-                        <textarea id="fmt-desc" rows="2" placeholder="Brief description of when to use this format."></textarea>
+                        <textarea id="fmt-desc" rows="2" placeholder="Brief note on where this format should be used."></textarea>
                     </div>
                 </div>
 
                 <div class="form-section">
                     <h3>Mandatory Sections</h3>
-                    <p class="form-hint">The document must contain all selected sections. Missing ones will be flagged as errors.</p>
+                    <p class="form-hint">Selected sections become required in student submissions.</p>
                     <div class="checkbox-grid" id="sections-grid">
                         {% for sec in all_sections %}
                         <label class="cb-label">
@@ -57,7 +68,7 @@
 
                 <div class="form-section">
                     <h3>Enabled Checks</h3>
-                    <p class="form-hint">Only selected checks will appear in student results.</p>
+                    <p class="form-hint">Only enabled checks appear in student quality reports.</p>
                     <div class="checks-grid">
                         {% for cat, checks in checks_by_cat.items() %}
                         <div class="check-category">
@@ -74,7 +85,7 @@
                     </div>
                 </div>
 
-                <button class="btn btn-primary btn-full" id="save-format-btn">💾 Save Format</button>
+                <button class="btn btn-primary btn-full" id="save-format-btn">Save Format</button>
                 <div id="save-msg"></div>
             </section>
 
@@ -100,17 +111,21 @@
                             {% endfor %}
                             {% if not fmt.mandatory_sections %}<span class="empty-pill">None</span>{% endif %}
                         </div>
-                        <div class="format-checks-count">✅ {{ fmt.enabled_checks|length }} checks enabled</div>
+                        <div class="format-checks-count">{{ fmt.enabled_checks|length }} checks enabled</div>
                         {% if not fmt.is_system %}
-                        <button class="btn btn-danger btn-sm delete-fmt-btn" data-id="{{ fmt.id }}" data-name="{{ fmt.name }}">🗑️ Delete</button>
+                        <button class="btn btn-danger btn-sm delete-fmt-btn" data-id="{{ fmt.id }}" data-name="{{ fmt.name }}">Delete</button>
                         {% endif %}
                     </div>
                     {% endfor %}
                 </div>
             </section>
+            </section>
         </main>
 
-        <footer><p><a href="/">← Home</a> · <a href="/student">Student Mode →</a></p></footer>
+        <footer class="footer">
+            <p>PaperInsight</p>
+            <p class="footer-muted"><a href="/student">Switch to Student Dashboard</a></p>
+        </footer>
     </div>
 
     <script src="{{ url_for('static', filename='js/professor.js') }}"></script>

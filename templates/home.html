@@ -3,64 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Research Paper Checker</title>
+    <title>PaperInsight | Research Writing Quality Platform</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>📄 Research Paper Checker</h1>
-            <p class="subtitle">AI-powered formatting compliance checker for IEEE research papers,
-            backed by GROBID's ML models and Camelot table extraction.</p>
+    <div class="shell">
+        <header class="topbar home-topbar">
+            <div class="brand-group home-brand-group">
+                <div class="brand-mark">PI</div>
+                <div class="home-brand-text">
+                    <p class="brand-name">PaperInsight</p>
+                    <p class="brand-caption">Institutional Research Quality Suite</p>
+                </div>
+            </div>
+            <nav class="home-nav">
+                <a href="#platform">Platform</a>
+                <a href="#capabilities">Capabilities</a>
+                <a href="#roles">Dashboards</a>
+                <a href="#coverage">Coverage</a>
+            </nav>
+            <div class="home-actions">
+                <a href="/student" class="btn btn-secondary">Student</a>
+                <a href="/professor" class="btn btn-primary">Professor</a>
+            </div>
         </header>
 
-        <main>
-            <!-- Role Cards -->
-            <section class="section">
-                <h2 style="text-align:center; margin-bottom:25px; font-size:1.6rem;">Choose your role</h2>
+        <main class="page-content home-page-content">
+            <section id="platform" class="home-hero">
+                <div class="home-hero-left">
+                    <p class="eyebrow">For universities, labs, and research teams</p>
+                    <h1>Enterprise-grade manuscript quality control for academic workflows.</h1>
+                    <p class="hero-copy">
+                        Streamline submission readiness with a centralized platform that helps teams review,
+                        standardize, and deliver publication-ready papers with confidence.
+                    </p>
+                    <div class="hero-actions">
+                        <a href="/student" class="btn btn-primary">Open Student Dashboard</a>
+                        <a href="/professor" class="btn btn-secondary">Open Professor Dashboard</a>
+                    </div>
+                    <p class="home-no-login">No authentication required in this version</p>
+                </div>
+                <div class="home-hero-right">
+                    <div class="home-hero-card">
+                        <p class="home-card-label">Operations Snapshot</p>
+                        <div class="home-kpi-grid">
+                            <div>
+                                <h3>30+</h3>
+                                <p>quality controls</p>
+                            </div>
+                            <div>
+                                <h3>2</h3>
+                                <p>role dashboards</p>
+                            </div>
+                            <div>
+                                <h3>PDF</h3>
+                                <p>native workflow</p>
+                            </div>
+                            <div>
+                                <h3>Fast</h3>
+                                <p>analysis pipeline</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="capabilities" class="section home-section">
+                <div class="section-head">
+                    <h2>Designed for professional research operations</h2>
+                    <p>Clear structure, measurable outputs, and role-specific workflows.</p>
+                </div>
+                <div class="home-feature-grid">
+                    <article class="home-feature-card">
+                        <h3>Centralized Review</h3>
+                        <p>Run a complete quality check and consolidate outcomes into one consistent report.</p>
+                    </article>
+                    <article class="home-feature-card">
+                        <h3>Institution Standards</h3>
+                        <p>Define and manage custom submission formats for departments and guided cohorts.</p>
+                    </article>
+                    <article class="home-feature-card">
+                        <h3>Actionable Output</h3>
+                        <p>Generate clear diagnostics and downloadable annotated files for rapid revision cycles.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section id="roles" class="section home-section">
+                <div class="section-head">
+                    <h2>Choose your role</h2>
+                    <p>Two focused dashboards built for different responsibilities.</p>
+                </div>
                 <div class="role-grid">
-                    <a href="/professor" class="role-card role-prof">
-                        <div class="role-icon">👩‍🏫</div>
-                        <h3>Professor / Researcher</h3>
-                        <p>Create custom paper formats. Define mandatory sections and toggle checks on or off.</p>
-                        <ul>
-                            <li>Name and describe your format</li>
-                            <li>Select mandatory sections</li>
-                            <li>Toggle individual checks</li>
-                            <li>Saved locally for students</li>
-                        </ul>
-                        <span class="role-link">Go to Professor Mode →</span>
+                    <a href="/student" class="role-card home-role-card">
+                        <span class="role-tag">Student Dashboard</span>
+                        <h3>Draft Quality Workspace</h3>
+                        <p>Upload papers, run analysis, and review section-wise quality findings in a clean interface.</p>
+                        <span class="role-link">Launch workspace</span>
                     </a>
-                    <a href="/student" class="role-card role-student">
-                        <div class="role-icon">🎓</div>
-                        <h3>Student</h3>
-                        <p>Upload your research paper PDF and check it against the IEEE standard or a professor-defined format.</p>
-                        <ul>
-                            <li>Pick a format</li>
-                            <li>Upload your PDF</li>
-                            <li>Get a detailed error report</li>
-                            <li>Download the annotated PDF</li>
-                        </ul>
-                        <span class="role-link">Go to Student Mode →</span>
+                    <a href="/professor" class="role-card home-role-card">
+                        <span class="role-tag">Professor Dashboard</span>
+                        <h3>Governance &amp; Format Control</h3>
+                        <p>Create approved formats, enforce required sections, and guide consistent submissions.</p>
+                        <span class="role-link">Launch workspace</span>
                     </a>
                 </div>
             </section>
 
-            <!-- How it works -->
-            <section class="section">
-                <h2 style="text-align:center; margin-bottom:25px; font-size:1.6rem;">How it works</h2>
-                <div class="steps-grid">
-                    <div class="step-card"><div class="step-num">1</div><h4>GROBID Parses the PDF</h4><p>ML models extract structure: title, abstract, headings, figures, equations, and references.</p></div>
-                    <div class="step-card"><div class="step-num">2</div><h4>Camelot Extracts Tables</h4><p>Reads all tables from the PDF with accurate cell detection.</p></div>
-                    <div class="step-card"><div class="step-num">3</div><h4>20+ Checks Run</h4><p>Each check targets a specific IEEE formatting rule.</p></div>
-                    <div class="step-card"><div class="step-num">4</div><h4>Errors Highlighted</h4><p>Every issue is annotated directly in the PDF.</p></div>
-                    <div class="step-card"><div class="step-num">5</div><h4>Results Displayed</h4><p>A detailed report groups errors by category.</p></div>
+            <section id="coverage" class="section home-section">
+                <div class="section-head">
+                    <h2>Coverage categories</h2>
+                    <p>Quality checks available in the current platform build.</p>
                 </div>
-            </section>
-
-            <!-- Checks overview -->
-            <section class="section">
-                <h2 style="text-align:center; margin-bottom:25px; font-size:1.6rem;">Checks covered</h2>
                 <div class="checks-overview">
                     {% for cat, names in checks_by_cat.items() %}
                     <div class="check-cat-card">
@@ -74,8 +128,9 @@
             </section>
         </main>
 
-        <footer>
-            <p>Powered by GROBID, Camelot, PyMuPDF &amp; Flask</p>
+        <footer class="footer">
+            <p>PaperInsight Enterprise</p>
+            <p class="footer-muted">Professional manuscript quality infrastructure for academic institutions.</p>
         </footer>
     </div>
 </body>
