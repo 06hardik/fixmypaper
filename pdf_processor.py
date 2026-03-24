@@ -17,6 +17,7 @@ GROBID migration notes:
     - Table extraction:       Camelot (lattice/stream).  GROBID table parsing removed.
 """
 import re
+from concurrent.futures import ThreadPoolExecutor
 import fitz  # PyMuPDF — retained for open/image-count/annotate only
 import camelot
 import requests
@@ -25,6 +26,7 @@ from collections import OrderedDict
 from typing import List, Dict, Tuple, Optional, Set
 from dataclasses import dataclass, field
 from lxml import etree
+from pix2text_processor import extract_equations_from_pdf
 
 
 # ---------------------------------------------------------------------------
@@ -242,6 +244,14 @@ class PDFErrorDetector:
         self.raw_citations: List[Dict] = []
         self.reference_analysis: Dict = {}
         self._grobid_equations: List[Dict] = []
+        self.pix2text_equations: List[Dict] = []
+        self.merged_blocks: List[Dict] = []
+        self.merge_summary: Dict = {}
+        self.pipeline_status: Dict = {
+            "current_layer": {"success": False, "message": "Not started"},
+            "pix2text": {"enabled": False, "success": False, "message": "Not started", "count": 0},
+            "merge": {"success": False, "message": "Not started"},
+        }
 
         # ── GROBID structural data ──────────────────────────────────────────
         # Populated by _extract_with_grobid(); used by multiple checks.
@@ -963,6 +973,95 @@ class PDFErrorDetector:
     # STATISTICS  — figure count now from GROBID
     # =========================================================================
 
+    @staticmethod
+    def _bbox_overlap_ratio(a: Dict, b: Dict) -> float:
+        """Return overlap ratio wrt the smaller of two bbox areas."""
+        ax0, ay0, ax1, ay1 = a["x0"], a["y0"], a["x1"], a["y1"]
+        bx0, by0, bx1, by1 = b["x0"], b["y0"], b["x1"], b["y1"]
+
+        ix0, iy0 = max(ax0, bx0), max(ay0, by0)
+        ix1, iy1 = min(ax1, bx1), min(ay1, by1)
+        if ix1 <= ix0 or iy1 <= iy0:
+            return 0.0
+
+        inter = (ix1 - ix0) * (iy1 - iy0)
+        area_a = max(0.0, (ax1 - ax0) * (ay1 - ay0))
+        area_b = max(0.0, (bx1 - bx0) * (by1 - by0))
+        base = min(area_a, area_b)
+        if base <= 0.0:
+            return 0.0
+        return inter / base
+
+    def _build_merged_blocks(self) -> None:
+        """Merge current text-layer blocks with Pix2Text equation blocks."""
+        line_blocks = []
+        for idx, (text, bbox, page_num) in enumerate(self.line_info):
+            line_blocks.append({
+                "id": f"line-{idx}",
+                "source": "current_layer",
+                "page_num": page_num,
+                "bbox": {"x0": bbox[0], "y0": bbox[1], "x1": bbox[2], "y1": bbox[3]},
+                "content_type": "text",
+                "text": text,
+                "latex": None,
+                "mathml": None,
+                "confidence": None,
+            })
+
+        equation_blocks = []
+        replaced_line_ids = set()
+        for eq in self.pix2text_equations:
+            eq_page = int(eq.get("page", 0))
+            eq_bbox = eq.get("bbox") or {}
+            if not all(k in eq_bbox for k in ("x0", "y0", "x1", "y1")):
+                continue
+
+            best_line = None
+            best_overlap = 0.0
+            for lb in line_blocks:
+                if lb["page_num"] != eq_page:
+                    continue
+                if not self._is_likely_equation(lb["text"]):
+                    continue
+                overlap = self._bbox_overlap_ratio(lb["bbox"], eq_bbox)
+                if overlap > best_overlap:
+                    best_overlap = overlap
+                    best_line = lb
+
+            if best_line is not None and best_overlap >= 0.40:
+                replaced_line_ids.add(best_line["id"])
+
+            equation_blocks.append({
+                "id": f"pix2text-eq-{eq.get('index', len(equation_blocks))}",
+                "source": "pix2text",
+                "page_num": eq_page,
+                "bbox": {
+                    "x0": float(eq_bbox["x0"]),
+                    "y0": float(eq_bbox["y0"]),
+                    "x1": float(eq_bbox["x1"]),
+                    "y1": float(eq_bbox["y1"]),
+                },
+                "content_type": "display_equation",
+                "text": eq.get("text") or eq.get("latex") or "",
+                "latex": eq.get("latex"),
+                "mathml": eq.get("mathml"),
+                "confidence": eq.get("confidence"),
+            })
+
+        merged = [lb for lb in line_blocks if lb["id"] not in replaced_line_ids] + equation_blocks
+        merged.sort(key=lambda b: (b["page_num"], b["bbox"]["y0"], b["bbox"]["x0"]))
+
+        for order, block in enumerate(merged):
+            block["reading_order"] = order
+
+        self.merged_blocks = merged
+        self.merge_summary = {
+            "line_blocks": len(line_blocks),
+            "pix2text_equations": len(equation_blocks),
+            "replaced_equation_like_lines": len(replaced_line_ids),
+            "merged_blocks": len(merged),
+        }
+
     def _collect_statistics(self, doc: fitz.Document) -> Dict:
         """
         Collect document statistics.
@@ -984,6 +1083,8 @@ class PDFErrorDetector:
 
         total_tables = self.total_tables_count
         total_equations = len([eq for eq in self._grobid_equations if eq.get("number") is not None])
+        total_equations_pix2text = len(self.pix2text_equations)
+        total_equations_merged = sum(1 for b in self.merged_blocks if b.get("content_type") == "display_equation")
         total_images = sum(len(doc[p].get_images(full=True)) for p in range(len(doc)))
 
         # Convert Camelot DataFrames to a JSON-serialisable format for the frontend.
@@ -1007,6 +1108,8 @@ class PDFErrorDetector:
             "total_figures":    total_figures,
             "total_tables":     total_tables,
             "total_equations":  total_equations,
+            "total_equations_pix2text": total_equations_pix2text,
+            "total_equations_merged": total_equations_merged,
             "total_images":     total_images,
             "grobid_figures":   self.grobid_figures,
             "extracted_tables": camelot_tables_serialised,
@@ -1014,6 +1117,18 @@ class PDFErrorDetector:
                 {"index": eq["index"], "text": eq["text"][:100], "number": eq["number"], "page": eq["page"]}
                 for eq in self._grobid_equations
             ],
+            "pix2text_equations": [
+                {
+                    "index": eq.get("index"),
+                    "text": str(eq.get("text") or "")[:120],
+                    "latex": str(eq.get("latex") or "")[:120],
+                    "page": eq.get("page"),
+                    "confidence": eq.get("confidence"),
+                }
+                for eq in self.pix2text_equations
+            ],
+            "merge_summary": self.merge_summary,
+            "pipeline_status": self.pipeline_status,
         }
 
     # =========================================================================
@@ -1028,16 +1143,63 @@ class PDFErrorDetector:
         """Open PDF, extract text and tables, run all checks, return errors + doc + stats."""
         doc = fitz.open(pdf_path)
 
-        # GROBID must run first: it populates _tei_root, _grobid_section_heads,
-        # _grobid_has_abstract, _grobid_has_keywords, grobid_figures, _grobid_equations.
-        # _extract_all_text then reads _tei_root.
-        self._extract_with_grobid(pdf_path)
-        self._extract_all_text(doc)
-        self._extract_tables(pdf_path)
+        def _run_current_layer() -> None:
+            try:
+                # GROBID must run before _extract_all_text because it populates _tei_root.
+                self._extract_with_grobid(pdf_path)
+                self._extract_all_text(doc)
+                self._extract_tables(pdf_path)
+                self.pipeline_status["current_layer"] = {
+                    "success": True,
+                    "message": "Current extraction layer complete",
+                }
+            except Exception as exc:
+                print(f"[CURRENT LAYER] Error: {exc}")
+                # Preserve baseline fallback so checks can continue.
+                self.full_text = ""
+                self.page_texts = []
+                self.line_info = []
+                self.line_offsets = []
+                self._extract_text_via_pymupdf(doc)
+                self.pipeline_status["current_layer"] = {
+                    "success": False,
+                    "message": f"Current extraction layer failed: {exc}",
+                }
+
+        def _run_pix2text_layer() -> None:
+            try:
+                p2t_result = extract_equations_from_pdf(pdf_path)
+                self.pix2text_equations = p2t_result.get("equations", [])
+                self.pipeline_status["pix2text"] = p2t_result.get("status", self.pipeline_status["pix2text"])
+            except Exception as exc:
+                print(f"[PIX2TEXT] Error: {exc}")
+                self.pix2text_equations = []
+                self.pipeline_status["pix2text"] = {
+                    "enabled": False,
+                    "success": False,
+                    "message": f"Pix2Text layer failed: {exc}",
+                    "count": 0,
+                }
+
+        # Run current extraction and Pix2Text in parallel.
+        with ThreadPoolExecutor(max_workers=2) as executor:
+            fut_current = executor.submit(_run_current_layer)
+            fut_pix2text = executor.submit(_run_pix2text_layer)
+            fut_current.result()
+            fut_pix2text.result()
 
         citations = self._extract_citations_grobid(pdf_path)
         self.reference_analysis = self.analyze_references(citations)
         self.raw_citations = citations
+
+        try:
+            self._build_merged_blocks()
+            self.pipeline_status["merge"] = {"success": True, "message": "Merge complete"}
+        except Exception as exc:
+            print(f"[MERGE] Error: {exc}")
+            self.merged_blocks = []
+            self.merge_summary = {}
+            self.pipeline_status["merge"] = {"success": False, "message": f"Merge failed: {exc}"}
 
         statistics = self._collect_statistics(doc)
         errors = self._run_document_checks(doc)
@@ -1056,6 +1218,10 @@ class PDFErrorDetector:
             "page_texts":       self.page_texts,
             "total_pages":      len(self.page_texts),
             "line_count":       len(self.line_info),
+            "pix2text_equations": self.pix2text_equations,
+            "merged_blocks": self.merged_blocks,
+            "merge_summary": self.merge_summary,
+            "pipeline_status": self.pipeline_status,
             "lines": [
                 {
                     "text":     text,
