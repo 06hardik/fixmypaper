@@ -363,9 +363,14 @@ class PDFErrorDetector:
         fallback_page: int = 0,
     ) -> Tuple[int, Tuple[float, float, float, float]]:
         """
-        Parse a list of GROBID coords strings ("page,x0,y0,x1,y1") and return
-        (page_num, union_bbox) covering all tokens.  GROBID page numbers are
-        1-indexed; we convert to 0-indexed.
+        Parse a list of GROBID coords strings and return
+        (page_num, union_bbox) covering all tokens.
+
+        GROBID emits coordinates in two forms:
+          • Simple:  "page,x0,y0,x1,y1"
+          • Multi:   "page,x0,y0,x1,y1;page,x0,y0,x1,y1;…"
+        Both are handled.  Page numbers are 1-indexed in GROBID;
+        we convert to 0-indexed.
         """
         if not coords_list:
             return fallback_page, (0.0, 0.0, 100.0, 14.0)
@@ -373,23 +378,26 @@ class PDFErrorDetector:
         pages = []
         x0s, y0s, x1s, y1s = [], [], [], []
 
-        for c in coords_list:
-            parts = c.split(",")
-            if len(parts) < 5:
-                continue
-            try:
-                pages.append(int(parts[0]) - 1)  # 1-indexed → 0-indexed
-                x0s.append(float(parts[1]))
-                y0s.append(float(parts[2]))
-                x1s.append(float(parts[3]))
-                y1s.append(float(parts[4]))
-            except ValueError:
-                continue
+        for raw in coords_list:
+            # Split on ';' to handle multi-fragment coords strings
+            fragments = raw.split(";") if ";" in raw else [raw]
+            for frag in fragments:
+                parts = frag.strip().split(",")
+                if len(parts) < 5:
+                    continue
+                try:
+                    pages.append(int(parts[0]) - 1)
+                    x0s.append(float(parts[1]))
+                    y0s.append(float(parts[2]))
+                    x1s.append(float(parts[3]))
+                    y1s.append(float(parts[4]))
+                except ValueError:
+                    continue
 
         if not x0s:
             return fallback_page, (0.0, 0.0, 100.0, 14.0)
 
-        page_num = pages[0]  # page of the first token in the sentence
+        page_num = pages[0]
         bbox = (min(x0s), min(y0s), max(x1s), max(y1s))
         return page_num, bbox
 
@@ -678,22 +686,31 @@ class PDFErrorDetector:
             print(f"[GROBID] Section headings found: {len(self._grobid_section_heads)}")
 
             # ── Figures ─────────────────────────────────────────────────────
-            # GROBID marks non-table figures as <figure> without type="table".
+            # GROBID wraps many float objects (figures, algorithms, charts)
+            # in <figure>.  To get an accurate count we only keep entries
+            # that carry a recognisable "Fig." / "Figure" label with a
+            # number, and we deduplicate by that number so multi-panel
+            # entries are not double-counted.
             self.grobid_figures = []
             self._grobid_figure_entries = []
+            _fig_label_re = re.compile(r'(?:Fig\.?|Figure)\s*(\d+)', re.IGNORECASE)
+            _seen_fig_nums = set()
             fig_idx = 0
+
             for fig in root.findall(".//tei:figure", ns):
                 if fig.get("type") == "table":
                     continue
 
-                fig_desc = fig.find(".//tei:figDesc", ns)
-                head = fig.find(".//tei:head", ns)
+                # Extract label, head, xml:id and figDesc
                 label_el = fig.find(".//tei:label", ns)
+                head = fig.find(".//tei:head", ns)
+                fig_desc = fig.find(".//tei:figDesc", ns)
+                xml_id = fig.get("{http://www.w3.org/XML/1998/namespace}id", "") or fig.get("xml:id", "")
 
                 label = ""
                 if label_el is not None:
                     label = ("".join(label_el.itertext())).strip()
-                elif head is not None:
+                if not label and head is not None:
                     label = ("".join(head.itertext())).strip()
 
                 description = ""
@@ -701,6 +718,31 @@ class PDFErrorDetector:
                     description = ("".join(fig_desc.itertext())).strip()
 
                 caption = f"{label} {description}".strip() if label else description
+
+                # Determine the figure number from label text first,
+                # then fall back to GROBID's xml:id (e.g. "fig_0" → 1).
+                fig_num = None
+                lm = _fig_label_re.search(label) if label else None
+                if lm:
+                    fig_num = int(lm.group(1))
+                elif not lm and caption:
+                    lm = _fig_label_re.search(caption)
+                    if lm:
+                        fig_num = int(lm.group(1))
+                if fig_num is None and xml_id:
+                    xm = re.search(r'fig_(\d+)', xml_id)
+                    if xm:
+                        fig_num = int(xm.group(1)) + 1  # GROBID uses 0-based ids
+
+                # Skip entries that have no recognisable figure number —
+                # they are usually algorithms, pseudo-code, or decoration.
+                if fig_num is None:
+                    continue
+
+                # Deduplicate by figure number (multi-panel / repeated refs)
+                if fig_num in _seen_fig_nums:
+                    continue
+                _seen_fig_nums.add(fig_num)
 
                 coords_str = fig.get("coords", "")
                 page_num, bbox = self._parse_grobid_coords(
@@ -711,6 +753,7 @@ class PDFErrorDetector:
                     "index": fig_idx,
                     "type": "figure",
                     "label": label,
+                    "number": fig_num,
                     "description": description,
                     "caption": caption,
                     "xml_coords": coords_str,
@@ -720,7 +763,7 @@ class PDFErrorDetector:
                 self.grobid_figures.append(entry)
                 self._grobid_figure_entries.append(entry)
                 fig_idx += 1
-                print(f"[GROBID] Figure {fig_idx} (page {page_num+1}): {caption[:60]}...")
+                print(f"[GROBID] Figure {fig_num} (page {page_num+1}): {caption[:60]}...")
 
             # ── Tables: extracted by Camelot (not GROBID) ──────────────────
             # grobid_tables / _grobid_table_entries are left empty so that
@@ -729,33 +772,67 @@ class PDFErrorDetector:
             self._grobid_table_entries = []
 
             # ── Equations ──────────────────────────────────────────────────
+            # GROBID emits <formula type="display"> for numbered / block
+            # equations and <formula type="inline"> for inline math.
+            # Only display equations should be counted and checked.
+            # The equation number is often in a <label> child element
+            # (e.g. <label>(1)</label>) rather than in the running text.
             self._grobid_equations = []
-            for idx, formula in enumerate(root.findall(".//tei:formula", ns)):
+            _seen_eq_nums = set()
+            display_idx = 0
+
+            for formula in root.findall(".//tei:formula", ns):
+                ftype = (formula.get("type") or "").lower()
+                # Keep display (numbered) equations; skip inline math
+                if ftype == "inline":
+                    continue
+
                 text = "".join(formula.itertext()).strip()
                 if not text:
                     continue
 
-                coords_str = formula.get("coords", "")
+                # Collect all coord fragments (GROBID may emit semicolon-
+                # separated multi-token coords like "1,x0,y0,x1,y1;1,…").
+                raw_coords = formula.get("coords", "")
+                coord_parts = [c.strip() for c in raw_coords.split(";") if c.strip()] \
+                              if ";" in raw_coords else ([raw_coords] if raw_coords else [])
                 page_num, bbox = self._parse_grobid_coords(
-                    [coords_str] if coords_str else [], fallback_page=0
+                    coord_parts, fallback_page=0
                 )
 
+                # Try to read equation number from <label> first
                 eq_num = None
-                num_match = re.search(r'\((\d+)\)\s*$', text)
-                if num_match:
-                    eq_num = int(num_match.group(1))
+                label_el = formula.find(".//tei:label", ns)
+                if label_el is not None:
+                    label_txt = ("".join(label_el.itertext())).strip()
+                    lm = re.search(r'\(?(\d+)\)?', label_txt)
+                    if lm:
+                        eq_num = int(lm.group(1))
+
+                # Fall back to regex on the full text
+                if eq_num is None:
+                    num_match = re.search(r'\((\d+)\)\s*$', text)
+                    if num_match:
+                        eq_num = int(num_match.group(1))
+
+                # Deduplicate by equation number
+                if eq_num is not None and eq_num in _seen_eq_nums:
+                    continue
+                if eq_num is not None:
+                    _seen_eq_nums.add(eq_num)
 
                 entry = {
-                    "index": idx,
+                    "index": display_idx,
                     "text": text,
                     "number": eq_num,
                     "page": page_num,
                     "bbox": bbox,
                 }
                 self._grobid_equations.append(entry)
+                display_idx += 1
 
             print(f"[GROBID] Extracted {len(self.grobid_figures)} figures "
-                  f"and {len(self._grobid_equations)} equations "
+                  f"and {len(self._grobid_equations)} display equations "
                   f"(tables extracted separately by Camelot)")
 
         except requests.exceptions.Timeout:
@@ -890,9 +967,11 @@ class PDFErrorDetector:
         """
         Collect document statistics.
 
-        Figure count:   GROBID <figure> elements (accurate structural count).
+        Figure count:   GROBID <figure> elements (deduplicated by number,
+                        filtered to only labelled figures).
         Table count:    Camelot-extracted table count (actual page tables).
-        Equation count: GROBID <formula> elements with a (n) number.
+        Equation count: GROBID <formula type="display"> elements (inline math
+                        excluded); only numbered equations contribute to count.
         """
         if self.grobid_figures:
             total_figures = len(self.grobid_figures)
@@ -1575,39 +1654,70 @@ class PDFErrorDetector:
         return errors
 
     # =========================================================================
-    # CHECK #8 — EQUATION NUMBERING  (unchanged)
+    # CHECK #8 — EQUATION NUMBERING
     # =========================================================================
 
     def _check_equation_numbering(self) -> List[ErrorInstance]:
+        """
+        Verify equation numbering format and sequence.
+
+        Primary path: use GROBID's already-parsed _grobid_equations (display
+        equations only, with numbers extracted from <label> or regex).
+        Fallback: heuristic scan of line_info (original approach).
+        """
         errors = []
         eq_numbers: List[int] = []
         eq_locations: Dict[int, Tuple] = {}
 
-        for line_text, line_bbox, page_num in self.line_info:
-            if not self._is_likely_equation(line_text):
-                continue
+        if self._grobid_equations:
+            for eq in self._grobid_equations:
+                if eq.get("number") is not None:
+                    eq_num = eq["number"]
+                    eq_numbers.append(eq_num)
+                    if eq_num not in eq_locations:
+                        eq_locations[eq_num] = (eq["text"], eq["bbox"], eq["page"])
+                else:
+                    # Display equation with no recognised number
+                    bare = re.search(r"(?<!\()\b(\d+)\b\s*$", eq["text"])
+                    if bare:
+                        errors.append(ErrorInstance(
+                            check_id=8,
+                            check_name="Equation Number Not in Parentheses",
+                            description=(
+                                f"Equation number '{bare.group(1)}' is not wrapped in parentheses. "
+                                "IEEE format requires (1), (2), etc."
+                            ),
+                            page_num=eq["page"],
+                            text=eq["text"].strip()[-70:],
+                            bbox=eq["bbox"],
+                            error_type="equation_numbering",
+                        ))
+        else:
+            for line_text, line_bbox, page_num in self.line_info:
+                if not self._is_likely_equation(line_text):
+                    continue
 
-            valid_match = re.search(r"\((\d+)\)\s*$", line_text)
-            if valid_match:
-                eq_num = int(valid_match.group(1))
-                eq_numbers.append(eq_num)
-                if eq_num not in eq_locations:
-                    eq_locations[eq_num] = (line_text, line_bbox, page_num)
-            else:
-                bare = re.search(r"(?<!\()\b(\d+)\b\s*$", line_text)
-                if bare:
-                    errors.append(ErrorInstance(
-                        check_id=8,
-                        check_name="Equation Number Not in Parentheses",
-                        description=(
-                            f"Equation number '{bare.group(1)}' is not wrapped in parentheses. "
-                            "IEEE format requires (1), (2), etc."
-                        ),
-                        page_num=page_num,
-                        text=line_text.strip()[-70:] if len(line_text.strip()) > 70 else line_text.strip(),
-                        bbox=line_bbox,
-                        error_type="equation_numbering",
-                    ))
+                valid_match = re.search(r"\((\d+)\)\s*$", line_text)
+                if valid_match:
+                    eq_num = int(valid_match.group(1))
+                    eq_numbers.append(eq_num)
+                    if eq_num not in eq_locations:
+                        eq_locations[eq_num] = (line_text, line_bbox, page_num)
+                else:
+                    bare = re.search(r"(?<!\()\b(\d+)\b\s*$", line_text)
+                    if bare:
+                        errors.append(ErrorInstance(
+                            check_id=8,
+                            check_name="Equation Number Not in Parentheses",
+                            description=(
+                                f"Equation number '{bare.group(1)}' is not wrapped in parentheses. "
+                                "IEEE format requires (1), (2), etc."
+                            ),
+                            page_num=page_num,
+                            text=line_text.strip()[-70:] if len(line_text.strip()) > 70 else line_text.strip(),
+                            bbox=line_bbox,
+                            error_type="equation_numbering",
+                        ))
 
         if len(eq_numbers) >= 2:
             unique = sorted(set(eq_numbers))
@@ -1638,17 +1748,17 @@ class PDFErrorDetector:
     def _check_figure_sequential_numbering(self) -> List[ErrorInstance]:
         """
         Verify figures are numbered sequentially (1, 2, 3, ...) with no gaps.
-        Uses GROBID figure entries for accurate detection; falls back to regex.
+        Uses GROBID figure entries (already deduplicated with a 'number' field)
+        for accurate detection; falls back to regex on raw text.
         """
         errors = []
         fig_numbers = []
 
         if self._grobid_figure_entries:
             for fig in self._grobid_figure_entries:
-                text = fig.get("label", "") or fig.get("caption", "")
-                m = re.search(r'(?:Fig\.?|Figure)\s*(\d+)', text, re.IGNORECASE)
-                if m:
-                    fig_numbers.append({"num": int(m.group(1)), "entry": fig})
+                num = fig.get("number")
+                if num is not None:
+                    fig_numbers.append({"num": num, "entry": fig})
         else:
             for line_text, line_bbox, page_num in self.line_info:
                 m = re.search(r'(?:Fig\.?|Figure)\s+(\d+)', line_text, re.IGNORECASE)

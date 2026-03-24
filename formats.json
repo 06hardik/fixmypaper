@@ -57,6 +57,39 @@
         "url_doi_validity",
         "et_al_formatting"
       ]
+    },
+    {
+      "id": "7d7274cd-3547-421d-9da4-5d0c268f55fd",
+      "name": "BTP for 4th year",
+      "created_by": "Vijay Bohat",
+      "is_system": false,
+      "description": "",
+      "mandatory_sections": [
+        "Abstract",
+        "Introduction",
+        "Methodology",
+        "Implementation",
+        "Conclusion",
+        "References"
+      ],
+      "enabled_checks": [
+        "metadata_completeness",
+        "abstract_exists",
+        "abstract_word_count",
+        "index_terms",
+        "references_section",
+        "roman_numeral_headings",
+        "introduction_section",
+        "figure_label_format",
+        "table_label_format",
+        "equation_numbering",
+        "figure_sequential",
+        "table_sequential",
+        "caption_placement",
+        "reference_format",
+        "url_doi_validity",
+        "et_al_formatting"
+      ]
     }
   ]
 }
