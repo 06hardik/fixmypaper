@@ -11,6 +11,7 @@ from werkzeug.utils import secure_filename
 from pdf_processor import process_pdf, AVAILABLE_CHECKS, ALL_SECTIONS
 
 app = Flask(__name__)
+CORS(app)
 app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['PROCESSED_FOLDER'] = 'processed'
