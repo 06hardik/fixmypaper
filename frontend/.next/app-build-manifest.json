@@ -1,20 +1,43 @@
 {
   "pages": {
-    "/student/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/student/page.js"
+    "/_not-found/page": [
+      "static/chunks/webpack-c81f7fd28659d64f.js",
+      "static/chunks/fd9d1056-5f55067fad1d0619.js",
+      "static/chunks/117-19e2607edffa9051.js",
+      "static/chunks/main-app-be3750cb3c8f91ce.js",
+      "static/chunks/app/_not-found/page-572d89080e0f8c2f.js"
     ],
     "/layout": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/layout.css",
-      "static/chunks/app/layout.js"
+      "static/chunks/webpack-c81f7fd28659d64f.js",
+      "static/chunks/fd9d1056-5f55067fad1d0619.js",
+      "static/chunks/117-19e2607edffa9051.js",
+      "static/chunks/main-app-be3750cb3c8f91ce.js",
+      "static/css/c4184faef757941c.css",
+      "static/chunks/app/layout-9c2224362c083f38.js"
     ],
     "/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/page.js"
+      "static/chunks/webpack-c81f7fd28659d64f.js",
+      "static/chunks/fd9d1056-5f55067fad1d0619.js",
+      "static/chunks/117-19e2607edffa9051.js",
+      "static/chunks/main-app-be3750cb3c8f91ce.js",
+      "static/chunks/972-3a938e7079d06116.js",
+      "static/chunks/app/page-46d6becf7b15885b.js"
+    ],
+    "/student/page": [
+      "static/chunks/webpack-c81f7fd28659d64f.js",
+      "static/chunks/fd9d1056-5f55067fad1d0619.js",
+      "static/chunks/117-19e2607edffa9051.js",
+      "static/chunks/main-app-be3750cb3c8f91ce.js",
+      "static/chunks/972-3a938e7079d06116.js",
+      "static/chunks/app/student/page-874109df61fee5ef.js"
+    ],
+    "/professor/page": [
+      "static/chunks/webpack-c81f7fd28659d64f.js",
+      "static/chunks/fd9d1056-5f55067fad1d0619.js",
+      "static/chunks/117-19e2607edffa9051.js",
+      "static/chunks/main-app-be3750cb3c8f91ce.js",
+      "static/chunks/972-3a938e7079d06116.js",
+      "static/chunks/app/professor/page-20507fddb2abe8bc.js"
     ]
   }
 }
