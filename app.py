@@ -9,6 +9,7 @@ from datetime import datetime
 from flask import Flask, render_template, request, jsonify, send_file
 from werkzeug.utils import secure_filename
 from pdf_processor import process_pdf, AVAILABLE_CHECKS, ALL_SECTIONS
+from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
