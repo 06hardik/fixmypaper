@@ -35,6 +35,7 @@ export default function StudentPage() {
   const [formatId, setFormatId] = useState("");
   const [phase, setPhase] = useState("upload"); // upload | processing | results
   const [fileName, setFileName] = useState("");
+  const [startPage, setStartPage] = useState(1);
   const [error, setError] = useState("");
   const [result, setResult] = useState(null);
   const [activeTab, setActiveTab] = useState("overview");
@@ -63,7 +64,7 @@ export default function StudentPage() {
       setPhase("processing");
 
       try {
-        const data = await uploadPDF(file, formatId);
+        const data = await uploadPDF(file, formatId, startPage);
         if (data.success) {
           setResult(data);
           setPhase("results");
@@ -77,13 +78,14 @@ export default function StudentPage() {
         setPhase("upload");
       }
     },
-    [formatId],
+    [formatId, startPage],
   );
 
   const reset = () => {
     setPhase("upload");
     setResult(null);
     setFileName("");
+    setStartPage(1);
     setFilter("all");
     setActiveTab("overview");
     setError("");
@@ -112,6 +114,26 @@ export default function StudentPage() {
             </option>
           ))}
         </select>
+      </section>
+
+      {/* Start page */}
+      <section className="bg-white border border-line rounded-card p-5">
+        <h2 className="text-base font-bold mb-1">Processing Start Page</h2>
+        <p className="text-xs text-ink-soft mb-3">
+          Skip title, cover, or copyright pages by choosing which page to begin analysis from.
+        </p>
+        <div className="flex items-center gap-3">
+          <input
+            type="number"
+            min={1}
+            value={startPage}
+            onChange={(e) => setStartPage(Math.max(1, parseInt(e.target.value) || 1))}
+            className="w-24 border border-gray-300 rounded-lg px-3 py-2.5 text-sm text-center focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand transition"
+          />
+          <span className="text-sm text-ink-soft">
+            {startPage === 1 ? "Processing all pages" : `Skipping pages 1–${startPage - 1}`}
+          </span>
+        </div>
       </section>
 
       {/* Upload */}
@@ -251,11 +273,26 @@ function ResultsView({ result, activeTab, setActiveTab, filter, setFilter, onRes
       {/* Tab: Overview */}
       {activeTab === "overview" && (
         <div className="animate-fade-in space-y-4">
-          <div className="grid sm:grid-cols-2 gap-3">
+          {/* <div className="grid sm:grid-cols-2 gap-3">
             <Card label="Title" value={overview.title || result.original_filename || "-"} />
             <Card label="Authors" value={overview.authors || "Not detected"} />
-          </div>
-          <Card label="Abstract" value={overview.abstract || "Not detected"} wide />
+          </div> */}
+          {/* <Card label="Abstract" value={overview.abstract || "Not detected"} wide /> */}
+
+          {/* Processing start page indicator */}
+          {result.start_page > 1 && (
+            <div className="flex items-center gap-2 border border-amber-200 bg-amber-50 rounded-xl px-4 py-2.5">
+              <svg className="w-4 h-4 text-amber-600 shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+              </svg>
+              <p className="text-sm text-amber-800 font-medium">
+                Processing started from page {result.start_page}
+                <span className="text-amber-600 font-normal ml-1">
+                  — pages 1–{result.start_page - 1} were skipped
+                </span>
+              </p>
+            </div>
+          )}
 
           {/* KPI row */}
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">

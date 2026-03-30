@@ -24,6 +24,9 @@ export async function POST(request) {
   const formatId = incoming.get("format_id");
   if (formatId) fd.append("format_id", formatId);
 
+  const startPage = incoming.get("start_page");
+  if (startPage) fd.append("start_page", startPage);
+
   const controller = new AbortController();
   const timeoutMs = 180000; // 3 minutes; adjust if your pipeline can take longer.
   const timeout = setTimeout(() => controller.abort(), timeoutMs);
