@@ -232,7 +232,8 @@ class PDFErrorDetector:
 
     GROBID_URL = "https://ashjin-grobid-local-2.hf.space/"
 
-    def __init__(self):
+    def __init__(self, start_page: int = 1):
+        self.start_page_0 = max(0, start_page - 1)  # convert 1-indexed to 0-indexed
         self.full_text = ""
         self.page_texts: List[str] = []
         self.line_info: List[Tuple[str, Tuple, int]] = []   # (text, bbox, page_num)
@@ -356,6 +357,9 @@ class PDFErrorDetector:
             page_num, bbox = self._parse_grobid_coords(coords_list, fallback_page=0)
             page_num = min(page_num, num_pages - 1)  # clamp
 
+            if page_num < self.start_page_0:
+                continue
+
             self.line_info.append((line_text, bbox, page_num))
             self.line_offsets.append(current_offset)
             self.full_text += line_text + "\n"
@@ -422,6 +426,9 @@ class PDFErrorDetector:
         for page_num in range(len(doc)):
             page = doc[page_num]
             self.page_texts.append(page.get_text())
+
+            if page_num < self.start_page_0:
+                continue
 
             page_spans = []
             for block in page.get_text("dict").get("blocks", []):
@@ -495,6 +502,8 @@ class PDFErrorDetector:
 
             raw_tables = []
             for idx, table in enumerate(tables):
+                if table.page <= self.start_page_0:
+                    continue
                 table_data = {
                     "index": idx,
                     "page": table.page,
@@ -1208,6 +1217,10 @@ class PDFErrorDetector:
         if required_sections:
             errors.extend(self._check_required_sections(required_sections))
 
+        # Filter out errors from pages before start_page
+        if self.start_page_0 > 0:
+            errors = [e for e in errors if e.page_num >= self.start_page_0]
+
         return errors, doc, statistics
 
     def export_extracted_data(self) -> Dict:
@@ -1245,7 +1258,7 @@ class PDFErrorDetector:
 
         # Structure & Content Checks (1–5)
         errors.extend(self._check_abstract_exists())
-        errors.extend(self._check_abstract_word_count())
+        # errors.extend(self._check_abstract_word_count())
         errors.extend(self._check_index_terms_exists())
         errors.extend(self._check_references_section_exists())
         errors.extend(self._check_roman_numeral_headings())
@@ -1437,53 +1450,79 @@ class PDFErrorDetector:
     ABSTRACT_MIN_WORDS = 150
     ABSTRACT_MAX_WORDS = 250
 
-    def _check_abstract_word_count(self) -> List[ErrorInstance]:
+    _HEADING_RE = re.compile(r"^#{1,6}\s+", re.MULTILINE)
+    _ABSTRACT_HEADING_RE = re.compile(
+        r"^#{1,6}\s+Abstract\s*$", re.MULTILINE | re.IGNORECASE
+    )
+
+    def _extract_abstract_from_markdown(self) -> str:
         """
-        Verify the abstract contains between 150 and 250 words.
+        Extract the abstract body from the pymupdf4llm markdown text.
 
-        Once GROBID identifies the <abstract> block the word count is nearly
-        100 % accurate because GROBID isolates exactly the abstract text,
-        free from surrounding headings or body paragraphs.
-
-        The check is skipped when GROBID was unavailable so no false positives
-        are emitted on service failure.
+        Finds the first heading matching "Abstract" (any level) and returns
+        everything between it and the next markdown heading.  Returns an
+        empty string when the markdown is unavailable or contains no
+        recognisable Abstract heading.
         """
-        if not self._grobid_abstract_text:
-            # Either GROBID unavailable or abstract genuinely absent (Check #1 covers that).
-            return []
+        if not self.markdown_text:
+            return ""
 
-        words = self._grobid_abstract_text.split()
-        count = len(words)
+        m = self._ABSTRACT_HEADING_RE.search(self.markdown_text)
+        if not m:
+            return ""
 
-        if self.ABSTRACT_MIN_WORDS <= count <= self.ABSTRACT_MAX_WORDS:
-            return []
+        body_start = m.end()
+        next_heading = self._HEADING_RE.search(self.markdown_text, body_start)
+        body_end = next_heading.start() if next_heading else len(self.markdown_text)
 
-        anchor_text, anchor_bbox, anchor_page = (
-            self.line_info[0] if self.line_info else ("", (0, 0, 200, 20), 0)
-        )
+        return self.markdown_text[body_start:body_end].strip()
 
-        if count < self.ABSTRACT_MIN_WORDS:
-            description = (
-                f"Abstract is too short: {count} word{'s' if count != 1 else ''}. "
-                f"IEEE abstracts should be between {self.ABSTRACT_MIN_WORDS} and "
-                f"{self.ABSTRACT_MAX_WORDS} words."
-            )
-        else:
-            description = (
-                f"Abstract is too long: {count} words. "
-                f"IEEE abstracts should be between {self.ABSTRACT_MIN_WORDS} and "
-                f"{self.ABSTRACT_MAX_WORDS} words."
-            )
+    # def _check_abstract_word_count(self) -> List[ErrorInstance]:
+    #     """
+    #     Verify the abstract contains between 150 and 250 words.
 
-        return [ErrorInstance(
-            check_id=26,
-            check_name="Abstract Word Count Out of Range",
-            description=description,
-            page_num=anchor_page,
-            text=f"[Abstract: {count} words — expected {self.ABSTRACT_MIN_WORDS}–{self.ABSTRACT_MAX_WORDS}]",
-            bbox=anchor_bbox,
-            error_type="abstract_word_count",
-        )]
+    #     Uses the pymupdf4llm markdown extraction to isolate the abstract:
+    #     everything after the "Abstract" heading up to the next heading.
+    #     Falls back to GROBID abstract text when markdown is unavailable.
+    #     """
+    #     abstract_text = self._extract_abstract_from_markdown()
+    #     if not abstract_text:
+    #         abstract_text = self._grobid_abstract_text
+    #     if not abstract_text:
+    #         return []
+
+    #     words = abstract_text.split()
+    #     count = len(words)
+
+    #     if self.ABSTRACT_MIN_WORDS <= count <= self.ABSTRACT_MAX_WORDS:
+    #         return []
+
+    #     anchor_text, anchor_bbox, anchor_page = (
+    #         self.line_info[0] if self.line_info else ("", (0, 0, 200, 20), 0)
+    #     )
+
+    #     if count < self.ABSTRACT_MIN_WORDS:
+    #         description = (
+    #             f"Abstract is too short: {count} word{'s' if count != 1 else ''}. "
+    #             f"IEEE abstracts should be between {self.ABSTRACT_MIN_WORDS} and "
+    #             f"{self.ABSTRACT_MAX_WORDS} words."
+    #         )
+    #     else:
+    #         description = (
+    #             f"Abstract is too long: {count} words. "
+    #             f"IEEE abstracts should be between {self.ABSTRACT_MIN_WORDS} and "
+    #             f"{self.ABSTRACT_MAX_WORDS} words."
+    #         )
+
+    #     return [ErrorInstance(
+    #         check_id=26,
+    #         check_name="Abstract Word Count Out of Range",
+    #         description=description,
+    #         page_num=anchor_page,
+    #         text=f"[Abstract: {count} words — expected {self.ABSTRACT_MIN_WORDS}–{self.ABSTRACT_MAX_WORDS}]",
+    #         bbox=anchor_bbox,
+    #         error_type="abstract_word_count",
+    #     )]
 
     # =========================================================================
     # CHECK #2 — INDEX TERMS EXISTS
@@ -2055,6 +2094,7 @@ class PDFErrorDetector:
             if re.search(r"\b(References|REFERENCES)\b", line_text):
                 in_references = True
                 continue
+
             if not in_references:
                 continue
 
@@ -2076,25 +2116,28 @@ class PDFErrorDetector:
             return errors
 
         sorted_nums = sorted(seen.keys())
-        for i, num in enumerate(sorted_nums):
-            expected = i + 1
-            if num != expected:
-                entry = seen[num]
+
+        for i in range(1, len(sorted_nums)):
+            prev = sorted_nums[i - 1]
+            curr = sorted_nums[i]
+
+            if curr != prev + 1:
+                entry = seen[curr]
                 errors.append(ErrorInstance(
                     check_id=23,
                     check_name="Non-Sequential Reference Numbering",
                     description=(
-                        f"Reference [{num}] found but expected [{expected}]. "
-                        "References must be numbered sequentially [1], [2], [3], ..."
+                        f"Reference [{curr}] found after [{prev}]. "
+                        f"Expected [{prev + 1}]. References must be sequential."
                     ),
                     page_num=entry["page"],
                     text=entry["text"][:70],
                     bbox=entry["bbox"],
                     error_type="reference_numbering_sequence",
+
                 ))
 
         return errors
-
     # =========================================================================
     # CHECK #24 — URL AND DOI VALIDITY
     # =========================================================================
@@ -2625,6 +2668,7 @@ def process_pdf(
     output_path: str,
     required_sections: Optional[List[str]] = None,
     enabled_check_types: Optional[Set[str]] = None,
+    start_page: int = 1,
 ) -> Tuple[List[ErrorInstance], str, Dict, Dict, Dict]:
     """
     Full pipeline: open PDF → detect errors → annotate → save.
@@ -2634,6 +2678,7 @@ def process_pdf(
         output_path         – path where the annotated PDF is written
         required_sections   – sections that must exist (format-driven)
         enabled_check_types – set of error_type strings to keep; None = keep all
+        start_page          – 1-indexed page to begin processing from (skips earlier pages)
 
     Returns:
         errors             – list of ErrorInstance objects (filtered)
@@ -2642,7 +2687,7 @@ def process_pdf(
         extracted_data     – raw extracted text and line data
         reference_analysis – reference quality analysis from external API
     """
-    detector = PDFErrorDetector()
+    detector = PDFErrorDetector(start_page=start_page)
     errors, doc, statistics = detector.detect_errors(input_path, required_sections)
 
     # Apply format whitelist: keep only errors whose type is enabled
