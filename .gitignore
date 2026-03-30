@@ -64,3 +64,21 @@ venv/
 __pycache__/
 *.pyc
 .next/
+4.0K    Dockerfile
+4.0K    Procfile
+4.0K    README.md
+176K    __pycache__
+ 12K    app.py
+4.0K    formats.json
+316M    frontend
+116K    pdf_processor.py
+ 12K    pix2text_processor.py
+ 12K    processed
+4.0K    render.yaml
+4.0K    requirements.txt
+4.0K    runtime.txt
+4.0K    setup.sh
+4.0K    test_sample.py
+ 12K    uploads
+602M    venv
+rishabhkumarjain@Aayushi research-paper-checker % 
