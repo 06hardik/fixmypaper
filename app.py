@@ -272,5 +272,5 @@ def health():
 
 if __name__ == '__main__':
     print("Starting Research Paper Error Checker…")
-    print("Open your browser to: http://localhost:5001")
-    app.run( host='0.0.0.0', port=5001)
+    print("Open your browser to: http://localhost:7860")
+    app.run( host='0.0.0.0', port=7860)
