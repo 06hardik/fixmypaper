@@ -17,7 +17,7 @@ GROBID migration notes:
     - Table extraction:       Camelot (lattice/stream).  GROBID table parsing removed.
 """
 import re
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, process
 import fitz  # PyMuPDF — retained for open/image-count/annotate only
 import camelot
 import requests
@@ -948,7 +948,7 @@ class PDFErrorDetector:
         if not citations:
             return {}
 
-        REFERENCE_API = "https://reference-api.onrender.com/analyze"
+        REFERENCE_API = process.env.get("REFERENCE_API_URL", "https://reference-api.onrender.com/analyze")
         payload = {
             "entries": citations,
             "dry_run": False,

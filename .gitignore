@@ -22,6 +22,7 @@ Thumbs.db
 # Uploads (temporary files)
 uploads/*.pdf
 processed/*.pdf
+processed/*.json
 
 # Keep folders but not contents
 !uploads/.gitkeep
