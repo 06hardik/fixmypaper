@@ -2,31 +2,55 @@ import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 
+function getBackendUrl() {
+  return (
+    process.env.API_URL ||
+    process.env.NEXT_PUBLIC_API_URL ||
+    "http://127.0.0.1:7860"
+  ).replace(/\/$/, "");
+}
+
+function getUploadTimeoutMs() {
+  const raw = process.env.UPLOAD_PROXY_TIMEOUT_MS || "900000";
+  const parsed = Number.parseInt(raw, 10);
+  if (!Number.isFinite(parsed) || parsed < 0) {
+    return 900000;
+  }
+  return parsed;
+}
+
 /**
  * Proxies the multipart upload to Flask.
  * This avoids Next's rewrite proxy instability/timeouts during long PDF processing.
  */
 export async function POST(request) {
-  const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
+  const API = getBackendUrl();
+  const timeoutMs = getUploadTimeoutMs();
 
   // Parse multipart from the client.
   const incoming = await request.formData();
 
   const fd = new FormData();
   const file = incoming.get("file");
-  if (file) {
-    // Ensure we proxy as a Blob/FiIe to keep the multipart structure intact.
-    const buf = await file.arrayBuffer();
-    const blob = new Blob([buf], { type: file.type || "application/pdf" });
-    fd.append("file", blob, file.name || "upload.pdf");
+  if (!file || typeof file.arrayBuffer !== "function") {
+    return NextResponse.json({ error: "No PDF file provided" }, { status: 400 });
   }
+
+  // Ensure we proxy as a Blob/File to keep the multipart structure intact.
+  const buf = await file.arrayBuffer();
+  const blob = new Blob([buf], { type: file.type || "application/pdf" });
+  fd.append("file", blob, file.name || "upload.pdf");
 
   const formatId = incoming.get("format_id");
   if (formatId) fd.append("format_id", formatId);
 
+  const startPage = incoming.get("start_page");
+  if (startPage) fd.append("start_page", startPage);
+
   const controller = new AbortController();
-  const timeoutMs = 180000; // 3 minutes; adjust if your pipeline can take longer.
-  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+  const timeout = timeoutMs > 0
+    ? setTimeout(() => controller.abort(), timeoutMs)
+    : null;
 
   try {
     const backendRes = await fetch(`${API}/upload`, {
@@ -42,8 +66,24 @@ export async function POST(request) {
       status: backendRes.status,
       headers: contentType ? { "content-type": contentType } : undefined,
     });
+  } catch (error) {
+    if (error?.name === "AbortError") {
+      const secs = Math.round(timeoutMs / 1000);
+      return NextResponse.json(
+        {
+          error: `Upload timed out after ${secs} seconds. Set UPLOAD_PROXY_TIMEOUT_MS to a higher value for large PDFs.`,
+        },
+        { status: 504 },
+      );
+    }
+
+    console.error("[UPLOAD PROXY] Failed to reach backend:", error);
+    return NextResponse.json(
+      { error: "Upload proxy could not reach backend service" },
+      { status: 502 },
+    );
   } finally {
-    clearTimeout(timeout);
+    if (timeout) clearTimeout(timeout);
   }
 }
 

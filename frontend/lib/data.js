@@ -265,10 +265,11 @@ export async function deleteFormat(id) {
   return res.json();
 }
 
-export async function uploadPDF(file, formatId) {
+export async function uploadPDF(file, formatId, startPage) {
   const form = new FormData();
   form.append("file", file);
   if (formatId) form.append("format_id", formatId);
+  if (startPage && startPage > 1) form.append("start_page", String(startPage));
   const res = await fetch(`/upload`, { method: "POST", body: form });
   if (!res.ok) {
     let message = "Upload failed";

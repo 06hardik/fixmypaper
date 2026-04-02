@@ -155,8 +155,9 @@ def upload_file():
     if not allowed_file(file.filename):
         return jsonify({'error': 'Only PDF files are allowed'}), 400
 
-    # Read optional format_id from the form
+    # Read optional format_id and start_page from the form
     format_id = request.form.get('format_id', '')
+    start_page = max(1, int(request.form.get('start_page', '1') or '1'))
     required_sections = []
     enabled_check_types = None
 
@@ -184,11 +185,12 @@ def upload_file():
         output_path = os.path.join(app.config['PROCESSED_FOLDER'],
                                    f"{job_id}_{output_filename}")
 
-        print(f"[PROCESSING] Starting PDF processing (format={format_id or 'none'})…")
+        print(f"[PROCESSING] Starting PDF processing (format={format_id or 'none'}, start_page={start_page})…")
         errors, annotated_path, statistics, extracted_data, reference_analysis = process_pdf(
             input_path, output_path,
             required_sections=required_sections or None,
             enabled_check_types=enabled_check_types,
+            start_page=start_page,
         )
         print(f"[PROCESSING] Complete — {len(errors)} errors")
 
@@ -203,6 +205,7 @@ def upload_file():
             'output_filename': output_filename,
             'input_path': input_path,
             'output_path': output_path,
+            'start_page': start_page,
             'errors': [
                 {
                     'check_id': e.check_id,
@@ -233,6 +236,7 @@ def upload_file():
             'reference_analysis': reference_analysis,
             'mandatory_sections': required_sections,
             'document_overview': processing_results[job_id]['document_overview'],
+            'start_page': start_page,
             'success': True,
         })
 
@@ -268,5 +272,5 @@ def health():
 
 if __name__ == '__main__':
     print("Starting Research Paper Error Checker…")
-    print("Open your browser to: http://localhost:5001")
-    app.run( host='0.0.0.0', port=5001)
+    print("Open your browser to: http://localhost:7860")
+    app.run( host='0.0.0.0', port=7860)
