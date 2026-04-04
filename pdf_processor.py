@@ -16,8 +16,9 @@ GROBID migration notes:
     - PDF open / image count / annotation writing: PyMuPDF retained (GROBID cannot do these).
     - Table extraction:       Camelot (lattice/stream).  GROBID table parsing removed.
 """
+import os
 import re
-from concurrent.futures import ThreadPoolExecutor, process
+from concurrent.futures import ThreadPoolExecutor
 import fitz  # PyMuPDF — retained for open/image-count/annotate only
 import camelot
 import requests
@@ -327,11 +328,20 @@ class PDFErrorDetector:
         # Walk every <s> (sentence) element — they span multiple <w> tokens.
         # We reconstruct logical "lines" by grouping tokens whose GROBID
         # page+y coords are within a small tolerance of each other.
-        sentence_elements = root.findall(".//tei:s", ns)
-        if not sentence_elements:
-            # Some GROBID versions use <ab> or bare text without <s> wrappers;
-            # fall back to PyMuPDF in that case.
-            raise ValueError("No <s> elements found in TEI — GROBID model may differ.")
+        sentences = root.findall(".//tei:s", ns)
+
+        if not sentences:
+            print("[GROBID] No <s> tags — falling back to paragraphs")
+            
+            paragraphs = root.findall(".//tei:p", ns)
+            sentences = []
+
+            for p in paragraphs:
+                text = "".join(p.itertext()).strip()
+                if text:
+                    sentences.extend(
+                        re.split(r'(?<=[.!?])\s+', text)
+                    )
 
         for sent in sentence_elements:
             # Each sentence becomes one logical "line" in line_info.
@@ -611,6 +621,12 @@ class PDFErrorDetector:
                     f"{self.GROBID_URL}/api/processFulltextDocument",
                     files={"input": pdf_file},
                     timeout=60,
+                    data={
+                        "teiCoordinates": "true",
+                        "segmentSentences": "true",
+                        "consolidateHeader": "1",
+                        "consolidateCitations": "1",
+                    },
                 )
 
             if response.status_code != 200:
@@ -948,7 +964,9 @@ class PDFErrorDetector:
         if not citations:
             return {}
 
-        REFERENCE_API = process.env.get("REFERENCE_API_URL", "https://reference-api.onrender.com/analyze")
+        REFERENCE_API = os.environ.get(
+            "REFERENCE_API_URL", "https://reference-api.onrender.com/analyze"
+        )
         payload = {
             "entries": citations,
             "dry_run": False,
@@ -2403,6 +2421,7 @@ class PDFErrorDetector:
                         ))
         else:
             # ── Fallback: page-height heuristic ──────────────────────────────
+            print("Fallback: page-height heuristic for figure caption placement")
             fig_pattern = re.compile(
                 r"(Fig\.|Figure)\s+(\d+)[:\.]?\s+([^\n]{10,200})", re.IGNORECASE
             )
