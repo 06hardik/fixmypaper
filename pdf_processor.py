@@ -18,7 +18,6 @@ GROBID migration notes:
 """
 import os
 import re
-from concurrent.futures import ThreadPoolExecutor
 import fitz  # PyMuPDF — retained for open/image-count/annotate only
 import camelot
 import requests
@@ -27,9 +26,6 @@ from collections import OrderedDict
 from typing import List, Dict, Tuple, Optional, Set
 from dataclasses import dataclass, field
 from lxml import etree
-from pix2text_processor import extract_equations_from_pdf
-
-
 # ---------------------------------------------------------------------------
 # FORMAT CONFIGURATION CONSTANTS
 # Used by the Streamlit professor/student UI to build and apply formats.
@@ -635,6 +631,23 @@ class PDFErrorDetector:
                 return
 
             tei_xml = response.content
+
+            base_name = os.path.splitext(os.path.basename(pdf_path))[0]
+
+            # Create output directory (optional but recommended)
+            output_dir = os.path.join(os.path.dirname(pdf_path), "grobid_outputs")
+            os.makedirs(output_dir, exist_ok=True)
+
+            # Final path
+            tei_output_path = os.path.join(output_dir, f"{base_name}.tei.xml")
+
+            # Save file
+            with open(tei_output_path, "wb") as f:
+                f.write(tei_xml)
+
+            print(f"[GROBID] TEI saved at: {tei_output_path}")
+
+            
             root = etree.fromstring(tei_xml)
             self._tei_root = root  # stored for _extract_text_via_grobid()
 
@@ -1193,27 +1206,13 @@ class PDFErrorDetector:
                     "message": f"Current extraction layer failed: {exc}",
                 }
 
-        def _run_pix2text_layer() -> None:
-            try:
-                p2t_result = extract_equations_from_pdf(pdf_path)
-                self.pix2text_equations = p2t_result.get("equations", [])
-                self.pipeline_status["pix2text"] = p2t_result.get("status", self.pipeline_status["pix2text"])
-            except Exception as exc:
-                print(f"[PIX2TEXT] Error: {exc}")
-                self.pix2text_equations = []
-                self.pipeline_status["pix2text"] = {
-                    "enabled": False,
-                    "success": False,
-                    "message": f"Pix2Text layer failed: {exc}",
-                    "count": 0,
-                }
-
-        # Run current extraction and Pix2Text in parallel.
-        with ThreadPoolExecutor(max_workers=2) as executor:
-            fut_current = executor.submit(_run_current_layer)
-            fut_pix2text = executor.submit(_run_pix2text_layer)
-            fut_current.result()
-            fut_pix2text.result()
+        _run_current_layer()
+        self.pipeline_status["pix2text"] = {
+            "enabled": False,
+            "success": False,
+            "message": "Pix2Text equation extraction disabled",
+            "count": 0,
+        }
 
         citations = self._extract_citations_grobid(pdf_path)
         self.reference_analysis = self.analyze_references(citations)
