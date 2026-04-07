@@ -3,16 +3,22 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.backend
+    container_name: research-paper-backend
     ports:
       - "5001:7860"
+    environment:
+      - PORT=7860
     restart: always
 
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+    container_name: research-paper-frontend
     ports:
       - "3000:3000"
+    environment:
+      - NODE_ENV=production
     depends_on:
       - backend
     restart: always
