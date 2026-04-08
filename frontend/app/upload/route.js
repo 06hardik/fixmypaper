@@ -3,15 +3,11 @@ import { NextResponse } from "next/server";
 export const runtime = "nodejs";
 
 function getBackendUrl() {
-  return (
-    process.env.API_URL ||
-    process.env.NEXT_PUBLIC_API_URL ||
-    "http://127.0.0.1:7860"
-  ).replace(/\/$/, "");
+  return "http://backend:7860".replace(/\/$/, "");
 }
 
 function getUploadTimeoutMs() {
-  const raw = process.env.UPLOAD_PROXY_TIMEOUT_MS || "900000";
+  const raw = "900000";
   const parsed = Number.parseInt(raw, 10);
   if (!Number.isFinite(parsed) || parsed < 0) {
     return 900000;

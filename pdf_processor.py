@@ -16,8 +16,8 @@ GROBID migration notes:
     - PDF open / image count / annotation writing: PyMuPDF retained (GROBID cannot do these).
     - Table extraction:       Camelot (lattice/stream).  GROBID table parsing removed.
 """
+import os
 import re
-from concurrent.futures import ThreadPoolExecutor, process
 import fitz  # PyMuPDF — retained for open/image-count/annotate only
 import camelot
 import requests
@@ -26,9 +26,6 @@ from collections import OrderedDict
 from typing import List, Dict, Tuple, Optional, Set
 from dataclasses import dataclass, field
 from lxml import etree
-from pix2text_processor import extract_equations_from_pdf
-
-
 # ---------------------------------------------------------------------------
 # FORMAT CONFIGURATION CONSTANTS
 # Used by the Streamlit professor/student UI to build and apply formats.
@@ -378,11 +375,20 @@ class PDFErrorDetector:
         # Walk every <s> (sentence) element — they span multiple <w> tokens.
         # We reconstruct logical "lines" by grouping tokens whose GROBID
         # page+y coords are within a small tolerance of each other.
-        sentence_elements = root.findall(".//tei:s", ns)
-        if not sentence_elements:
-            # Some GROBID versions use <ab> or bare text without <s> wrappers;
-            # fall back to PyMuPDF in that case.
-            raise ValueError("No <s> elements found in TEI — GROBID model may differ.")
+        sentences = root.findall(".//tei:s", ns)
+
+        if not sentences:
+            print("[GROBID] No <s> tags — falling back to paragraphs")
+            
+            paragraphs = root.findall(".//tei:p", ns)
+            sentences = []
+
+            for p in paragraphs:
+                text = "".join(p.itertext()).strip()
+                if text:
+                    sentences.extend(
+                        re.split(r'(?<=[.!?])\s+', text)
+                    )
 
         for sent in sentence_elements:
             # Each sentence becomes one logical "line" in line_info.
@@ -662,6 +668,12 @@ class PDFErrorDetector:
                     f"{self.GROBID_URL}/api/processFulltextDocument",
                     files={"input": pdf_file},
                     timeout=60,
+                    data={
+                        "teiCoordinates": "true",
+                        "segmentSentences": "true",
+                        "consolidateHeader": "1",
+                        "consolidateCitations": "1",
+                    },
                 )
 
             if response.status_code != 200:
@@ -670,6 +682,23 @@ class PDFErrorDetector:
                 return
 
             tei_xml = response.content
+
+            base_name = os.path.splitext(os.path.basename(pdf_path))[0]
+
+            # Create output directory (optional but recommended)
+            output_dir = os.path.join(os.path.dirname(pdf_path), "grobid_outputs")
+            os.makedirs(output_dir, exist_ok=True)
+
+            # Final path
+            tei_output_path = os.path.join(output_dir, f"{base_name}.tei.xml")
+
+            # Save file
+            with open(tei_output_path, "wb") as f:
+                f.write(tei_xml)
+
+            print(f"[GROBID] TEI saved at: {tei_output_path}")
+
+            
             root = etree.fromstring(tei_xml)
             self._tei_root = root  # stored for _extract_text_via_grobid()
 
@@ -999,7 +1028,9 @@ class PDFErrorDetector:
         if not citations:
             return {}
 
-        REFERENCE_API = process.env.get("REFERENCE_API_URL", "https://reference-api.onrender.com/analyze")
+        REFERENCE_API = os.environ.get(
+            "REFERENCE_API_URL", "https://reference-api.onrender.com/analyze"
+        )
         payload = {
             "entries": citations,
             "dry_run": False,
@@ -1226,27 +1257,13 @@ class PDFErrorDetector:
                     "message": f"Current extraction layer failed: {exc}",
                 }
 
-        def _run_pix2text_layer() -> None:
-            try:
-                p2t_result = extract_equations_from_pdf(pdf_path)
-                self.pix2text_equations = p2t_result.get("equations", [])
-                self.pipeline_status["pix2text"] = p2t_result.get("status", self.pipeline_status["pix2text"])
-            except Exception as exc:
-                print(f"[PIX2TEXT] Error: {exc}")
-                self.pix2text_equations = []
-                self.pipeline_status["pix2text"] = {
-                    "enabled": False,
-                    "success": False,
-                    "message": f"Pix2Text layer failed: {exc}",
-                    "count": 0,
-                }
-
-        # Run current extraction and Pix2Text in parallel.
-        with ThreadPoolExecutor(max_workers=2) as executor:
-            fut_current = executor.submit(_run_current_layer)
-            fut_pix2text = executor.submit(_run_pix2text_layer)
-            fut_current.result()
-            fut_pix2text.result()
+        _run_current_layer()
+        self.pipeline_status["pix2text"] = {
+            "enabled": False,
+            "success": False,
+            "message": "Pix2Text equation extraction disabled",
+            "count": 0,
+        }
 
         citations = self._extract_citations_grobid(pdf_path)
         self.reference_analysis = self.analyze_references(citations)
@@ -2475,6 +2492,7 @@ class PDFErrorDetector:
                         ))
         else:
             # ── Fallback: page-height heuristic ──────────────────────────────
+            print("Fallback: page-height heuristic for figure caption placement")
             fig_pattern = re.compile(
                 r"(Fig\.|Figure)\s+(\d+)[:\.]?\s+([^\n]{10,200})", re.IGNORECASE
             )
